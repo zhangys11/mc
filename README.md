@@ -1,2 +1,4 @@
-# mc
-A Monte-Carlo toolset for education
+# mc-tk
+A Monte-Carlo toolkit for educational purposes.
+
+> pip install mc-tk
