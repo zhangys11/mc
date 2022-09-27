@@ -1,2 +1,2 @@
 # mc
-Monte-Carlo tool for education
+A Monte-Carlo toolset for education
