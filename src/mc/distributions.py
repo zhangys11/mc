@@ -113,6 +113,7 @@ def binom(m = 20, N = 5000, display = True):
     plt.figure(figsize = (10,3))
     plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
     plt.bar(x,result, color = 'gray', linewidth=1.2)
+    
     return  
 
 

@@ -11,7 +11,7 @@ def pi(N = 1000000, flavor = 0):
 
     Parameters
     ----------
-    N : number of points
+    N : number of points.
     flavor : which implementation to use. 1 or 2.
 
     Returns
