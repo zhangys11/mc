@@ -147,15 +147,25 @@ def dices(N = 10000000):
     print(dict_cnt)
     print(dict_cnt['ooo']/sum + dict_cnt['xyz']/sum + dict_cnt['123']/sum + dict_cnt['456']/sum + dict_cnt['oox']/sum)# 满足归一化
     
+    #  Theoretical value：
+    dict_cnt = {}
+    dict_cnt['ooo'] = 6*(1/6)**3
+    dict_cnt['123'] = 6*(1/6)**3
+    dict_cnt['456'] = 6*(1/6)**3
+    dict_cnt['xyz'] = 6*5*4/(6**3)-dict_cnt['123']-dict_cnt['456']
+    dict_cnt['oox'] = 6*5*3/(6**3)
+    print("Theoretical value：",dict_cnt)
+    print("Theoretical value：",dict_cnt['ooo'] + dict_cnt['xyz'] + dict_cnt['123'] + dict_cnt['456'] + dict_cnt['oox']) # 满足归一化
+
     return 
 
 
 def galton_board(m = 20, N = 5000, display = True):
     
-    return binom() 
+    return binom(m, N, display = True) 
 
 
 def paper_clips(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     
-    return zipf()
+    return zipf(num_rounds, num_clips_k, verbose = False)
 
