@@ -201,6 +201,6 @@ def galton_board(num_layers = 20, N = 5000, flavor=1):
 def paper_clips(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     return distributions.zipf(num_rounds, num_clips_k, verbose)
 
-def sudden_death(N= 1000, p=0.01):
-    return distributions.exponential(N, p)
+def sudden_death(num_rounds = 1000, p = 0.01, N = 10000):
+    return distributions.exponential(num_rounds, p, N)
 

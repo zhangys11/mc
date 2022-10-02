@@ -149,29 +149,35 @@ def binom(num_layers = 20, N = 5000, flavor = 1):
     return result
     
 
-def clt(N = 10000, dist = [1,2,5,50], flavor = 0, display = True):
+def clt(dist, sample_size = [1,2,5,20,100], N = 10000, display = True):
     """
-    The function refers to a population given an arbitrary distribution, 
-    Each time from these populations randomly extracted m samples (where m takes the value in the [dist] list), A total of [N] times. 
+    Central Limit Theorem
+
+    For a population, given an arbitrary distribution.
+    Each time from these populations randomly extracted [sample_size] samples 
+    (where [sample_size] takes the value in the [dist]), A total of [N] times. 
     The [N] sets of samples are then averaged separately. 
     The distribution of these means is close to normal.
 
     Parameters
     ----------
+    dist : base / undeyling /atom distribution. 底层/原子分布
+        an dictionary - a PMF, e.g., {0:0.5,1:0.5} (coin), {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6} (dice)
+        'uniform' - a uniform distribution U(-1,1) is used.
+        'expon' - an exponential distribution Expon(1) is used. 
+        'coin' - {0:0.5,1:0.5}
+        'tampered_coin' - {0:0.9,1:0.1} # head more likely than tail 
+        'dice' - {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6} 
+        'tampered_dice' - {1:0.04,2:0.04,3:0.04,4:0.04,5:0.04,6:0.8} # 6 is more likely
+        None - use 0-1 distribution {0:0.5,1:0.5} by default        
+    sample_size : sample size to be averaged over / summed up.
+        Can be an array / list, user can check how the histogram changes with sample size. 
     N : Number of experiments.
-    dist=[] : Each number in the list represents the number of samples randomly selected from a given arbitrarily distributed population at a time.
-    flavor : Which distribution to use. 1 or 2.
-    If flavor=1, a uniform distribution is used; 
-    If flavor=1, an exponential distribution is used.
+    """ 
 
-    Returns
-    -------
-    When the number of samples is different, a histogram of the frequency distribution of different shapes appears.
-    """  
-    if not dist:
-        # 如果dist不为空的话,就往下走(清空列表); 为空就不走
-        dist = []
-    for m in dist:
+    # TODO 需要重写
+
+    for m in sample_size:
         xbars = []
         for i in tqdm(range(N)): # MC试验次数
             if flavor == 1: # underlying distribution: uniform.
@@ -182,15 +188,15 @@ def clt(N = 10000, dist = [1,2,5,50], flavor = 0, display = True):
         
         plt.figure()
         plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
-        plt.title('m = ' + str(m))
+        plt.title('base dist = ' + dist + ', sample size = ' + str(m))
         plt.yticks([])
-        plt.show() 
+        plt.show()
     
 
-def exponential(N = 1000, p = 0.01):
+def exponential(num_rounds = 1000, p = 0.01, N = 10000):
     """
     元器件寿命为何符合指数分布？  
-    定义一个survival game（即每回合有p的死亡率；或电容在单位时间内被击穿的概率）的概率计算函数survival_dist。
+    定义一个survival game（即每回合有p的死亡率；或电容在单位时间内被击穿的概率）的概率
     取p = 0.001（每回合很小的死亡率），绘制出pmf曲线（离散、等比数组）
 
     This code defines the probability calculation function of the survival game.
@@ -198,30 +204,51 @@ def exponential(N = 1000, p = 0.01):
 
     Parameters
     ----------
-    N : maximum survial rounds to display
+    num_rounds : survial game rounds
     p : The probability of suddent death / failure / accident for each round
+    N : players / sample count / MC simulations
     
     Returns
     -------
-    Plot of probability of dying in n+1 rounds after surviving n rounds.
+    Plot of survival histogram.
     """
+
+    survival_rounds = []
+    for player in range(N):
+        fate = random.choices([0,1], weights=(1-p,p), k = num_rounds)
+        if 1 in fate:
+            survival_rounds.append(fate.index(1))
+        # else: # still lives, i.e., > num_rounds
+        #     survival_rounds.append(num_rounds)
+            
+    c = collections.Counter(survival_rounds)
+
+    plt.figure(figsize = (10,3))
+    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    plt.bar(c.keys(), c.values(), color = 'gray', edgecolor='black')
+    plt.title("Frequency Histogram\nper-round sudden death probality p=" + str(p) + ', players = ' + str(N))
+    plt.show()
+
+    '''
     # survival game.It has survived n rounds; dies in n+1 round. 
     def survival_dist(n,p):
         return pow((1-p),n)*p
 
     plt.figure(figsize = (10,3))
     # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-    x = linspace(0,N,N+1)
+    x = linspace(0,num_rounds,num_rounds+1)
     plt.plot(x, survival_dist(x,p))
-    plt.title("Frequency Histogram\nsudden death probality p=" + str(p) )
+    plt.title("Theoretical Distribution\nsurvival PMF" )
     plt.show()
+    '''
 
     plt.figure(figsize = (10,3))    
     theta = round(1 / p + 0.5)
     plt.title('Theoretical Distribution\nexponential(θ='+ str(theta) + ')')  
     # pmf: Probability mass function. i.e. pdf
     # ppf: Percent point function (inverse of cdf — percentiles).
-    # x = np.arange(stats.expon.ppf(q=0.001, scale=theta), stats.expon.ppf(q=0.999, scale=theta)) 
+    # x = np.arange(stats.expon.ppf(q=0.001, scale=theta), stats.expon.ppf(q=0.999, scale=theta))
+    x = range(np.array(list(c.keys())).min(), np.array(list(c.keys())).max() + 1) 
     plt.plot(x,stats.expon.pdf(x=x, scale=theta))
     # plt.show();
     # plt.plot(x,expon.cdf(x=x, scale=s))
