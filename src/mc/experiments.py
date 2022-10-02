@@ -1,5 +1,6 @@
 import numpy as np
 import random
+from tqdm import tqdm
 
 def pi(N = 1000000, flavor = 0):
     
@@ -10,7 +11,7 @@ def pi(N = 1000000, flavor = 0):
 
     Parameters
     ----------
-    N : number of points
+    N : number of points.
     flavor : which implementation to use. 1 or 2.
 
     Returns
@@ -100,9 +101,15 @@ def parcel(N=100000, num_players = 5, num_ops = 10):
 
     return L/N
 
-def dices(N):
+
+def dices(N = 10000000):
     """
-   Fit the model according to the given training data.
+   Randomly roll three dice and calculate the probabilities of various situations. 
+   The corresponding score for each dice point is as follows:
+   If the three dice have 1, 2, 3 points or 4, 5 and 6 respectively, 16 points are awarded;
+   If all three dice have the same number of points, 8 points are awarded;
+   If only two of the dice have the same number of points, 2 points are awarded;
+   If the three dice have different points, 0 points are awarded.
 
    Parameters
    ----------
@@ -110,19 +117,14 @@ def dices(N):
 
    Returns
    -------
-   The probability of each case and verifies whether it satisfies the normalization.
+   The number of times each case occurs and verifies that the final result satisfies the normalization.
 
    Notes
    -----
-   When calculating the probability that the three dice have different points, it is necessary to remove the cases where the number of points is 1, 2, 3, and 4, 5, and 6, respectively.
+   When calculating the probability that the three dices have different points.
+   it is necessary to remove the cases where the number of points is 1, 2, 3, and 4, 5, and 6, respectively.
     """
 
-    ### Randomly roll three dice and calculate the probabilities of various situations. The corresponding score for each dice point is as follows: if the three dice have 1, 2, 3 points or 4, 5 and 6 respectively, 16 points are awarded; If all three dice have the same number of points, 8 points are awarded; If only two of the dice have the same number of points, 2 points are awarded; If the three dice have different points, 0 points are awarded.
-
-    import numpy as np
-    from tqdm import tqdm
-
-    N = 10000000
     samples = np.random.randint(low=1, high=7, size=(N,3)) # range: [low, high)
     dict_cnt = {}
     dict_cnt['ooo'] = 0 # 三个相同
@@ -130,48 +132,40 @@ def dices(N):
     dict_cnt['456'] = 0
     dict_cnt['xyz'] = 0 # 三个均不同，但需排除123和456的情况
     dict_cnt['oox'] = 0 # 两个相同
-
     for s in tqdm(samples):
         if s[0] == s[1] and s[0] == s[2]:
-            dict_cnt['ooo'] += 1
+            dict_cnt['ooo'] += 1 # 三个相同
         elif sorted(s) == [1,2,3]:
             dict_cnt['123'] += 1
         elif sorted(s) == [4,5,6]:
             dict_cnt['456'] += 1
         elif s[0] != s[1] and s[0] != s[2] and s[1] != s[2]:
-            dict_cnt['xyz'] += 1
+            dict_cnt['xyz'] += 1 # 三个均不同，但需排除123和456的情况
         else:
-            dict_cnt['oox'] += 1
+            dict_cnt['oox'] += 1# 两个相同
+    sum=dict_cnt['ooo'] + dict_cnt['xyz'] + dict_cnt['123'] + dict_cnt['456'] + dict_cnt['oox']
     print(dict_cnt)
-
-    # Theoretical value:
+    print(dict_cnt['ooo']/sum + dict_cnt['xyz']/sum + dict_cnt['123']/sum + dict_cnt['456']/sum + dict_cnt['oox']/sum)# 满足归一化
+    
+    #  Theoretical value：
     dict_cnt = {}
     dict_cnt['ooo'] = 6*(1/6)**3
     dict_cnt['123'] = 6*(1/6)**3
     dict_cnt['456'] = 6*(1/6)**3
     dict_cnt['xyz'] = 6*5*4/(6**3)-dict_cnt['123']-dict_cnt['456']
     dict_cnt['oox'] = 6*5*3/(6**3)
-    print(dict_cnt)    
-
-    print(dict_cnt['ooo'] + dict_cnt['xyz'] + dict_cnt['123'] + dict_cnt['456'] + dict_cnt['oox'])# 满足归一化
-
-    # Calculate theoretical values using scipy multinomial, consistent with a polynomial distribution:
-    from scipy.stats import multinomial
-    rv = multinomial(3, [1/6]*6)
-    rv.pmf([1, 1, 1, 0, 0, 0]) # 123 或 456 的情况
+    print("Theoretical value：",dict_cnt)
+    print("Theoretical value：",dict_cnt['ooo'] + dict_cnt['xyz'] + dict_cnt['123'] + dict_cnt['456'] + dict_cnt['oox']) # 满足归一化
 
     return 
 
 
-def galton_board():
+def galton_board(m = 20, N = 5000, display = True):
     
-    return binom(num_rounds, n, display = True) 
+    return binom(m, N, display = True) 
 
 
-
-
-
-def paper_clips():
+def paper_clips(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     
-    return zipf(num_rounds, num_clips, display = True)
+    return zipf(num_rounds, num_clips_k, verbose = False)
 

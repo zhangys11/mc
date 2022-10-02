@@ -1,10 +1,13 @@
-from scipy import stats
-import numpy as np
 import collections
+import random
+import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 from matplotlib.pyplot import MultipleLocator
 from scipy.special import rel_entr
+from scipy import stats
+from scipy.stats import binom
+from tqdm import tqdm
 
 def zipf(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     
@@ -83,147 +86,99 @@ def zipf(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     plt.show()
     
     
-def binom(num_rounds, n, display = True):
+def binom(m = 20, N = 5000, display = True):
     """
-   Fit the model according to the given training data.
+    If there are [m] layers of nail plates, the number of nails in each layer increases from the beginning one by one, 
+    And the nail plates have corresponding grooves under them. 
+    This function solves the probability (N times) for a ball falling into each slot by using Monte Carlo's algorithm.
 
-   Parameters
-   ----------
-   num_rounds : it represents the number of experiments.
-      
-   n : the number of nail plate layers.
+    Parameters
+    ----------
+    m : The number of nail plate layers.
+    N : Number of experiments.
 
-   Returns
-   -------
-   The histogram obtained from the experiment.
-
-   Notes
-   -----
-   """
-
-    ### If there are 20 layers of nail plates and 21 drop slots on the nail board, use Monte Carlo's algorithm to solve the probability of the ball falling into each slot (simulating 100,000 times).
-
-    import random
-    def galtonBoard(num_rounds, n):
-        history = []
-        tracks = []
-        for iter in range(num_rounds):
-            position = 0 # 初始位置
-            track = []
-            for layer in range(n):
-                position = position + random.choice([0, +1]) # 0 向左落，+1 向右落
-                track.append(position)        
-                tracks.append(track)
-            history.append(position)        
-        return history, tracks
-    num_rounds = 500000
-    n = 20
-    hist, _ = galtonBoard(num_rounds, n)
-
-    import collections
-    c = collections.Counter(hist)
-    
-    import matplotlib.pyplot as plt
-    import matplotlib.ticker as mticker
-
+    Returns
+    -------
+    The number of balls that fall into each slot.
+    """
+    result = [0 for i in range(m)]
+    for i in range (N):
+        pos = 0
+        for j in range (1, m):
+            if random.random() > 0.5:
+                pos += 1
+        result [pos] += 1
+    print (result)
+    x = range(m)
     plt.figure(figsize = (10,3))
     plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-    plt.bar(c.keys(), c.values(), color = 'gray', edgecolor='black', linewidth=1.2)
-    # plt.plot(list(c.keys()), list(c.values()))
-
+    plt.bar(x,result, color = 'gray', linewidth=1.2)
     
-
-    return [histogram]
-
+    return  
 
 
-
-
-def clt(N, dist=[], display = True):
+def clt(N = 10000, dist = [1,2,5,50], flavor = 0, display = True):
     """
-   Fit the model according to the given training data.
+    The function refers to a population given an arbitrary distribution, 
+    Each time from these populations randomly extracted m samples (where m takes the value in the [dist] list), A total of [N] times. 
+    The [N] sets of samples are then averaged separately. 
+    The distribution of these means is close to normal.
 
-   Parameters
-   ----------
-   m : a random sampling of m is taken from a given arbitrarily distributed population at a time.
-      
-   N : number of experiments.
+    Parameters
+    ----------
+    N : Number of experiments.
+    dist=[] : Each number in the list represents the number of samples randomly selected from a given arbitrarily distributed population at a time.
+    flavor : Which distribution to use. 1 or 2.
+    If flavor=1, a uniform distribution is used; 
+    If flavor=1, an exponential distribution is used.
 
-   Returns
-   -------
-   The resulting histogram when m takes a different value.
-
-   Notes
-   -----
-   """  
-
-    import matplotlib.pyplot as plt
-    import matplotlib.ticker as mticker
-    import collections
-    from scipy.stats import binom
-    from tqdm import tqdm
-    import numpy as np
- 
-    ### underlying distribution: uniform.
-    for m in [1,2,5]:
+    Returns
+    -------
+    When the number of samples is different, a histogram of the frequency distribution of different shapes appears.
+    """  
+    if not dist:
+        # 如果dist不为空的话,就往下走(清空列表); 为空就不走
+        dist = []
+    for m in dist:
         xbars = []
-        for i in tqdm(range(10000)): # MC试验次数
-            xbar = np.random.uniform(-1,1,m).mean()
-            xbars.append(xbar)        
+        for i in tqdm(range(N)): # MC试验次数
+            if flavor == 1: # underlying distribution: uniform.
+                xbar = np.random.uniform(-1,1,m).mean()
+            else: # underlying distribution: exponential.
+                xbar = np.random.exponential(scale = 1, size = m).mean()  
+            xbars.append(xbar) 
+        
         plt.figure()
         plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
         plt.title('m = ' + str(m))
         plt.yticks([])
-        plt.show()
-
-    ### underlying distribution: exponential.
-    for m in [1,2,5,50]:
-        xbars = []
-        for i in tqdm(range(10000)): # MC试验次数
-            xbar = np.random.exponential(scale = 1, size = m).mean()
-            xbars.append(xbar)        
-        plt.figure()
-        plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
-        plt.title('m = ' + str(m))
-        plt.yticks([])
-        plt.show()
+        plt.show()      
        
     return 
     
 
-    
-    
-
-def exponential(p, N):
+def exponential(N = 10000, p = 0.001):
     """
-  Fit the model according to the given training data.
+    This code defines the probability calculation function of the survival game.
+    (e.g. a mortality rate of [p] per turn, or a capacitor having a probability of [p] being broken down per unit of time).
 
-   Parameters
-   ----------
-   p : during each experiment, the experiment fixes the probability of failure or accident.
-      
-   N : number of experiments.
-
-   Returns
-   -------
-   Plot of probability of dying in n+1 rounds after surviving n rounds.
-
-   Notes
-   -----
-   """
-
-    ### The code defines a probability calculation function for survival.game (i.e. the probability of p mortality per turn, or the probability that the capacitance is broken per unit time survival_dist.
-
-    import numpy
-    from matplotlib import pyplot as plt
-
+    Parameters
+    ----------
+    N : Number of experiments.
+    p : During each experiment, the experiment fixes the probability of failure or accident.
+    
+    Returns
+    -------
+    Plot of probability of dying in n+1 rounds after surviving n rounds.
+    """
     # survival game.It has survived n rounds; dies in n+1 round. 
     def survival_dist(n,p):
-        return pow((1-p),n)*p;
-    N = 10000
-    p = 0.001
-    x = numpy.linspace(0,N,N+1)
+        return pow((1-p),n)*p
+    x = np.linspace(0,N,N+1)
     plt.plot(x,survival_dist(x,p))
     plt.show()
     
     return
+   
+
+  
