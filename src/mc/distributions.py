@@ -155,35 +155,98 @@ def clt(dist, sample_size = [1,2,5,20,100], N = 10000, display = True):
     ----------
     dist : base / undeyling /atom distribution. 底层/原子分布
         an dictionary - a PMF, e.g., {0:0.5,1:0.5} (coin), {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6} (dice)
-        'uniform' - a uniform distribution U(-1,1) is used.
-        'expon' - an exponential distribution Expon(1) is used. 
-        'coin' - {0:0.5,1:0.5}
-        'tampered_coin' - {0:0.9,1:0.1} # head more likely than tail 
-        'dice' - {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6} 
-        'tampered_dice' - {1:0.04,2:0.04,3:0.04,4:0.04,5:0.04,6:0.8} # 6 is more likely
+        'uniform' - a uniform distribution U(-1,1) is used.# when dist = 1
+        'expon' - an exponential distribution Expon(1) is used. # when dist = 2
+        'coin' - {0:0.5,1:0.5} # when dist = 3
+        'tampered_coin' - {0:0.9,1:0.1} # head more likely than tail # when dist = 4
+        'dice' - {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6} # when dist = 5
+        'tampered_dice' - {1:0.04,2:0.04,3:0.04,4:0.04,5:0.04,6:0.8} # 6 is more likely # when dist = 6
         None - use 0-1 distribution {0:0.5,1:0.5} by default        
     sample_size : sample size to be averaged over / summed up.
         Can be an array / list, user can check how the histogram changes with sample size. 
     N : Number of experiments.
     """ 
-
-    # TODO 需要重写
-
-    for m in sample_size:
-        xbars = []
-        for i in tqdm(range(N)): # MC试验次数
-            if flavor == 1: # underlying distribution: uniform.
-                xbar = np.random.uniform(-1,1,m).mean()
-            else: # underlying distribution: exponential.
-                xbar = np.random.exponential(scale = 1, size = m).mean()  
-            xbars.append(xbar) 
-        
-        plt.figure()
-        plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
-        plt.title('base dist = ' + dist + ', sample size = ' + str(m))
-        plt.yticks([])
-        plt.show()
     
+    # underlying distribution: uniform.
+    if dist == 1:
+        for m in sample_size:
+            xbars = []
+            for i in tqdm(range(N)): # MC试验次数
+                xbar = np.random.uniform(-1,1,m).mean()
+                xbars.append(xbar)        
+            plt.figure()
+            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
+            plt.title('underlying distribution: uniform\n m = ' + str(m))
+            plt.yticks([])
+            plt.show()
+
+    # underlying distribution: exponential.
+    elif dist == 2:
+        for m in sample_size:
+            xbars = []    
+            for i in tqdm(range(N)): # MC试验次数
+                xbar = np.random.exponential(scale = 1, size = m).mean()
+                xbars.append(xbar)        
+            plt.figure()
+            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
+            plt.title('underlying distribution: exponential\n m = ' + str(m))
+            plt.yticks([])
+            plt.show()
+    
+    # underlying distribution: coin.
+    elif dist == 3:
+        for m in sample_size:
+            xbars = []    
+            for i in tqdm(range(N)): # MC试验次数
+                xbar = np.random.randint(0, 2, m).mean()
+                xbars.append(xbar)        
+            plt.figure()
+            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
+            plt.title('underlying distribution: coin\n m = ' + str(m))
+            plt.yticks([])
+            plt.show()
+
+    # underlying distribution: tampered_coin.
+    elif dist == 4:
+        for m in sample_size:
+            xbars = []    
+            for i in tqdm(range(N)): # MC试验次数
+                xbar = np.random.choice(2, m, p = [0.9,0.1]).mean()
+                xbars.append(xbar)        
+            plt.figure()
+            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
+            plt.title('underlying distribution: tampered_coin\n m = ' + str(m))
+            plt.yticks([])
+            plt.show()
+
+    # underlying distribution: dice.
+    elif dist == 5:
+        for m in sample_size:
+            xbars = []    
+            for i in tqdm(range(N)): # MC试验次数
+                xbar = np.random.randint(1, 7, m).mean()
+                xbars.append(xbar)        
+            plt.figure()
+            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
+            plt.title('underlying distribution: dice\n m = ' + str(m))
+            plt.yticks([])
+            plt.show()       
+
+    # underlying distribution: tampered_dice.
+    elif dist == 6:
+        for m in sample_size:
+            xbars = []    
+            for i in tqdm(range(N)): # MC试验次数
+                tampered_dice_list = [1,2,3,4,5,6]
+                xbar = np.random.choice(tampered_dice_list, m, p = [0.04,0.04,0.04,0.04,0.04,0.8]).mean()
+                xbars.append(xbar)        
+            plt.figure()
+            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
+            plt.title('underlying distribution: tampered_dice\n m = ' + str(m))
+            plt.yticks([])
+            plt.show()
+    
+    return
 
 def exponential(num_rounds = 1000, p = 0.01, N = 10000):
     """
