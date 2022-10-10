@@ -195,8 +195,8 @@ def dices(N = 10000):
     
     return dict_cnt
 
-def galton_board(num_layers = 20, N = 5000, flavor=1):
-    return distributions.binom(num_layers, N, flavor) 
+def galton_board(num_layers = 20, N = 5000, flavor=1, display = True):
+    return distributions.binom(num_layers, N, flavor, display=display) 
 
 def paper_clips(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     return distributions.zipf(num_rounds, num_clips_k, verbose)
