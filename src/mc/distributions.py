@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.ticker as mticker
 from matplotlib.pyplot import MultipleLocator
 from scipy.special import rel_entr
-from scipy import stats, linspace
+from scipy import stats
 from tqdm import tqdm
 
 def zipf(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
@@ -78,7 +78,7 @@ def zipf(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     plt.show()
     
     
-def binom(num_layers = 20, N = 5000, flavor = 1):
+def binom(num_layers = 20, N = 5000, flavor = 1, display = True):
 
     """
     The Galton board is a physical model of the binomial distribution. 
@@ -96,8 +96,9 @@ def binom(num_layers = 20, N = 5000, flavor = 1):
     A [num_layers+1] long vector : Freqency Historgm, i.e., the number of balls that fall into each slot.
     """
 
-    plt.figure(figsize = (10,3))
-    plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    if display:
+        plt.figure(figsize = (10,3))
+        plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
 
     result = [0 for i in range(num_layers + 1)]
 
@@ -109,7 +110,8 @@ def binom(num_layers = 20, N = 5000, flavor = 1):
                     pos += 1
             result [pos] += 1
         
-        plt.bar(range(num_layers+1), result, color = 'gray', linewidth=1.2, edgecolor='black')
+        if display:
+            plt.bar(range(num_layers+1), result, color = 'gray', linewidth=1.2, edgecolor='black')
 
     else:
 
@@ -120,133 +122,31 @@ def binom(num_layers = 20, N = 5000, flavor = 1):
                 position = position + random.choice([0, +1]) # 0 向左落，+1 向右落
             history.append(position)
         c = collections.Counter(history)
-        plt.bar(c.keys(), c.values(), color = 'gray', linewidth=1.2, edgecolor='black')
         for pair in zip(c.keys(), c.values()):
             result[pair[0]] = pair[1]
 
-    plt.title("Frequency Histogram\nlayers=" + str(num_layers) + ", balls=" + str(N) +")")
-    plt.show()
+        if display:
+            plt.bar(c.keys(), c.values(), color = 'gray', linewidth=1.2, edgecolor='black')
+        
+    if display:
+        plt.title("Frequency Histogram\nlayers=" + str(num_layers) + ", balls=" + str(N) +")")
+        plt.show()
 
-    plt.figure(figsize = (10,3))
-    plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+        plt.figure(figsize = (10,3))
+        plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
 
-    n = num_layers
-    p = 0.5    
+        n = num_layers
+        p = 0.5    
 
-    x = range(num_layers+1)
-    plt.plot(x, stats.binom.pmf(x, n, p), 'k+', ms=1, label='b (' + str(n) + ',' + str(p) + ')')
-    plt.legend()
-    plt.title('Theoretical Distribution\nbinomial(n='+str(n) + ',p='+ str(p) + ')')
-    plt.bar(x, stats.binom.pmf(x, n, p), color='gray', linewidth=1.2, edgecolor='black')
-    plt.show()
+        x = range(num_layers+1)
+        plt.plot(x, stats.binom.pmf(x, n, p), 'k+', ms=1, label='b (' + str(n) + ',' + str(p) + ')')
+        plt.legend()
+        plt.title('Theoretical Distribution\nbinomial(n='+str(n) + ',p='+ str(p) + ')')
+        plt.bar(x, stats.binom.pmf(x, n, p), color='gray', linewidth=1.2, edgecolor='black')
+        plt.show()
 
     return result
     
-
-def clt(dist, sample_size = [1,2,5,20,100], N = 10000, display = True):
-    """
-    Central Limit Theorem
-    For a population, given an arbitrary distribution.
-    Each time from these populations randomly extracted [sample_size] samples 
-    (where [sample_size] takes the value in the [dist]), A total of [N] times. 
-    The [N] sets of samples are then averaged separately. 
-    The distribution of these means is close to normal.
-    Parameters
-    ----------
-    dist : base / undeyling /atom distribution. 底层/原子分布
-        an dictionary - a PMF, e.g., {0:0.5,1:0.5} (coin), {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6} (dice)
-        'uniform' - a uniform distribution U(-1,1) is used.# when dist = 1
-        'expon' - an exponential distribution Expon(1) is used. # when dist = 2
-        'coin' - {0:0.5,1:0.5} # when dist = 3
-        'tampered_coin' - {0:0.9,1:0.1} # head more likely than tail # when dist = 4
-        'dice' - {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6} # when dist = 5
-        'tampered_dice' - {1:0.04,2:0.04,3:0.04,4:0.04,5:0.04,6:0.8} # 6 is more likely # when dist = 6
-        None - use 0-1 distribution {0:0.5,1:0.5} by default        
-    sample_size : sample size to be averaged over / summed up.
-        Can be an array / list, user can check how the histogram changes with sample size. 
-    N : Number of experiments.
-    """ 
-    
-    # underlying distribution: uniform.
-    if dist == 1:
-        for m in sample_size:
-            xbars = []
-            for i in tqdm(range(N)): # MC试验次数
-                xbar = np.random.uniform(-1,1,m).mean()
-                xbars.append(xbar)        
-            plt.figure()
-            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
-            plt.title('underlying distribution: uniform\n m = ' + str(m))
-            plt.yticks([])
-            plt.show()
-
-    # underlying distribution: exponential.
-    elif dist == 2:
-        for m in sample_size:
-            xbars = []    
-            for i in tqdm(range(N)): # MC试验次数
-                xbar = np.random.exponential(scale = 1, size = m).mean()
-                xbars.append(xbar)        
-            plt.figure()
-            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
-            plt.title('underlying distribution: exponential\n m = ' + str(m))
-            plt.yticks([])
-            plt.show()
-    
-    # underlying distribution: coin.
-    elif dist == 3:
-        for m in sample_size:
-            xbars = []    
-            for i in tqdm(range(N)): # MC试验次数
-                xbar = np.random.randint(0, 2, m).mean()
-                xbars.append(xbar)        
-            plt.figure()
-            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
-            plt.title('underlying distribution: coin\n m = ' + str(m))
-            plt.yticks([])
-            plt.show()
-
-    # underlying distribution: tampered_coin.
-    elif dist == 4:
-        for m in sample_size:
-            xbars = []    
-            for i in tqdm(range(N)): # MC试验次数
-                xbar = np.random.choice(2, m, p = [0.9,0.1]).mean()
-                xbars.append(xbar)        
-            plt.figure()
-            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
-            plt.title('underlying distribution: tampered_coin\n m = ' + str(m))
-            plt.yticks([])
-            plt.show()
-
-    # underlying distribution: dice.
-    elif dist == 5:
-        for m in sample_size:
-            xbars = []    
-            for i in tqdm(range(N)): # MC试验次数
-                xbar = np.random.randint(1, 7, m).mean()
-                xbars.append(xbar)        
-            plt.figure()
-            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
-            plt.title('underlying distribution: dice\n m = ' + str(m))
-            plt.yticks([])
-            plt.show()       
-
-    # underlying distribution: tampered_dice.
-    elif dist == 6:
-        for m in sample_size:
-            xbars = []    
-            for i in tqdm(range(N)): # MC试验次数
-                tampered_dice_list = [1,2,3,4,5,6]
-                xbar = np.random.choice(tampered_dice_list, m, p = [0.04,0.04,0.04,0.04,0.04,0.8]).mean()
-                xbars.append(xbar)        
-            plt.figure()
-            plt.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black")
-            plt.title('underlying distribution: tampered_dice\n m = ' + str(m))
-            plt.yticks([])
-            plt.show()
-    
-    return
 
 def exponential(num_rounds = 1000, p = 0.01, N = 10000):
     """
@@ -306,6 +206,3 @@ def exponential(num_rounds = 1000, p = 0.01, N = 10000):
     # plt.plot(x,expon.cdf(x=x, scale=s))
     # plt.plot(x,expon.sf(x=x, scale=s)) # when s = 1, sf and pdf overlaps
     plt.show() 
-   
-
-  

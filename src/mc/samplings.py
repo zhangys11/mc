@@ -1,0 +1,320 @@
+# Sampling distributions used in various hypothesis tests
+#
+# In statistics, a sampling distribution or finite-sample distribution is the probability 
+# distribution of a given random-sample-based statistic.
+
+import numpy as np
+import collections
+from scipy.stats import binom, chi2, f
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+
+if __package__:
+    from . import experiments
+else:
+    import experiments
+
+def clt(dist = 'bernoulli', sample_size = [1,2,5,20], N = 10000, display = True):
+    """
+    Central Limit Theorem
+
+    For a population, given an arbitrary distribution.
+    Each time from these populations randomly draw [sample_size] samples 
+    (where [sample_size] takes the value in the [dist]), A total of [N] times. 
+    The [N] sets of samples are then averaged separately. 
+    The distribution of these means should be close to normal dist when [sample_size] is big enough.
+
+    Parameters
+    ----------
+    dist : base / undeyling /atom distribution. 底层/原子分布
+        'uniform' - a uniform distribution U(-1,1) is used.
+        'expon' - an exponential distribution Expon(1) is used. 
+        'poisson' - poisson distribution PI(1) is used. 
+        'coin' / 'bernoulli' - {0:0.5,1:0.5}
+        'tampered_coin' - {0:0.2,1:0.8} # head more likely than tail 
+        'dice' - {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6} 
+        'tampered_dice' - {1:0.1,2:0.1,3:0.1,4:0.1,5:0.1,6:0.5} # 6 is more likely
+        None - use 0-1 distribution {0:0.5,1:0.5} by default        
+    sample_size : sample size to be averaged over / summed up.
+        Can be an array / list, user can check how the histogram changes with sample size. 
+    N : Number of experiments.
+    """ 
+    
+    rows = len(sample_size)
+    fig = plt.figure(figsize=(12, rows*3))
+    plt.axis('off')
+    
+    if dist == 'uniform':
+        
+        f = lambda x : np.random.uniform(-1,1,x).mean()
+        dist_name = "$U(-1,1)$"
+        
+    elif dist == 'expon' or dist == 'exponential':
+                
+        f = lambda x : np.random.exponential(scale = 1, size = x).mean()
+        dist_name = "$Expon(1)$"
+        
+    elif dist == 'poisson':
+                
+        f = lambda x : np.random.poisson(lam = 1, size = x).mean()
+        dist_name = "$\pi(1)$"    
+        
+    elif dist == 'dice':
+        
+        f = lambda x : np.random.choice(list(range(1,7)), x).mean()
+        dist_name = "PMF {1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6}, i.e., dice"
+        
+    elif dist == 'tampered_dice':
+        
+        f = lambda x : np.random.choice(list(range(1,6)) + [6]*5, x).mean()
+        dist_name = "PMF {1:0.1,2:0.1,3:0.1,4:0.1,5:0.1,6:0.5}, i.e., a tampered dice"
+        
+    elif dist == 'tampered_coin':
+        
+        f = lambda x : np.random.choice([0]+[1]*4, x).mean()
+        dist_name = "PMF {0:0.2,1:0.8}, i.e., a tampered coin"
+
+    else: # dist == 'coin' or 'bernoulli':
+        
+        f = lambda x : np.random.choice([0,1], x).mean()
+        dist_name = "$Bernoulli(0.5), i.e., coin$"
+        
+        
+    title = "Use " + dist_name +" to verify CLT (central limit theorem)"
+    plt.title(title)
+
+    for row_index, n in enumerate(sample_size):
+
+        xbars = []
+        for i in range(N): # MC试验次数
+            xbar = f(n) # np.random.uniform(-1,1,n).mean() #
+            xbars.append(xbar)   
+
+        ax = fig.add_subplot(rows, 1, row_index + 1)
+        # ax.axis('off')
+        ax.hist(xbars, density=False, bins=100, facecolor="none", edgecolor = "black", \
+                 label='sample size = ' + str(n))
+        ax.legend()
+        ax.set_yticks([])
+            
+    
+    # plt.yticks([])
+    plt.show()
+
+    
+def clt_all():
+    '''
+    Very the CLT (Central Limit Theorem) with all supported underlying dists
+    '''
+    for dist in ['uniform', 'expon', 'poisson', 'coin', 'tampered_coin', 'dice', 'tampered_dice']:
+        print('-----------', dist, '-----------')
+        clt(dist, sample_size = [1,2,5,20,50], N = 10000)
+
+
+
+def chisq_stat(dist = 'binom', K = 8, sample_size = 100, N = 10000):
+    '''
+    Verify the chisq statistic used in Pearson's Chi-Square Goodness-of-Fit Test. 
+    验证皮尔逊卡方拟合优度检验的卡方分布假设
+
+    Parameters
+    ----------
+    dist : what kind of population dist to use. Default we use binom, i.e., the Galton board
+        'binom' / 'galton' - the population is binom
+        'dice' - 6 * 1/6
+    K : classes in the PMF
+    N : how many MC experiments to run
+    '''
+
+    # test with b(n,p)
+
+    chisqs = []
+
+    for i in range(N): # MC试验次数
+        
+        if dist == 'binom' or dist =='galton':
+
+            h = experiments.galton_board(K - 1, sample_size, display = False) # rounds, layers
+            # print('experiment', h)
+
+            chisq = 0
+
+            for j in range(K):
+                pj = binom.pmf(j,K-1,0.5)
+                npj = sample_size * pj # theoretical
+                fj = h[j]
+                
+                chisq = chisq + (fj - npj)**2 / npj
+        
+        elif dist == 'dice':
+
+            h = collections.Counter( np.random.randint(0, 6, sample_size) )
+            
+            chisq = 0
+            
+            for j in range(6):
+                pj = 1.0/6
+                npj = sample_size * pj
+                fj = h[j]
+                # print(pj, npj, fj)
+                
+                chisq = chisq + (fj - npj)**2 / npj
+            
+            chisqs.append(chisq)
+
+        chisqs.append(chisq)
+
+    plt.figure()
+    plt.hist(chisqs, density=False, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of the GOF test statistic (TODO add math formula)\n. \
+        Population is " + dist + ", sample size="+str(sample_size)) # $b("+ str(K) +", 1/2)$
+    plt.show()
+
+    plt.figure()
+    x = np.linspace(0, np.max(chisqs) ,100)
+    plt.plot(x, chi2.pdf(x, df = K-1), lw=3, alpha=0.6, label='df = ' + str(K-1), c = "black")
+    plt.title('Theoretical Distribution\n$\chi^2(df='+ str(K-1) + ')$') 
+    plt.legend()
+    plt.show()
+
+
+def anova_stat(K = 10, n = 10, N = 10000):
+    '''
+    验证 ANOVA的F分布假设
+    F = MSTR/MSE ~ F(k-1, n-k)
+
+    The H0 assumes mu1=mu2=...=muK. 
+    In this experiment, all samples are drawn from N(0,1)
+
+    Parameters
+    ----------
+    K : classes / groups
+    n : samples per group. Total sample count is [K]*[n]
+    N : how many MC experiments to run
+    '''
+
+    FS = []
+
+    for i in range(N): # MC试验次数
+        
+        X = np.random.normal (0, 1, size=(n,K))
+        SSTR = n*((X.mean(axis = 0)-X.mean())**2).sum()
+        MSTR = SSTR/(K-1)
+        SSE = ((X - X.mean())**2).sum()
+        MSE = SSE/(K*n-K) # 此处K*n为公式中n，样本总量
+        
+        F = 1.0*MSTR/MSE    
+        FS.append(F)
+
+    plt.hist(FS, density=False, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of the ANOVA test statistic (TODO add math formula)\n. \
+        Population is N(0,1). " + str(K) + " groups, " + str(n) + " samples per group.")
+    plt.show()
+
+    plt.figure()
+    x=np.linspace(0, np.max(FS), 100)
+    plt.plot(x,f.pdf(x,dfn=K-1,dfd=n*K-K), lw=3, alpha=0.6, c = "black", \
+        label = '$F(' + str(K-1) + ',' + str(n*K-K) + ')$')
+    plt.title('Theoretical Distribution\n$F(' + str(K-1) + ',' + str(n*K-K) + ')$') 
+    plt.legend()
+    plt.show()
+
+def kw_stat(dist = 'uniform', K = 3, n = 100, N = 10000):
+    '''
+    Verify the Kruskal-Wallis test statistic (H) is a X2 random variable.
+
+    The Mann-Whitney or Wilcoxon test compares two groups while the Kruskal-Wallis test compares 3.
+    Kruskal-Wallis test is a non-parametric version of one-way ANOVA. It is rank based.
+    Kruskal-Wallis H: a X2 test statistic.
+
+    Parameters
+    ----------
+    dist : population assumption. As KW test is non-parametric, the choice of dist doesn't matter.
+        By default, we use unform.
+    K : groups / classes
+    n : samples per class. In this experiment, we use equal group size, i.e., n1=n2=n3=...
+    N : how many MC experiments to run
+    '''
+    
+    ni = n
+    nT = K * ni
+
+    Hs = []
+
+    for i in tqdm(range(10000)): # MC试验次数
+        
+        if dist == 'uniform':
+            y1 = np.random.uniform(0,1,ni) 
+            y2 = np.random.uniform(0,1,ni)
+            y3 = np.random.uniform(0,1,ni)
+        else: # 'gaussian'
+            y1 = np.random.randn(ni) # normal
+            y2 = np.random.randn(ni)
+            y3 = np.random.randn(ni)
+
+        yall = y1.tolist() + y2.tolist() + y3.tolist()
+        sorted_id = sorted(range(len(yall)), key = lambda k: yall[k])
+
+        R1 = np.sum(sorted_id[:ni])
+        R2 = np.sum(sorted_id[ni:ni+ni])
+        R3 = np.sum(sorted_id[ni+ni:])
+
+        H = 12/nT/(nT+1) * (R1**2 + R2**2 + R3**2) / ni - 3 * (nT + 1)
+        
+        Hs.append(H)
+
+    plt.hist(Hs, density=False, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of Kruskal-Wallis test's H statistic (TODO add math formula)\n. \
+        Population is " + ("U(0,1). " if dist=='uniform' else "N(0,1). ") + str(K) + " groups, " + str(n) + " samples per group.")
+    plt.show()
+
+    x=np.linspace(np.min(Hs) - np.min(Hs), np.max(Hs) - np.min(Hs), 100) # 差一个平移，research later
+    plt.figure()
+    plt.plot(x, chi2.pdf(x, df = K-1), label='df = ' + str(K - 1))
+    plt.title('Theoretical Distribution\n$\chi^2(df='+ str(K-1) + ')$') 
+    plt.legend()
+    plt.show()
+
+def sign_test_stat(dist = 'expon', n = 100, N = 10000):
+    '''
+    For sign test, if H0 is true (m = m0), the N- and N+ both follow b(n,1/2)
+
+    Parameters
+    ----------
+    dist : population assumption. As sign test is non-parametric, the choice of dist doesn't matter.
+        By default, we use exponential. It's theoretical median is m = $\theta ln(2)$
+    n : sample size.
+    N : how many MC experiments to run
+    '''
+    
+    poss = []
+    negs = []
+
+    for i in tqdm(range(N)): # MC试验次数
+        
+        x = np.random.exponential(scale = 1, size = n)
+        n_pos = len(np.where(x - np.log(2) > 0)[0])
+        n_neg = len(np.where(x - np.log(2) < 0)[0])
+        
+        poss.append(n_pos)
+        negs.append(n_neg)
+
+    plt.hist(poss, density=True, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of sign test's N+ statistic\n. \
+        Population is expon(1). " + str(n) + " samples.")
+    plt.show()
+
+    plt.hist(negs, density=True, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of sign test's N- statistic\n. \
+        Population is expon(1). " + str(n) + " samples.")
+    plt.show()
+
+    plt.figure()
+    plt.title ("b ({}, 0.5)".format(n))
+    x = np.linspace(0,n,n+1)
+    pmf = binom.pmf(x, n, 0.5)
+    lb = round( min( np.min(poss), np.min(negs)) )
+    ub = round( max( np.max(poss), np.max(negs)) )
+    plt.plot(x[lb:ub],pmf[lb:ub])
+    plt.title('Theoretical Distribution\n$b(n='+ str(n) + ',p=1/2)$')     
+    plt.show()
