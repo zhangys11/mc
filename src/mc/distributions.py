@@ -6,7 +6,8 @@ import matplotlib.ticker as mticker
 from matplotlib.pyplot import MultipleLocator
 from scipy.special import rel_entr
 from scipy import stats
-from tqdm import tqdm
+import scipy.special
+import scipy.stats
 
 def zipf(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     
@@ -154,6 +155,29 @@ def binom(num_layers = 20, N = 5000, flavor = 1, display = True):
     return result
     
 
+def poisson(n = 10000, p = 0.0001, N = 100000):
+    '''
+    possion 是 b(n,p), n很大，p很小的一种极限分布
+    假设一个容量为n的群体，每个个体发生特定事件（如意外或事故）的概率为p（极低），那么总体发生事件的总数近似符合泊松
+    '''
+    events = stats.binom.rvs(n, p, size=N) # directly draw from a b(n,p) dist
+    c = collections.Counter(events)
+
+    plt.figure(figsize = (10,3))
+    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    plt.bar(c.keys(), c.values(), color = 'gray', linewidth=1.2, edgecolor='black')
+    plt.title("Frequency Histogram\nSampling from b(" + str(n) + ',' + str(p) + '). \
+Simulations = ' + str(N))
+    plt.show()
+
+    plt.figure(figsize = (10,3)) 
+    plt.title('Theoretical Distribution\n' + r'$\pi (\lambda='+ str(n*p) + ')$')
+    x = range(min(events), max(events) + 1) 
+    plt.bar(x,stats.poisson.pmf(x, n*p), color='gray', linewidth=1.2, edgecolor='black', \
+        label = r'$\pi (\lambda='+ str(n*p) + ')$')
+    plt.legend()
+    plt.show()
+
 def exponential(num_rounds = 1000, p = 0.01, N = 10000):
     """
     元器件寿命为何符合指数分布？  
@@ -215,6 +239,107 @@ def exponential(num_rounds = 1000, p = 0.01, N = 10000):
     # plt.plot(x,expon.cdf(x=x, scale=s))
     # plt.plot(x,expon.sf(x=x, scale=s)) # when s = 1, sf and pdf overlaps
     plt.show() 
-   
 
-  
+
+def chisq_pdf(x, k):
+    '''
+    The theoretical PDF of CHISQ dist. 
+    This is a direct implementation based on the definition.
+    Alternately, we may use scipy.stats.chi2
+
+    Paramters
+    ---------
+    k : dof, degree of freedom
+    '''
+
+    return x**(k/2-1)*np.exp(-x/2)/(2**(k/2)*scipy.special.gamma(k/2))
+    
+
+def chisq_pdf_dist(ul=0, ub=10, k=2, flavor = 1):
+    '''
+    Parameters
+    ----------
+    flavor : 
+        1 - use self implementation
+        2 - use scipy.stats.chi2
+    '''
+    
+    pdf = chisq_pdf if flavor == 1 else scipy.stats.chi2.pdf
+
+    plt.figure(figsize = (10,3))
+    plt.title('Theoretical Distribution\n' + r'$\chi^2(dof='+ str(k) + ')$')  
+    plt.plot(np.linspace(ul,ub), pdf(np.linspace(ul,ub),k),\
+        lw=3, alpha=0.6, label = r'$\chi^2(dof='+ str(k) + ')$')
+    plt.legend()
+    plt.show()     
+
+def chisq(k=10, N = 10000):
+    '''
+    The squared sum of [k] r.v.s. from standard normal distributions is a chisq statistic.
+    This function will verify it via [N] MC experiments.
+    [k]个 N(0,1)^2 r.v.s. 的和为一个卡方分布的统计量
+
+    Parameters
+    ----------
+    k : How many r.v.s. to use
+    N : MC simulations
+    '''
+
+    CHISQS = []
+
+    for i in range(N):
+        CHISQS.append( np.sum(np.random.randn(k)**2) )  
+
+    plt.figure(figsize = (10,3))
+    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    plt.hist(CHISQS, bins=100, color = 'gray', edgecolor='black')
+    plt.title("Frequency Histogram\ndegree of freedom =" + str(k) + ', simulations = ' + str(N))
+    plt.show()
+
+    ul=min(CHISQS)
+    ub=max(CHISQS)+0.5
+    chisq_pdf_dist(round(ul), round(ub), k=k)
+
+def student(k=5, N = 10000):
+    '''
+    The t-distribution
+    '''
+    X = np.random.randn(N)
+    Y = scipy.stats.chi2.rvs(df=k, size=N)
+
+    ts = X/np.sqrt(Y/k)
+
+    plt.figure(figsize = (10,3))
+    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    plt.hist(ts, bins=100, color = 'gray', edgecolor='black')
+    plt.title("Frequency Histogram\ndegree of freedom =" + str(k) + ', simulations = ' + str(N))
+    plt.show()
+
+    plt.figure(figsize = (10,3)) 
+    plt.title('Theoretical Distribution\n' + r'$t (df='+ str(k) + ')$')  
+    x = np.linspace(round(min(ts)), round(max(ts)+0.5), 200) 
+    plt.plot(x,stats.t.pdf(x=x, df=k), label = r'$t (df='+ str(k) + ')$')
+    plt.legend()
+    plt.show() 
+
+def F(df1=10, df2=10, N = 1000):
+    '''
+    The F-distribution
+    '''
+    U = scipy.stats.chi2.rvs(df=df1, size=N)
+    V = scipy.stats.chi2.rvs(df=df2, size=N)
+
+    Fs = U/df1 / (V/df2)
+
+    plt.figure(figsize = (10,3))
+    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    plt.hist(Fs, bins=100, color = 'gray', edgecolor='black')
+    plt.title("Frequency Histogram\ndegree of freedom = (" + str(df1) + ',' + str(df2) + '). simulations = ' + str(N))
+    plt.show()
+
+    plt.figure(figsize = (10,3)) 
+    plt.title('Theoretical Distribution\n' + r'$F (df1='+ str(df1) + ', df2='+ str(df2) + ')$')  
+    x = np.linspace(round(min(Fs)), round(max(Fs)+0.5), 200) 
+    plt.plot(x,stats.f.pdf(x=x, dfn=df1, dfd=df2), label = r'$F (df1='+ str(df1) + ', df2='+ str(df2) + ')$')
+    plt.legend()
+    plt.show() 
