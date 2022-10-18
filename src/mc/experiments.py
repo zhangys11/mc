@@ -1,7 +1,6 @@
 import numpy as np
 import random
-from tqdm import tqdm
-import collections
+import math
 import matplotlib.pyplot as plt
 from IPython.display import HTML, display
 
@@ -186,6 +185,71 @@ def dices(N = 10000):
     
     return dict_cnt
 
+def prisoners(n = 100, N = 2000):
+    '''
+    The famous 100-prisoners quiz.
+    We will prove that the limit is (1-ln2) when n approaches +inf
+
+    Parameters
+    ----------
+    n : how many prisoners
+    N : MC experiments
+
+    Returns
+    -------
+    frequency : of the N experiments, how many times the n prisoners survive.
+    '''
+    WINS = 0
+    FAILS = 0
+    for i in range(N): # i is MC experiment NO, we will not use it later.
+        
+        boxes_inner = np.random.choice(list(range(n)), n, replace = False)
+        failed = False # at least one prisoner failed the test
+        
+        for j in range(n): # j is prisoner NO            
+            found = False
+            
+            target_box_index = j
+            for k in range(round(n/2)): # k is the draw round
+                target_box_index = boxes_inner[target_box_index]
+                if target_box_index == j:
+                    found = True
+                    break
+            
+            if found == False:
+                # DOOMED
+                failed = True
+                break
+        
+        if failed:
+            FAILS += 1
+        else:
+            WINS += 1
+        
+    return WINS / (WINS + FAILS)
+
+def prisoners_limit(ns = [10, 20, 30, 40, 50, 100, 200, 500, 1000, 2000], N = 1000):
+    '''
+    Test how the survival rate changes with n. The limit is 1-ln2.
+
+    Parameters
+    ----------
+    ns : n values to be tested. default is [10, 20, 30, 50, 100, 200, 500, 1000, 2000]
+    N : how many MC experiments to run for each n 
+    '''
+    
+    fs = []
+    for n in ns:
+        fs.append( prisoners(n, N = N) )
+        
+    plt.figure(figsize = (10, 4))
+    plt.scatter(ns, fs, label='survival chance')
+    plt.plot(ns, fs)
+    plt.hlines(y = 1 - math.log(2), xmin = np.min(ns), xmax = np.max(ns), color ='r', label = r'$1- ln(2) = $' + str(round(1 - math.log(2), 3))) 
+    plt.xlabel('prisoner number')
+    plt.legend()
+    plt.show()
+
 def galton_board(num_layers = 20, N = 5000, flavor=1, display = True):
     return distributions.binom(num_layers, N, flavor, display=display) 
 
@@ -194,4 +258,3 @@ def paper_clips(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
 
 def sudden_death(num_rounds = 1000, p = 0.01, N = 10000):
     return distributions.exponential(num_rounds, p, N)
-
