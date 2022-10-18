@@ -318,3 +318,37 @@ def sign_test_stat(dist = 'expon', n = 100, N = 10000):
     plt.plot(x[lb:ub],pmf[lb:ub])
     plt.title('Theoretical Distribution\n$b(n='+ str(n) + ',p=1/2)$')     
     plt.show()
+
+def cochrane_q_stat(p = 0.5, K = 3, n = 100, N = 10000):
+    '''
+    Cochrane-Q test T statistic is a X2 (CHISQ) random variable.  
+    Cochrane-Q is an extension of McNemar that support more than 2 samples/groups.  
+    H0: the percentage of "success / pass" for all groups are equal. 
+
+    Parameters
+    ----------
+    p : we draw from a Bernoulli population with p. p is the "success / pass" probability.
+    K : groups / classes
+    n : samples per class. In this experiment, all group sizes are equal, as Cochrane-Q is paired / dependent. 
+    N : how many MC experiments to run
+    '''
+    
+    Ts = []
+
+    for i in tqdm(range(10000)): # MC试验次数
+        
+        X = np.random.binomial(1, p, (n, K)) # return a nxK matrix of {0,1}
+        T = K*(K-1)* np.sum((X.sum(axis = 0) - n)**2) / np.sum ((K - X.sum(axis = 1) ) * X.sum(axis = 1) )
+        Ts.append(T) #  / (K * n) 
+
+    plt.hist(Ts, density=False, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of Cochrane-Q test's T statistic (TODO add math formula)\n. \
+        Population is " + "Bernoulli(" + str(p) + "). " + str(K) + " groups, " + str(n) + " samples per group.")
+    plt.show()
+
+    x=np.linspace(np.min(Ts), np.max(Ts), 100)
+    plt.figure()
+    plt.plot(x, chi2.pdf(x, df = K-1), label='df = ' + str(K - 1))
+    plt.title('Theoretical Distribution\n$\chi^2(df='+ str(K-1) + ')$') 
+    plt.legend()
+    plt.show()
