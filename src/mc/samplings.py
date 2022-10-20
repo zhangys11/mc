@@ -166,7 +166,7 @@ def chisq_stat(dist = 'binom', K = 8, sample_size = 100, N = 10000):
 
     plt.figure()
     plt.hist(chisqs, density=False, bins=100, facecolor="none", edgecolor = "black")
-    plt.title("Histogram of the GOF test statistic (TODO add math formula)\n. \
+    plt.title("Histogram of the GOF test statistic ($np.sum((fj-npj)**2/npj)$)\n. \
         Population is " + dist + ", sample size="+str(sample_size)) # $b("+ str(K) +", 1/2)$
     plt.show()
 
@@ -207,7 +207,7 @@ def anova_stat(K = 10, n = 10, N = 10000):
         FS.append(F)
 
     plt.hist(FS, density=False, bins=100, facecolor="none", edgecolor = "black")
-    plt.title("Histogram of the ANOVA test statistic (TODO add math formula)\n. \
+    plt.title("Histogram of the ANOVA test statistic ($F = 1.0*MSTR/MSE$)\n. \
         Population is N(0,1). " + str(K) + " groups, " + str(n) + " samples per group.")
     plt.show()
 
@@ -264,7 +264,7 @@ def kw_stat(dist = 'uniform', K = 3, n = 100, N = 10000):
         Hs.append(H)
 
     plt.hist(Hs, density=False, bins=100, facecolor="none", edgecolor = "black")
-    plt.title("Histogram of Kruskal-Wallis test's H statistic (TODO add math formula)\n. \
+    plt.title("Histogram of Kruskal-Wallis test's H statistic \n($H = 12/nT/(nT+1) * (R1**2 + R2**2 + R3**2) / ni - 3 * (nT + 1)$)\n. \
         Population is " + ("U(0,1). " if dist=='uniform' else "N(0,1). ") + str(K) + " groups, " + str(n) + " samples per group.")
     plt.show()
 
@@ -338,11 +338,11 @@ def cochrane_q_stat(p = 0.5, K = 3, n = 100, N = 10000):
     for i in tqdm(range(10000)): # MC试验次数
         
         X = np.random.binomial(1, p, (n, K)) # return a nxK matrix of {0,1}
-        T = K*(K-1)* np.sum((X.sum(axis = 0) - n)**2) / np.sum ((K - X.sum(axis = 1) ) * X.sum(axis = 1) )
+        T = (K-1)*(K*np.sum(X.sum(axis = 0)**2)-np.sum(X.sum(axis = 0))**2) / np.sum ((K - X.sum(axis = 1) ) * X.sum(axis = 1) )
         Ts.append(T) #  / (K * n) 
 
     plt.hist(Ts, density=False, bins=100, facecolor="none", edgecolor = "black")
-    plt.title("Histogram of Cochrane-Q test's T statistic (TODO add math formula)\n. \
+    plt.title("Histogram of Cochrane-Q test's T statistic \n($T = (K-1)*(K*np.sum(X.sum(axis = 0)**2)-np.sum(X.sum(axis = 0))**2) / np.sum ((K - X.sum(axis = 1) ) * X.sum(axis = 1) )$)\n. \
         Population is " + "Bernoulli(" + str(p) + "). " + str(K) + " groups, " + str(n) + " samples per group.")
     plt.show()
 
