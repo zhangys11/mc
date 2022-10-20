@@ -20,14 +20,11 @@ def zipf(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     that is, two paper clips are randomly drawn and connected together, 
     then put back, and then do the above again. 
     After enough rounds, the clips of different lengths will obey zipf distribution. 
-
     Parameters
     ----------
     num_rounds : The number of random samples. 抽样拼接次数
-
     num_clips_k : The total number of paper clips should be greater than [num_rounds]. This is the ratio of the numbers. 
     Should always > 1. Some of values are 1.6, 1.8, 2, 2.5, 3.
-
     Note
     ----
     Internally, we use grid search via the KLD metric to determine the best-fit zipf dist. 
@@ -87,17 +84,14 @@ def binom(num_layers = 20, N = 5000, flavor = 1, display = True):
     """
     The Galton board is a physical model of the binomial distribution. 
     When samples are sufficient, you can also observe CLT. 
-
     If there are [num_layers] layers of nail plates, the number of nails in each layer increases from the beginning one by one, 
     And the nail plates have [num_layers+1] corresponding grooves under them. 
     This function solves the probability (N times) for a ball falling into each slot by using Monte Carlo's algorithm.
-
     Parameters
     ----------
     num_layers : The number of nail plate layers.
     N : Number of experiments.
     flavor : 1 or 2. Which implementation to use.
-
     Returns
     -------
     A [num_layers+1] long vector : Freqency Historgm, i.e., the number of balls that fall into each slot.
@@ -183,10 +177,8 @@ def exponential(num_rounds = 1000, p = 0.01, N = 10000):
     元器件寿命为何符合指数分布？  
     定义一个survival game（即每回合有p的死亡率；或电容在单位时间内被击穿的概率）的概率
     取p = 0.001（每回合很小的死亡率），绘制出pmf曲线（离散、等比数组）
-
     This code defines the probability calculation function of the survival game.
     (e.g. a mortality rate of [p] per turn, or a capacitor having a probability of [p] being broken down per unit of time).
-
     Parameters
     ----------
     num_rounds : survial game rounds
@@ -218,7 +210,6 @@ def exponential(num_rounds = 1000, p = 0.01, N = 10000):
     # survival game.It has survived n rounds; dies in n+1 round. 
     def survival_dist(n,p):
         return pow((1-p),n)*p
-
     plt.figure(figsize = (10,3))
     # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
     x = linspace(0,num_rounds,num_rounds+1)

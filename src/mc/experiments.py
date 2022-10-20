@@ -15,12 +15,10 @@ def pi(N = 1000000, flavor = 0):
     Perform a mc experiment to estimate PI. 
     N points (x,y) are drawn from uniform random distributions in the range of -1 to +1. 
     The points within the unit circle divided by N is an approximation of PI/4.
-
     Parameters
     ----------
     N : number of points.
     flavor : which implementation to use. 1 or 2.
-
     Returns
     -------
     freq : The ratio / percentage of points within the unit circle divided by N.
@@ -72,19 +70,15 @@ def parcel(N=100000, num_players = 5, num_ops = 10):
     Simulate a bi-directional parcel passing game. 
     [num_players] players form a circle. 
     Then, each round the parcel can be passed to the left or right person. 
-
     球回到A手中的试验次数 / 总试验次数 = parcel(试验次数, 玩家数目，每次试验传球次数)
-
     Parameters
     ----------
     N : number of experiments.
     num_players : the number of players.      
     num_ops : the number of passes per experiment.
-
     Returns
     -------
     p : the approximated probability the parcel returns to the starter player.
-
     Example
     ----
     ### Five people (A, B, C, D, E) stand in a circle to play the game of parcel passing.
@@ -118,15 +112,12 @@ def dices(N = 10000):
     If all three dice have the same number of points, 8 points are awarded;
     If only two of the dice have the same number of points, 2 points are awarded;
     If the three dice have different points, 0 points are awarded.
-
     Parameters
     ----------
     N : number of experiments.
-
     Returns
     -------
     Frequency History, i.e., the number of times each case occurs
-
     Notes
     -----
     When calculating the probability that the three dices have different points.
