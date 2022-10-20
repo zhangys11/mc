@@ -6,8 +6,10 @@ A Monte-Carlo toolkit for educational purposes.
 # package architecture
 
     experiments
-        each experiment has a related distribution
+        - classical / typical experiments in probability
 
     distributions 
-        - common
-        - sampling
+        - inclulde MC experiments that produce common distributions
+
+    samplings
+        - sampling distributions of statistic used in hypothesis tests
