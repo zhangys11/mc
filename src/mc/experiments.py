@@ -9,23 +9,31 @@ if __package__:
 else:
     import distributions
 
-def pi(N = 1000000, flavor = 0):
+def pi(N = 1000000, flavor = 1):
     
     """
     Perform a mc experiment to estimate PI. 
-    N points (x,y) are drawn from uniform random distributions in the range of -1 to +1. 
-    The points within the unit circle divided by N is an approximation of PI/4.
+    
     Parameters
     ----------
     N : number of points.
-    flavor : which implementation to use. 1 or 2.
+    flavor : which implementation to use. 
+        0 - the classic Buffon's needle problem 
+        1, 2 - circle inside square. N points (x,y) are drawn from uniform random distributions in the range of -1 to +1. 
+    The points within the unit circle divided by N is an approximation of PI/4.
     Returns
     -------
     freq : The ratio / percentage of points within the unit circle divided by N.
     PI :  An estimated value of PI.
     """
+    if flavor == 0:
+        # Buffon
+        # PI = 1 / freq
+        # print("frequency = {}/{} = {}".format(idx.sum(), N, idx.sum()/N))
+        # print("PI = {}".format(idx.sum()/N*4))        
+        return freq, PI
 
-    if flavor == 1:
+    elif flavor == 1:
 
         def is_inside_unit_circle(x, y):
             '''
