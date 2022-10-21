@@ -9,7 +9,7 @@ if __package__:
 else:
     import distributions
 
-def pi(N = 1000000, flavor = 1):
+def pi(N = 1000000, a = 4, l = 1,flavor = 1):
     
     """
     Perform a mc experiment to estimate PI. 
@@ -17,8 +17,10 @@ def pi(N = 1000000, flavor = 1):
     Parameters
     ----------
     N : number of points.
+    a : the distance between two parallel lines in the Buffon's needle problem.
+    l : the length of the needle arbitrarily cast in the Buffon's needle problem.
     flavor : which implementation to use. 
-        0 - the classic Buffon's needle problem 
+        0 - the classic Buffon's needle problem.
         1, 2 - circle inside square. N points (x,y) are drawn from uniform random distributions in the range of -1 to +1. 
     The points within the unit circle divided by N is an approximation of PI/4.
     Returns
@@ -27,11 +29,17 @@ def pi(N = 1000000, flavor = 1):
     PI :  An estimated value of PI.
     """
     if flavor == 0:
-        # Buffon
-        # PI = 1 / freq
-        # print("frequency = {}/{} = {}".format(idx.sum(), N, idx.sum()/N))
-        # print("PI = {}".format(idx.sum()/N*4))        
-        return freq, PI
+        xl = np.pi*np.random.random(N)
+        yl = 0.5*a*np.random.random(N)
+        m = 0
+        for x,y in zip(xl,yl):
+            if y < 0.5*l*np.sin(x):
+                m += 1
+
+        freq = m/N
+        PI = 2*l/(a*freq)
+        print("frequency = {}/{} = {}".format(m, N, m/N))
+        print("PI = {}".format(2*l/(a*(m/N))))        
 
     elif flavor == 1:
 
@@ -56,7 +64,10 @@ def pi(N = 1000000, flavor = 1):
             if (is_inside_unit_circle(xs[i], ys[i])):
                 cnt += 1
 
-        freq = cnt / N        
+        freq = cnt / N    
+        PI = freq*4
+        print("frequency = {}/{} = {}".format(cnt, N, cnt/N))
+        print("PI = {}".format(cnt/N*4))       
 
     else:
 
@@ -64,11 +75,11 @@ def pi(N = 1000000, flavor = 1):
         pts = np.random.uniform(-1,1,(N,2))
         # Select the points according to your condition
         idx = (pts**2).sum(axis=1)  <= 1.0
+
         freq = idx.sum()/N
-    
-    PI = freq*4
-    print("frequency = {}/{} = {}".format(idx.sum(), N, idx.sum()/N))
-    print("PI = {}".format(idx.sum()/N*4))        
+        PI = freq*4
+        print("frequency = {}/{} = {}".format(idx.sum(), N, idx.sum()/N))
+        print("PI = {}".format(idx.sum()/N*4))        
     return freq, PI
           
 
