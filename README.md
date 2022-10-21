@@ -13,3 +13,7 @@ A Monte-Carlo toolkit for educational purposes.
 
     samplings
         - sampling distributions of statistic used in hypothesis tests
+
+# future plan
+
+gui.py - add a tk-inter (ttkbootstrap) GUI
