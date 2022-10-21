@@ -228,7 +228,7 @@ def prisoners(n = 100, N = 2000):
         
     return WINS / (WINS + FAILS)
 
-def prisoners_limit(ns = [10, 20, 30, 40, 50, 100, 200, 500, 1000, 2000], N = 1000):
+def prisoners_limit(ns = [10, 20, 30, 40, 50, 100, 200, 500, 1000], N = 1000, repeat = 1, SD = 0):
     '''
     Test how the survival rate changes with n. The limit is 1-ln2.
 
@@ -236,16 +236,40 @@ def prisoners_limit(ns = [10, 20, 30, 40, 50, 100, 200, 500, 1000, 2000], N = 10
     ----------
     ns : n values to be tested. default is [10, 20, 30, 50, 100, 200, 500, 1000, 2000]
     N : how many MC experiments to run for each n 
+    repeat : repeat multiple times to calculate the SD (standard deviation)
+    SD : how many SD (standard deviation) to show in the error bar chart 
     '''
     
-    fs = []
-    for n in ns:
-        fs.append( prisoners(n, N = N) )
+    fss = []
+
+    if repeat is None or repeat < 1:
+        repeat = 1
+
+    for _ in range(repeat):
+        fs = []
+        for n in ns:
+            fs.append( prisoners(n, N = N) )
+        fss.append(fs)
+    
+    fss = np.array(fss) # repeat-by-ns matrix
+    fsm = fss.mean(axis = 0)
         
     plt.figure(figsize = (10, 4))
-    plt.scatter(ns, fs, label='survival chance')
-    plt.plot(ns, fs)
-    plt.hlines(y = 1 - math.log(2), xmin = np.min(ns), xmax = np.max(ns), color ='r', label = r'$1- ln(2) = $' + str(round(1 - math.log(2), 3))) 
+
+    if SD == 0 or repeat <= 1:
+        plt.scatter(ns, fsm, label='survival chance')
+        plt.plot(ns, fsm)
+    else: # show +/- std errorbar
+        plt.errorbar(ns, fsm, fss.std(axis = 0)*SD, 
+                    # color = ["blue","red","green","orange"][c], 
+                    linewidth=1, 
+                    alpha=0.2,
+                    label= 'survival chance. mean ± '+ str(SD) +' SD',
+                    )
+        plt.scatter(ns, fsm)
+    
+    plt.hlines(y = 1 - math.log(2), xmin = np.min(ns), xmax = np.max(ns), \
+        color ='r', label = r'$1- ln(2) = $' + str(round(1 - math.log(2), 3))) 
     plt.xlabel('prisoner number')
     plt.legend()
     plt.show()
