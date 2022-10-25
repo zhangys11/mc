@@ -352,3 +352,14 @@ def cochrane_q_stat(p = 0.5, K = 3, n = 100, N = 10000):
     plt.title('Theoretical Distribution\n$\chi^2(df='+ str(K-1) + ')$') 
     plt.legend()
     plt.show()
+
+def hotelling_t2_stat():
+    '''
+    The Hotelling T2- distribution was proposed by H. Hotelling for testing equality of means of two normal populations. 
+    This functions verify the T2 statistic constructed from two multivariate Gussian follows the Hotelling's T2 distribution. 
+
+    For k=1 the Hotelling T2- distribution reduces to the Student distribution, 
+    and for any k>0 it can be regarded as a multivariate generalization of the 
+    Student distribution
+    '''
+    pass
