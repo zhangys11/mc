@@ -4,8 +4,10 @@
 # distribution of a given random-sample-based statistic.
 
 import numpy as np
+from numpy import mat
 import collections
 from scipy.stats import binom, chi2, f
+from scipy.special import gamma
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
@@ -335,7 +337,7 @@ def cochrane_q_stat(p = 0.5, K = 3, n = 100, N = 10000):
     
     Ts = []
 
-    for i in tqdm(range(10000)): # MC试验次数
+    for i in tqdm(range(N)): # MC试验次数
         
         X = np.random.binomial(1, p, (n, K)) # return a nxK matrix of {0,1}
         T = (K-1)*(K*np.sum(X.sum(axis = 0)**2)-np.sum(X.sum(axis = 0))**2) / np.sum ((K - X.sum(axis = 1) ) * X.sum(axis = 1) )
@@ -353,7 +355,7 @@ def cochrane_q_stat(p = 0.5, K = 3, n = 100, N = 10000):
     plt.legend()
     plt.show()
 
-def hotelling_t2_stat():
+def hotelling_t2_stat(n = 50, k = 2, u = 0, N = 1000):
     '''
     The Hotelling T2- distribution was proposed by H. Hotelling for testing equality of means of two normal populations. 
     This functions verify the T2 statistic constructed from two multivariate Gussian follows the Hotelling's T2 distribution. 
@@ -361,5 +363,34 @@ def hotelling_t2_stat():
     For k=1 the Hotelling T2- distribution reduces to the Student distribution, 
     and for any k>0 it can be regarded as a multivariate generalization of the 
     Student distribution
+    Parameters
+    ----------
+    n : samples per class.  
+    K : groups / classes.
+    u : population mean.
+    N : how many MC experiments to run.
     '''
-    pass
+  
+    T2s = []
+    for i in tqdm(range(N)):
+        X = np.random.randn(k,n)
+        X_mat=mat(X)
+        X1 = (X_mat.sum(axis=1))/n #x ba
+        sum_xs = 0
+        for j in range(0,n):
+            sum_xs = sum_xs+(X_mat[:,j]-X1)*((X_mat[:,j]-X1).T)
+        s = sum_xs/(n-1)
+        T2 = (n*((X1-u).T))*(np.linalg.inv(s))*(X1-u)
+        T2s.append(T2[0,0])
+    plt.hist(T2s, density=False, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of Hotelling's $T^2$ statistic ($T^2 = n(\overline{X}-\mu)^{T}S^{-1}(\overline{x}-\mu)$)")
+    plt.show()
+
+    x = np.linspace(np.min(T2s), np.max(T2s), 100)
+    y = ((gamma((n+1)/2))*((1+x/n)**(-(n+1)/2)))/((gamma((n-1)/2))*(gamma(1)*n))
+    plt.figure()
+    plt.plot(x,y, lw=3, alpha=0.6, c = "black", \
+            label = '$T^2(' + str(k) + ',' + str(n+k-1) + ')$')
+    plt.title('Theoretical Distribution\n$T^2(' + str(k) + ',' + str(n+k-1) + ')$') 
+    plt.legend()
+    plt.show()
