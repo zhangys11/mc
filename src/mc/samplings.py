@@ -355,7 +355,7 @@ def cochrane_q_stat(p = 0.5, K = 3, n = 100, N = 10000):
     plt.legend()
     plt.show()
 
-def hotelling_t2_stat(n = 50, k = 2, u = 0, N = 1000):
+def hotelling_t2_stat(n = 50, k = 2, N = 1000):
     '''
     The Hotelling T2- distribution was proposed by H. Hotelling for testing equality of means of two normal populations. 
     This functions verify the T2 statistic constructed from two multivariate Gussian follows the Hotelling's T2 distribution. 
@@ -367,20 +367,19 @@ def hotelling_t2_stat(n = 50, k = 2, u = 0, N = 1000):
     ----------
     n : samples per class.  
     K : groups / classes.
-    u : population mean.
     N : how many MC experiments to run.
     '''
   
     T2s = []
     for i in tqdm(range(N)):
-        X = np.random.randn(k,n)
+        X = np.random.randn(k,n) # Draw from a standard normal dist. The returned X is de-meaned, no need to do (X-mu) afterwards.
         X_mat=mat(X)
         X1 = (X_mat.sum(axis=1))/n #x ba
         sum_xs = 0
         for j in range(0,n):
             sum_xs = sum_xs+(X_mat[:,j]-X1)*((X_mat[:,j]-X1).T)
-        s = sum_xs/(n-1)
-        T2 = (n*((X1-u).T))*(np.linalg.inv(s))*(X1-u)
+        SIGMA = sum_xs/(n-1)
+        T2 = (n*X1.T)*(np.linalg.inv(SIGMA))*X1
         T2s.append(T2[0,0])
     plt.hist(T2s, density=False, bins=100, facecolor="none", edgecolor = "black")
     plt.title("Histogram of Hotelling's $T^2$ statistic ($T^2 = n(\overline{X}-\mu)^{T}S^{-1}(\overline{x}-\mu)$)")
@@ -391,6 +390,6 @@ def hotelling_t2_stat(n = 50, k = 2, u = 0, N = 1000):
     plt.figure()
     plt.plot(x,y, lw=3, alpha=0.6, c = "black", \
             label = '$T^2(' + str(k) + ',' + str(n+k-1) + ')$')
-    plt.title('Theoretical Distribution\n$T^2(' + str(k) + ',' + str(n+k-1) + ')$') 
+    plt.title('Theoretical Distribution $T^2(' + str(k) + ',' + str(n+k-1) + ')$\n$p(x)=$') 
     plt.legend()
     plt.show()
