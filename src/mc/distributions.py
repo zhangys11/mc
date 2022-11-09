@@ -313,9 +313,9 @@ def student(k=5, N = 10000):
     plt.show()
 
     plt.figure(figsize = (10,3)) 
-    plt.title('Theoretical Distribution\n' + r'$t (df='+ str(k) + ')$')  
+    plt.title('Theoretical Distribution\n' + r'$t (dof='+ str(k) + ')$')  
     x = np.linspace(round(min(ts)), round(max(ts)+0.5), 200) 
-    plt.plot(x,stats.t.pdf(x=x, df=k), label = r'$t (df='+ str(k) + ')$')
+    plt.plot(x,stats.t.pdf(x=x, df=k), label = r'$t (dof='+ str(k) + ')$')
     plt.legend()
     plt.show() 
 

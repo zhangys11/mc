@@ -390,6 +390,6 @@ def hotelling_t2_stat(n = 50, k = 2, N = 1000):
     plt.figure()
     plt.plot(x,y, lw=3, alpha=0.6, c = "black", \
             label = '$T^2(' + str(k) + ',' + str(n+k-1) + ')$')
-    plt.title('Theoretical Distribution $T^2(' + str(k) + ',' + str(n+k-1) + ')$\n$p(x)=$') 
+    plt.title('Theoretical Distribution $T^2(' + str(k) + ',' + str(n+k-1) + ')$ \n $p(x) = \dfrac{\Gamma((n+1)/2)x^{k/2-1}(1+x/n)^{-(n+1)/2}}{\Gamma((n-k+1)/2)\Gamma(k/2)n^{k/2}}$') 
     plt.legend()
     plt.show()
