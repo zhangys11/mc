@@ -313,9 +313,9 @@ def student(k=5, N = 10000):
     plt.show()
 
     plt.figure(figsize = (10,3)) 
-    plt.title('Theoretical Distribution\n' + r'$t (df='+ str(k) + ')$')  
+    plt.title('Theoretical Distribution\n' + r'$t (dof='+ str(k) + ')$')  
     x = np.linspace(round(min(ts)), round(max(ts)+0.5), 200) 
-    plt.plot(x,stats.t.pdf(x=x, df=k), label = r'$t (df='+ str(k) + ')$')
+    plt.plot(x,stats.t.pdf(x=x, df=k), label = r'$t (dof='+ str(k) + ')$')
     plt.legend()
     plt.show() 
 
@@ -335,9 +335,9 @@ def F(df1=10, df2=10, N = 1000):
     plt.show()
 
     plt.figure(figsize = (10,3)) 
-    plt.title('Theoretical Distribution\n' + r'$F (df1='+ str(df1) + ', df2='+ str(df2) + ')$')  
+    plt.title('Theoretical Distribution\n' + r'$F (dof1='+ str(df1) + ', dof2='+ str(df2) + ')$')  
     x = np.linspace(round(min(Fs)), round(max(Fs)+0.5), 200) 
-    plt.plot(x,stats.f.pdf(x=x, dfn=df1, dfd=df2), label = r'$F (df1='+ str(df1) + ', df2='+ str(df2) + ')$')
+    plt.plot(x,stats.f.pdf(x=x, dfn=df1, dfd=df2), label = r'$F (dof1='+ str(df1) + ', dof2='+ str(df2) + ')$')
     plt.legend()
     plt.show() 
 

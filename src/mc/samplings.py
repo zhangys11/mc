@@ -174,8 +174,8 @@ def chisq_stat(dist = 'binom', K = 8, sample_size = 100, N = 10000):
 
     plt.figure()
     x = np.linspace(0, np.max(chisqs) ,100)
-    plt.plot(x, chi2.pdf(x, df = K-1), lw=3, alpha=0.6, label='df = ' + str(K-1), c = "black")
-    plt.title('Theoretical Distribution\n$\chi^2(df='+ str(K-1) + ')$') 
+    plt.plot(x, chi2.pdf(x, df = K-1), lw=3, alpha=0.6, label='dof = ' + str(K-1), c = "black")
+    plt.title('Theoretical Distribution\n$\chi^2(dof='+ str(K-1) + ')$') 
     plt.legend()
     plt.show()
 
@@ -272,8 +272,8 @@ def kw_stat(dist = 'uniform', K = 3, n = 100, N = 10000):
 
     x=np.linspace(np.min(Hs) - np.min(Hs), np.max(Hs) - np.min(Hs), 100) # 差一个平移，research later
     plt.figure()
-    plt.plot(x, chi2.pdf(x, df = K-1), label='df = ' + str(K - 1))
-    plt.title('Theoretical Distribution\n$\chi^2(df='+ str(K-1) + ')$') 
+    plt.plot(x, chi2.pdf(x, df = K-1), label='dof = ' + str(K - 1))
+    plt.title('Theoretical Distribution\n$\chi^2(dof='+ str(K-1) + ')$') 
     plt.legend()
     plt.show()
 
@@ -350,8 +350,8 @@ def cochrane_q_stat(p = 0.5, K = 3, n = 100, N = 10000):
 
     x=np.linspace(np.min(Ts), np.max(Ts), 100)
     plt.figure()
-    plt.plot(x, chi2.pdf(x, df = K-1), label='df = ' + str(K - 1))
-    plt.title('Theoretical Distribution\n$\chi^2(df='+ str(K-1) + ')$') 
+    plt.plot(x, chi2.pdf(x, df = K-1), label='dof = ' + str(K - 1))
+    plt.title('Theoretical Distribution\n$\chi^2(dof='+ str(K-1) + ')$') 
     plt.legend()
     plt.show()
 
