@@ -102,7 +102,7 @@ def clt(dist = 'bernoulli', sample_size = [1,2,5,20], N = 10000, display = True)
     
     # plt.yticks([])
     plt.show()
-
+    
     
 def clt_all():
     '''
@@ -113,8 +113,7 @@ def clt_all():
         clt(dist, sample_size = [1,2,5,20,50], N = 10000)
 
 
-
-def chisq_stat(dist = 'binom', K = 8, sample_size = 100, N = 10000):
+def chisq_gof_stat(dist = 'binom', K = 8, sample_size = 100, N = 10000):
     '''
     Verify the chisq statistic used in Pearson's Chi-Square Goodness-of-Fit Test. 
     验证皮尔逊卡方拟合优度检验的卡方分布假设
