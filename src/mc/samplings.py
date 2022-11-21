@@ -363,7 +363,7 @@ def levene_hov_stat():
     '''
 
 
-def bartlett_sphericit_stat():
+def bartlett_hov_stat():
     '''
     For sign test, if H0 is true (m = m0), the N- and N+ both follow b(n,1/2)
 
