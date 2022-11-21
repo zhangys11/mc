@@ -10,6 +10,7 @@ from scipy.stats import binom, chi2, f
 from scipy.special import gamma
 from tqdm import tqdm
 import matplotlib.pyplot as plt
+from sklearn import preprocessing
 
 if __package__:
     from . import experiments
@@ -275,6 +276,119 @@ def kw_stat(dist = 'uniform', K = 3, n = 100, N = 10000):
     plt.title('Theoretical Distribution\n$\chi^2(dof='+ str(K-1) + ')$') 
     plt.legend()
     plt.show()
+
+def median_stat(k = 6, ni = 1000, n = 10000):
+    '''
+    This test is performed by analyzing multiple sets of independent samples.                                  
+    Examine whether there is a significant difference in the median of the population from which they come.
+    ----------
+    ni : samples per class. In this experiment, all group sizes are equal. 
+    k : groups / classes
+    n : how many MC experiments to run
+    '''
+    N=ni*k 
+    MTs = []
+    for i in tqdm(range(n)):
+        X = np.random.randint(0,100,[k,ni])
+
+        Os = []
+        for j in range(0,k):
+            x_median = np.median(X[j])
+            O_1i = 0
+            for y in range(0,ni):
+                if X[j][y] > x_median:
+                    O_1i += 1
+            Os.append(O_1i)
+
+        X_median = np.median(X)
+        a =0
+        for j in range(0,k):
+            for y in range(0,ni):
+                if X[j][y] > X_median:
+                    a += 1
+                    
+        accu =0
+        for x in range(0,k):
+            accu += ((Os[x]-(ni*a)/N)**2)/ni
+        MT = (N**2/(a*(N-a)))*accu
+        MTs.append(MT)
+
+    plt.hist(MTs, density=False, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of Median Test $MT$ statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)")
+    plt.show()
+
+def fk_hov_stat(n = 10, k = 5, N = 1000):
+    '''
+    The Fligner-Killeen test is a non-parametric test for homogeneity of group variances based on ranks.
+    Verify the Fligner-Killeen Test statistic (FK) is a X2 random variable.
+
+    Parameters
+    ----------
+    n : samples per class. In this experiment, all group sizes are equal. 
+    K : groups / classes
+    N : how many MC experiments to run
+    '''
+    FKs = []
+    for i in tqdm(range(N)):
+        X = np.random.randint(0,100,[k,n])
+        X_normal = preprocessing.scale(X)
+        a_j_bar = (X_normal.sum(axis=1))/n
+        a_bar = X_normal.sum()/(n*k)
+        sum = 0
+        for j in range(0,k):
+            sum = sum+k*(a_j_bar[j]-a_bar)**2
+        FK = sum/X_normal.var()
+        FKs.append(FK)
+    plt.hist(FKs, density=False, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of Fligner-Killeen test $FK$ statistic ($FK = \dfrac{\sum_{j=1}^{k}n_{j}(\overline{a_{j}}-\overline{a})^2}{s^2}$)")
+    plt.show()
+
+    x = np.linspace(np.min(FKs), np.max(FKs), 100)
+    plt.figure()
+    plt.plot(x, chi2.pdf(x, df = k-1), label='dof = ' + str(k - 1))
+    plt.title('Theoretical Distribution\n$\chi^2(dof='+ str(k-1) + ')$') 
+    plt.legend()
+    plt.show() 
+
+def levene_hov_stat():
+    '''
+    For sign test, if H0 is true (m = m0), the N- and N+ both follow b(n,1/2)
+
+    Parameters
+    ----------
+    dist : population assumption. As sign test is non-parametric, the choice of dist doesn't matter.
+        By default, we use exponential. It's theoretical median is m = $\theta ln(2)$
+    n : sample size.
+    N : how many MC experiments to run
+    '''
+
+
+def bartlett_sphericit_stat():
+    '''
+    For sign test, if H0 is true (m = m0), the N- and N+ both follow b(n,1/2)
+
+    Parameters
+    ----------
+    dist : population assumption. As sign test is non-parametric, the choice of dist doesn't matter.
+        By default, we use exponential. It's theoretical median is m = $\theta ln(2)$
+    n : sample size.
+    N : how many MC experiments to run
+    '''
+
+
+def bartlett_sphericity_stat():
+    '''
+    For sign test, if H0 is true (m = m0), the N- and N+ both follow b(n,1/2)
+
+    Parameters
+    ----------
+    dist : population assumption. As sign test is non-parametric, the choice of dist doesn't matter.
+        By default, we use exponential. It's theoretical median is m = $\theta ln(2)$
+    n : sample size.
+    N : how many MC experiments to run
+    '''
+
+
 
 def sign_test_stat(dist = 'expon', n = 100, N = 10000):
     '''
