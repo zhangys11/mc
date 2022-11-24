@@ -206,7 +206,7 @@ def dices(N = 10000):
 
 def prisoners(n = 100, N = 2000):
     '''
-    The famous 100-prisoners quiz.
+    The famous the locker puzzle.
     We will prove that the limit is (1-ln2) when n approaches +inf
 
     Parameters
