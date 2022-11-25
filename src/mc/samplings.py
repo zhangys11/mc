@@ -317,7 +317,7 @@ def median_stat(k = 6, ni = 1000, n = 10000):
     plt.title("Histogram of Median Test $MT$ statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)")
     plt.show()
 
-def fk_hov_stat(n = 10, k = 5, N = 1000):
+def fk_stat(n = 10, k = 5, N = 1000):
     '''
     The Fligner-Killeen test is a non-parametric test for homogeneity of group variances based on ranks.
     Verify the Fligner-Killeen Test statistic (FK) is a X2 random variable.
@@ -350,30 +350,74 @@ def fk_hov_stat(n = 10, k = 5, N = 1000):
     plt.legend()
     plt.show() 
 
-def levene_hov_stat():
+def levene_hov_stat(ni = 5, k = 2, n = 1000):
     '''
-    For sign test, if H0 is true (m = m0), the N- and N+ both follow b(n,1/2)
+    Levene's test is used to test if k samples have equal variances. 
+    Verify the Levene's Test statistic (W) is a X2 random variable.
 
     Parameters
     ----------
-    dist : population assumption. As sign test is non-parametric, the choice of dist doesn't matter.
-        By default, we use exponential. It's theoretical median is m = $\theta ln(2)$
-    n : sample size.
-    N : how many MC experiments to run
+    ni : samples per class. In this experiment, all group sizes are equal. 
+    K : groups / classes
+    n : how many MC experiments to run
     '''
+    N=ni*k 
+    Ws = []
+    for i in tqdm(range(n)):
+        X = np.random.randn(k,ni)
+        X_mat = mat(X)
+        X_bar = X_mat.mean(axis = 1)
+        Z_ij = X_mat-X_bar
+        Zi_bar = Z_ij.mean(axis = 1)
+        Z_i2 = [(i - np.mean(Z_ij))**2 for i in Zi_bar]
+        W = ((N-k)/(k-1))*(sum([ni*i for i in Z_i2])/np.sum(np.square(Z_ij-Zi_bar)))
+        Ws.append(W[0,0])
+
+    plt.hist(Ws, density=False, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of Hotelling's $W$ statistic ($W=\dfrac{N-k}{k-1}*\dfrac{\sum_{i=1}^{k}n_{i}(\overline{Z_{i.}}-\overline{Z_{..}})^2}{\sum_{i=1}^{k}\sum_{j=1}^{n_{i}}(Z_{ij}-\overline{Z_{i.}})^2}$)")
+    plt.show()
 
 
-def bartlett_hov_stat():
+    x=np.linspace(np.min(Ws), np.max(Ws), 100)
+    plt.figure()
+    plt.plot(x, chi2.pdf(x, df = k-1), label='dof = ' + str(k - 1))
+    plt.title('Theoretical Distribution\n$\chi^2(dof='+ str(k-1) + ')$') 
+    plt.legend()
+    plt.show()
+
+
+def bartlett_hov_stat(k = 5, ni = 10, n = 1000):
     '''
-    For sign test, if H0 is true (m = m0), the N- and N+ both follow b(n,1/2)
+    Bartlett's test is used to test homoscedasticity, that is, if multiple samples are from populations with equal variances. 
+    Verify the Bartlett's Test statistic is a X2 random variable.
 
     Parameters
     ----------
-    dist : population assumption. As sign test is non-parametric, the choice of dist doesn't matter.
-        By default, we use exponential. It's theoretical median is m = $\theta ln(2)$
-    n : sample size.
-    N : how many MC experiments to run
+    k : groups / classes
+    ni : samples per class. In this experiment, all group sizes are equal. 
+    n : how many MC experiments to run
     '''
+    N=ni*k 
+    BTs = []
+    for i in tqdm(range(n)):
+        X = np.random.randn(k,ni)
+        Si_2 = np.var(X, axis=1) 
+        SP_2 = (1/(N-k))*sum([i * (ni-1) for i in Si_2])
+        ln_Si2 = np.log([i for i in Si_2])
+        BT = ((N-k)*np.log(SP_2)-sum([i * (ni-1) for i in ln_Si2]))/(1+(1/(3*(k-1)))*(k*((1/ni)-1/(N-k))))
+        BTs.append(BT)
+
+    plt.hist(BTs, density=False, bins=100, facecolor="none", edgecolor = "black")
+    plt.title("Histogram of Hotelling's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}(n_{i}-1)\ln^{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}})-\dfrac{1}{N-k})}$)")
+    plt.show()
+
+
+    x=np.linspace(np.min(BTs), np.max(BTs), 100)
+    plt.figure()
+    plt.plot(x, chi2.pdf(x, df = k-1), label='dof = ' + str(k - 1))
+    plt.title('Theoretical Distribution\n$\chi^2(dof='+ str(k-1) + ')$') 
+    plt.legend()
+    plt.show()
 
 
 def bartlett_sphericity_stat():
