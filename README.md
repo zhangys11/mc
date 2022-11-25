@@ -16,4 +16,4 @@ A Monte-Carlo toolkit for educational purposes.
 
 # future plan
 
-gui.py - add a tk-inter (ttkbootstrap) GUI
+gui.py - add a Flask or tk-inter (ttkbootstrap) GUI
