@@ -277,18 +277,22 @@ def kw_stat(dist = 'uniform', K = 3, n = 100, N = 10000):
     plt.legend()
     plt.show()
 
-def median_stat(k = 6, ni = 1000, n = 10000):
+def median_stat(k = 5, n = 1000, N = 10000):
     '''
     This test is performed by analyzing multiple sets of independent samples.                                  
     Examine whether there is a significant difference in the median of the population from which they come.
     ----------
     ni : samples per class. In this experiment, all group sizes are equal. 
     k : groups / classes
-    n : how many MC experiments to run
+    N : how many MC experiments to run
     '''
-    N=ni*k 
+
+    MC = N # monte-carlo experiments
+    ni = n # samples per class
+    N = ni*k # total
+
     MTs = []
-    for i in tqdm(range(n)):
+    for i in tqdm(range(MC)):
         X = np.random.randint(0,100,[k,ni])
 
         Os = []
@@ -315,6 +319,13 @@ def median_stat(k = 6, ni = 1000, n = 10000):
 
     plt.hist(MTs, density=False, bins=100, facecolor="none", edgecolor = "black")
     plt.title("Histogram of Median Test $MT$ statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)")
+    plt.show()
+
+    x = np.linspace(chi2.ppf(0.0001, df = k-1), chi2.ppf(0.9999, df = k-1),100) # np.linspace(np.min(MTs) - np.min(MTs), np.max(MTs) - np.min(MTs), 100)
+    plt.figure()
+    plt.plot(x, chi2.pdf(x, df = k-1), label='dof = ' + str(k - 1)) # 差
+    plt.title('Theoretical Distribution\n$\chi^2(dof='+ str(k-1) + ')$') 
+    plt.legend()
     plt.show()
 
 def fk_stat(n = 10, k = 5, N = 1000):
@@ -350,7 +361,7 @@ def fk_stat(n = 10, k = 5, N = 1000):
     plt.legend()
     plt.show() 
 
-def levene_hov_stat(ni = 5, k = 2, n = 1000):
+def levene_stat(ni = 5, k = 2, n = 1000):
     '''
     Levene's test is used to test if k samples have equal variances. 
     Verify the Levene's Test statistic (W) is a X2 random variable.
@@ -386,7 +397,7 @@ def levene_hov_stat(ni = 5, k = 2, n = 1000):
     plt.show()
 
 
-def bartlett_hov_stat(k = 5, ni = 10, n = 1000):
+def bartlett_stat(k = 5, ni = 10, n = 1000):
     '''
     Bartlett's test is used to test homoscedasticity, that is, if multiple samples are from populations with equal variances. 
     Verify the Bartlett's Test statistic is a X2 random variable.
@@ -408,7 +419,7 @@ def bartlett_hov_stat(k = 5, ni = 10, n = 1000):
         BTs.append(BT)
 
     plt.hist(BTs, density=False, bins=100, facecolor="none", edgecolor = "black")
-    plt.title("Histogram of Hotelling's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}(n_{i}-1)\ln^{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}})-\dfrac{1}{N-k})}$)")
+    plt.title("Histogram of Bartlett's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}(n_{i}-1)\ln^{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}})-\dfrac{1}{N-k})}$)")
     plt.show()
 
 
@@ -422,16 +433,12 @@ def bartlett_hov_stat(k = 5, ni = 10, n = 1000):
 
 def bartlett_sphericity_stat():
     '''
-    For sign test, if H0 is true (m = m0), the N- and N+ both follow b(n,1/2)
-
-    Parameters
-    ----------
-    dist : population assumption. As sign test is non-parametric, the choice of dist doesn't matter.
-        By default, we use exponential. It's theoretical median is m = $\theta ln(2)$
-    n : sample size.
-    N : how many MC experiments to run
+    Bartlett’s Test of Sphericity compares an observed correlation matrix to 
+    the identity matrix. Essentially it checks to see if there is a certain redundancy 
+    between the variables that we can summarize with a few number of factors.
+    This test is used as a precursory test for Factor Analysis or PCA.
     '''
-
+    pass
 
 
 def sign_test_stat(dist = 'expon', n = 100, N = 10000):
