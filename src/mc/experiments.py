@@ -67,7 +67,7 @@ def pi(N = 1000000, a = 4, l = 1,flavor = 1):
         freq = cnt / N    
         PI = freq*4
         print("frequency = {}/{} = {}".format(cnt, N, cnt/N))
-        print("PI = {}".format(cnt/N*4))       
+        print("PI = {}".format(cnt/N*4))
 
     else:
 
@@ -82,6 +82,24 @@ def pi(N = 1000000, a = 4, l = 1,flavor = 1):
         print("PI = {}".format(idx.sum()/N*4))        
     return freq, PI
           
+def pi_illustrate(N = 2000):
+    '''
+    Generate an illustration plot for the flavor 2 pi experiment
+    '''    
+    r = np.round( N / 500 + 0.5)
+
+    xs = np.random.uniform(-r,r,N)
+    ys = np.random.uniform(-r,r,N)
+
+    plt.figure(figsize = (4*r,4*r))
+    draw_circle = plt.Circle((0., 0.), r, fill=False)
+    plt.gcf().gca().add_artist(draw_circle)
+    plt.scatter(xs, ys, s = round(N/50 + 0.5), marker = 'o', edgecolor = 'gray', facecolor = 'none')
+    plt.axis("square") 
+    plt.axis("off") 
+    plt.xticks([-r,0,r])
+    plt.yticks([-r,0,r])
+    plt.show()
 
 def parcel(N=100000, num_players = 5, num_ops = 10):
     
