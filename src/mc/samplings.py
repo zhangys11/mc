@@ -448,7 +448,7 @@ def sign_test_stat(dist = 'expon', n = 100, N = 10000):
     Parameters
     ----------
     dist : population assumption. As sign test is non-parametric, the choice of dist doesn't matter.
-        By default, we use exponential. It's theoretical median is m = θ ln(2).
+        By default, we use exponential. It's theoretical median is m = θln(2).
     n : sample size.
     N : how many MC experiments to run
     '''
