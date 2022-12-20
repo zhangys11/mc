@@ -21,7 +21,7 @@ def pi(N = 1000000, a = 4, l = 1,flavor = 1):
     l : the length of the needle arbitrarily cast in the Buffon's needle problem.
     flavor : which implementation to use. 
         0 - the classic Buffon's needle problem.
-        1, 2 - circle inside square. N points (x,y) are drawn from uniform random distributions in the range of -1 to +1. 
+        1 - circle inside square. N points (x,y) are drawn from uniform random distributions in the range of -1 to +1. 
     The points within the unit circle divided by N is an approximation of PI/4.
     Returns
     -------
@@ -247,13 +247,13 @@ def prisoners(n = 100, N = 2000):
         
     return WINS / (WINS + FAILS)
 
-def prisoners_limit(ns = [10, 20, 30, 40, 50, 100, 200, 500, 1000], N = 1000, repeat = 1, SD = 0):
+def prisoners_limit(ns = [10, 20, 30, 40, 50, 100, 200, 500, 1000], N = 1000):
     '''
     Test how the survival rate changes with n. The limit is 1-ln2.
 
     Parameters
     ----------
-    ns : n values to be tested. default is [10, 20, 30, 50, 100, 200, 500, 1000, 2000]
+    ns : prisoner numbers to be tested.
     N : how many MC experiments to run for each n 
     repeat : repeat multiple times to calculate the SD (standard deviation)
     SD : how many SD (standard deviation) to show in the error bar chart 
