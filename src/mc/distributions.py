@@ -15,7 +15,7 @@ else:
     import os.path
     DATA_FOLDER = os.path.dirname(os.path.realpath(__file__)) + "/data/"
 
-def zipf(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
+def zipf(num_rounds = 10000, num_clips_k = 16000, verbose = False):
     
     """
     The Zipf law / distribution is published in 1949 by Harvard linguist George Kingsley Zipf. 
@@ -28,9 +28,8 @@ def zipf(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
     After enough rounds, the clips of different lengths will obey zipf distribution. 
     Parameters
     ----------
-    num_rounds : The number of random samples. 抽样拼接次数
-    num_clips_k : The total number of paper clips should be greater than [num_rounds]. This is the ratio of the numbers. 
-    Should always > 1. Some of values are 1.6, 1.8, 2, 2.5, 3.
+    num_rounds : game rounds.
+    num_clips_k : The total number of paper clips. It should always be greater than [num_rounds].
     Note
     ----
     Internally, we use grid search via the KLD metric to determine the best-fit zipf dist. 
@@ -187,9 +186,9 @@ def exponential(num_rounds = 1000, p = 0.01, N = 10000):
     (e.g. a mortality rate of [p] per turn, or a capacitor having a probability of [p] being broken down per unit of time).
     Parameters
     ----------
-    num_rounds : survial game rounds
-    p : The probability of suddent death / failure / accident for each round
-    N : players / sample count / MC simulations
+    num_rounds : survival game rounds
+    p : The probability of sudden death / failure / accident per round
+    N : MC simulations
     
     Returns
     -------
