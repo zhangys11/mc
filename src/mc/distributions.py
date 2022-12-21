@@ -15,7 +15,7 @@ else:
     import os.path
     DATA_FOLDER = os.path.dirname(os.path.realpath(__file__)) + "/data/"
 
-def zipf(num_rounds = 10000, num_clips_k = 16000, verbose = False):
+def zipf(num_rounds = 10000, num_clips = 16000, verbose = False):
     
     """
     The Zipf law / distribution is published in 1949 by Harvard linguist George Kingsley Zipf. 
@@ -29,17 +29,16 @@ def zipf(num_rounds = 10000, num_clips_k = 16000, verbose = False):
     Parameters
     ----------
     num_rounds : game rounds.
-    num_clips_k : The total number of paper clips. It should always be greater than [num_rounds].
+    num_clips : The total number of paper clips. It should always be greater than [num_rounds].
     Note
     ----
     Internally, we use grid search via the KLD metric to determine the best-fit zipf dist. 
     """ 
     
-    if num_clips_k <= 1:
-        print('Error: num_clips_k must > 1')
+    if num_clips <= num_rounds:# clip总数，应大于抽样拼接次数，
+        print('Error: num_clips must > num_rounds')
         return
 
-    num_clips = int(num_rounds*num_clips_k) # clip总数，应大于抽样拼接次数，i.e., k > 1
     history = []
     sets = [1]*num_clips    
     for iter in range(num_rounds):
@@ -53,12 +52,14 @@ def zipf(num_rounds = 10000, num_clips_k = 16000, verbose = False):
     vals = np.array(list(c.values())) 
     vals = vals / vals.sum()
     plt.bar(c.keys(), vals, color = 'gray', edgecolor='black')
-    plt.title("Frequency Histogram\nclips=" + str(num_clips) + ", rounds=" + str(num_rounds) + ", k=" + str(num_clips_k))
+    plt.title("Frequency Histogram\nclips=" + str(num_clips) + ", rounds=" + str(num_rounds))
     plt.show()
 
     kld = np.inf
     best_pwr = 1/2
     x = list(c.keys()) 
+
+    num_clips_k = num_clips / num_rounds
 
     for pwr in [1/6, 1/3, 1/2, 2/3, 1, 3/2]: # this is an inexact fitting
 

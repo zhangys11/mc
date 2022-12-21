@@ -372,29 +372,7 @@ def levene_stat(ni = 5, k = 2, n = 1000):
     K : groups / classes
     n : how many MC experiments to run
     '''
-    N=ni*k 
-    Ws = []
-    for i in tqdm(range(n)):
-        X = np.random.randn(k,ni)
-        X_mat = mat(X)
-        X_bar = X_mat.mean(axis = 1)
-        Z_ij = X_mat-X_bar
-        Zi_bar = Z_ij.mean(axis = 1)
-        Z_i2 = [(i - np.mean(Z_ij))**2 for i in Zi_bar]
-        W = ((N-k)/(k-1))*(sum([ni*i for i in Z_i2])/np.sum(np.square(Z_ij-Zi_bar)))
-        Ws.append(W[0,0])
-
-    plt.hist(Ws, density=False, bins=100, facecolor="none", edgecolor = "black")
-    plt.title("Histogram of Hotelling's $W$ statistic ($W=\dfrac{N-k}{k-1}*\dfrac{\sum_{i=1}^{k}n_{i}(\overline{Z_{i.}}-\overline{Z_{..}})^2}{\sum_{i=1}^{k}\sum_{j=1}^{n_{i}}(Z_{ij}-\overline{Z_{i.}})^2}$)")
-    plt.show()
-
-
-    x=np.linspace(np.min(Ws), np.max(Ws), 100)
-    plt.figure()
-    plt.plot(x, chi2.pdf(x, df = k-1), label='dof = ' + str(k - 1))
-    plt.title('Theoretical Distribution\n$\chi^2(dof='+ str(k-1) + ')$') 
-    plt.legend()
-    plt.show()
+    raise NotImplementedError
 
 
 def bartlett_stat(k = 5, ni = 10, n = 1000):
@@ -422,7 +400,6 @@ def bartlett_stat(k = 5, ni = 10, n = 1000):
     plt.title("Histogram of Bartlett's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}(n_{i}-1)\ln^{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}})-\dfrac{1}{N-k})}$)")
     plt.show()
 
-
     x=np.linspace(np.min(BTs), np.max(BTs), 100)
     plt.figure()
     plt.plot(x, chi2.pdf(x, df = k-1), label='dof = ' + str(k - 1))
@@ -431,14 +408,14 @@ def bartlett_stat(k = 5, ni = 10, n = 1000):
     plt.show()
 
 
-def bartlett_sphericity_stat():
+def bartlett_sphericity_stat(N = 10000):
     '''
     Bartlett’s Test of Sphericity compares an observed correlation matrix to 
     the identity matrix. Essentially it checks to see if there is a certain redundancy 
     between the variables that we can summarize with a few number of factors.
     This test is used as a precursory test for Factor Analysis or PCA.
     '''
-    pass
+    raise NotImplementedError
 
 
 def sign_test_stat(dist = 'expon', n = 100, N = 10000):

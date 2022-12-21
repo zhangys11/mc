@@ -9,7 +9,7 @@ if __package__:
 else:
     import distributions
 
-def pi(N = 1000000, a = 4, l = 1,flavor = 1):
+def pi(N = 1000000, a = 4, l = 1, flavor = 1):
     
     """
     Perform a mc experiment to estimate PI. 
@@ -22,7 +22,7 @@ def pi(N = 1000000, a = 4, l = 1,flavor = 1):
     flavor : which implementation to use. 
         0 - the classic Buffon's needle problem.
         1 - circle inside square. N points (x,y) are drawn from uniform random distributions in the range of -1 to +1. 
-    The points within the unit circle divided by N is an approximation of PI/4.
+        The points within the unit circle divided by N is an approximation of PI/4.
     Returns
     -------
     freq : The ratio / percentage of points within the unit circle divided by N.
@@ -39,7 +39,7 @@ def pi(N = 1000000, a = 4, l = 1,flavor = 1):
         freq = m/N
         PI = 2*l/(a*freq)
         print("frequency = {}/{} = {}".format(m, N, m/N))
-        print("PI = {}".format(2*l/(a*(m/N))))        
+        print("PI = {}".format(2*l/(a*(m/N))))
 
     elif flavor == 1:
 
@@ -79,7 +79,8 @@ def pi(N = 1000000, a = 4, l = 1,flavor = 1):
         freq = idx.sum()/N
         PI = freq*4
         print("frequency = {}/{} = {}".format(idx.sum(), N, idx.sum()/N))
-        print("PI = {}".format(idx.sum()/N*4))        
+        print("PI = {}".format(idx.sum()/N*4))    
+
     return freq, PI
           
 def pi_illustrate(N = 2000):
@@ -196,13 +197,13 @@ def dices(N = 10000):
     dict_tcnt['xyz'] = 6*5*4/(6**3)-dict_cnt['123']-dict_cnt['456']
     dict_tcnt['oox'] = 6*5*3/(6**3)
 
-    html_str = '<h2>The dice experiment</h2><p>' + '''
+    html_str = '<h3>The dice experiment</h3><p>' + '''
     Randomly roll three dice and calculate the probabilities of various situations. 
     The corresponding score for each dice combination is as follows:
-    (1) If the three dice have 1, 2, 3 points or 4, 5 and 6 respectively, 16 points are awarded;
-    (2) If all three dice have the same number of points, 8 points are awarded;
-    (3) If two of the dices have the same number of points, 2 points are awarded;
-    (4) If the three dices have different points, 0 points are awarded.
+    <br/>(1) If the three dice have 1, 2, 3 points or 4, 5 and 6 respectively, 16 points are awarded;
+    <br/>(2) If all three dice have the same number of points, 8 points are awarded;
+    <br/>(3) If two of the dices have the same number of points, 2 points are awarded;
+    <br/>(4) If the three dices have different points, 0 points are awarded.
     ''' + '</p>'
     html_str += '<table>'
     html_header = '<tr><th></th>'
@@ -211,7 +212,7 @@ def dices(N = 10000):
 
     for key in dict_tcnt:
         html_header += '<th>'+ key + '</th>'
-        dict_tcnt[key] = round( dict_tcnt[key] , 6)
+        dict_tcnt[key] = round( dict_tcnt[key] , 5)
         html_row1 += '<td>' + str(dict_cnt[key]) + '</td>'
         html_row2 += '<td>' + str(dict_tcnt[key]) + '</td>'
 
@@ -265,7 +266,7 @@ def prisoners(n = 100, N = 2000):
         
     return WINS / (WINS + FAILS)
 
-def prisoners_limit(ns = [10, 20, 30, 40, 50, 100, 200, 500, 1000], N = 1000):
+def prisoners_limit(ns = [10, 20, 30, 40, 50, 100, 200, 500, 1000], N = 1000, repeat = 10, SD = 1):
     '''
     Test how the survival rate changes with n. The limit is 1-ln2.
 
@@ -314,8 +315,8 @@ def prisoners_limit(ns = [10, 20, 30, 40, 50, 100, 200, 500, 1000], N = 1000):
 def galton_board(num_layers = 20, N = 5000, flavor=1, display = True):
     return distributions.binom(num_layers, N, flavor, display=display) 
 
-def paper_clips(num_rounds = 10000, num_clips_k = 1.6, verbose = False):
-    return distributions.zipf(num_rounds, num_clips_k, verbose)
+def paper_clips(num_rounds = 10000, num_clips = 16000, verbose = False):
+    return distributions.zipf(num_rounds, num_clips, verbose)
 
 def sudden_death(num_rounds = 1000, p = 0.01, N = 10000):
     return distributions.exponential(num_rounds, p, N)
