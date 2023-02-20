@@ -145,6 +145,39 @@ def parcel(N=100000, num_players=5, num_ops=10):
 
     return L/N
 
+def parcel_v2(N = 100000, num_players = 5, num_ops = 10):
+    '''
+    A Version II parcel/ball-passing game.
+    In this game setting, each player can pass the ball to ANY (not only left and right) other player.
+    '''
+
+    L = 0
+    history = []
+    
+    for _ in range(N):
+        position = 0
+        for _ in range(num_ops):
+            seq = list(range(num_players))
+            seq.remove(position)
+            position = random.choice(seq) # pass to any other player
+        history.append(position)
+        if position == 0:
+            L += 1
+
+    freq = L/N
+
+    ## use graph theory to calculate the theoretical probability
+    # construct the affinity matrix
+    A = 1 - np.eye(num_players)
+    M = np.linalg.matrix_power(A, num_ops)
+    print('Affinity matrix:\n', A)
+    print('Affinity matrix powered by num_ops({}): \n{}'.format(num_ops, M))
+    prob = M[0,0]/(num_players-1)**num_ops
+
+    print("Probability = {}".format(prob))
+    print("MC frequency = {}/{} = {}".format(L, N, L/N))
+    
+    return freq, prob
 
 def dices(N=10000):
     """
