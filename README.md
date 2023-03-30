@@ -15,1018 +15,220 @@ A Monte-Carlo toolkit for educational purposes.
         - sampling distributions of statistic used in hypothesis tests
 
 # functions
-<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns="http://www.w3.org/TR/REC-html40"><head><meta http-equiv=Content-Type  content="text/html; charset=gb2312" ><meta name=ProgId  content=Word.Document ><meta name=Generator  content="Microsoft Word 14" ><meta name=Originator  content="Microsoft Word 14" ><!--[if gte mso 9]><xml><o:OfficeDocumentSettings></o:OfficeDocumentSettings></xml><![endif]--><!--[if gte mso 9]><xml><w:WordDocument><w:BrowserLevel>MicrosoftInternetExplorer4</w:BrowserLevel><w:DisplayHorizontalDrawingGridEvery>0</w:DisplayHorizontalDrawingGridEvery><w:DisplayVerticalDrawingGridEvery>2</w:DisplayVerticalDrawingGridEvery><w:DocumentKind>DocumentNotSpecified</w:DocumentKind><w:DrawingGridVerticalSpacing>7.8 磅</w:DrawingGridVerticalSpacing><w:PunctuationKerning></w:PunctuationKerning><w:View>Web</w:View><w:Compatibility><w:DontGrowAutofit/><w:UseFELayout/></w:Compatibility><w:Zoom>0</w:Zoom></w:WordDocument></xml><![endif]--><!--[if gte mso 9]><xml><w:LatentStyles DefLockedState="false"  DefUnhideWhenUsed="true"  DefSemiHidden="true"  DefQFormat="false"  DefPriority="99"  LatentStyleCount="260" >
-@font-face{
-font-family:"Times New Roman";
-}
-
-@font-face{
-font-family:"宋体";
-}
-
-@font-face{
-font-family:"Arial";
-}
-
-@font-face{
-font-family:"Wingdings";
-}
-
-@font-face{
-font-family:"微软雅黑";
-}
-
-p.MsoNormal{
-mso-style-name:正文;
-mso-style-parent:"";
-margin:0pt;
-margin-bottom:.0001pt;
-mso-layout-grid-align:none;
-layout-grid-mode:char;
-mso-line-break-override:restrictions;
-text-autospace:none;
-text-align:left;
-vertical-align:baseline;
-font-family:Arial;
-color:rgb(0,0,0);
-font-size:10.5000pt;
-}
-
-span.10{
-font-family:Arial;
-}
-
-span.msoIns{
-mso-style-type:export-only;
-mso-style-name:"";
-text-decoration:underline;
-text-underline:single;
-color:blue;
-}
-
-span.msoDel{
-mso-style-type:export-only;
-mso-style-name:"";
-text-decoration:line-through;
-color:red;
-}
-
-table.MsoNormalTable{
-mso-style-name:普通表格;
-mso-style-parent:"";
-mso-style-noshow:yes;
-mso-tstyle-rowband-size:0;
-mso-tstyle-colband-size:0;
-mso-padding-alt:0.0000pt 5.4000pt 0.0000pt 5.4000pt;
-mso-para-margin:0pt;
-mso-para-margin-bottom:.0001pt;
-mso-pagination:widow-orphan;
-font-family:'Times New Roman';
-font-size:10.0000pt;
-mso-ansi-language:#0400;
-mso-fareast-language:#0400;
-mso-bidi-language:#0400;
-}
-
-table.15{
-mso-style-name:"Table Normal";
-mso-tstyle-rowband-size:0;
-mso-tstyle-colband-size:0;
-mso-padding-alt:0.0000pt 0.0000pt 0.0000pt 0.0000pt;
-mso-para-margin:0pt;
-mso-para-margin-bottom:.0001pt;
-mso-pagination:widow-orphan;
-font-family:'Times New Roman';
-font-size:10.0000pt;
-mso-ansi-language:#0400;
-mso-fareast-language:#0400;
-mso-bidi-language:#0400;
-}
-@page{mso-page-border-surround-header:no;
-	mso-page-border-surround-footer:no;}@page Section0{
-margin-top:71.5500pt;
-margin-bottom:0.0000pt;
-margin-left:89.2500pt;
-margin-right:89.2500pt;
-size:595.3000pt 841.9000pt;
-mso-header-margin:0.0000pt;
-mso-footer-margin:0.0000pt;
-}
-div.Section0{page:Section0;}</style></head><body style="tab-interval:25pt;" ><!--StartFragment--><div class="Section0" ><p class=MsoNormal ><span style="mso-spacerun:'yes';font-family:Arial;color:rgb(0,0,0);
-font-size:10.5000pt;mso-font-kerning:0.0000pt;" ></span></p><table class=15  border=1  cellspacing=0  style="border-collapse:collapse;width:509.9000pt;margin-left:18.9500pt;
-mso-table-layout-alt:fixed;border:none;mso-border-left-alt:none;
-mso-border-top-alt:none;mso-border-right-alt:none;mso-border-bottom-alt:none;
-mso-border-insideh:none;mso-border-insidev:none;mso-padding-alt:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;" ><tr style="height:10.7000pt;" ><td width=166  valign=top  style="width:100.1000pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:1.0000pt solid windowtext;
-mso-border-left-alt:0.5000pt solid windowtext;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:1.0000pt solid windowtext;mso-border-top-alt:0.5000pt solid windowtext;border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.7500pt;margin-left:15.8000pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >Mod</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >ule</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:1.0000pt solid windowtext;mso-border-top-alt:0.5000pt solid windowtext;border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.7500pt;margin-left:12.4500pt;text-align:justify;
-text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >Fu</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >n</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >ction</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:1.0000pt solid rgb(0,0,0);mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.7500pt;margin-left:7.2500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >Descri</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >ption</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:10.0000pt;" ><td width=166  valign=top  rowspan=7  style="width:100.1000pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:1.0000pt solid windowtext;
-mso-border-left-alt:0.5000pt solid windowtext;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:none;border-bottom:1.0000pt solid windowtext;
-mso-border-bottom-alt:0.5000pt solid windowtext;" ><p class=MsoNormal  style="line-height:106%;" ><span style="font-family:Arial;color:rgb(0,0,0);font-size:10.5000pt;
-mso-font-kerning:0.0000pt;" >mc</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >experiments</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.5500pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >pi</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >)</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.5500pt;margin-left:7.2500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >Perform Buffon’s needle experiment to est</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >imate</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="Arial" >&#960; </font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:9.6000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.2000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >parcel</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >)</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.2000pt;margin-left:7.3500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Simulate</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >a</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >bi</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >-</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >directional</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >parcel</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >passing</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >game</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:9.6000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.2000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >dices</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.2000pt;margin-left:7.2500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Estimate</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >probabilities</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >of</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >various</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >dice</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >combinations</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:25.9000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.2000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >prisoners</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p><p class=MsoNormal  align=justify  style="margin-top:0.2500pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >Prisone</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >rs</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >\_limit()</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid windowtext;
-mso-border-bottom-alt:0.5000pt solid windowtext;" ><p class=MsoNormal  style="margin-top:0.2000pt;margin-left:7.2000pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >The</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >famous</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >locker</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >puzzle</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(100-</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >prisoner</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >quiz</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >). </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >This</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >function</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >will</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><span style="font-family:微软雅黑;mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >prove</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >that</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >survival</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >chance</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >limit</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >is</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >1</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >&#8722;</font></span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >ln</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >2 </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >when</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >n</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >approaches</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span>+&#8734; .</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:20.0500pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:1.0500pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >g</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >alton</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >_</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_board</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >)</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.5000pt solid windowtext;border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:1.0500pt;margin-right:34.7000pt;margin-left:7.2000pt;
-text-indent:0.0500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Use</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >classic</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Galton</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >board</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >experiment</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >to</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >produce</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >a</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><span style="font-family:微软雅黑;mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >binomial</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><span style="font-family:微软雅黑;mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:2.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:19.0000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.2000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >paper</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_clips</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:5.1000pt;margin-left:7.2500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Use</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >paper</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >clip</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >experiment</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >to</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >produce</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >a</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Zipf</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:19.0000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.2500pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >sudden</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >\_death</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >)</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.2500pt;margin-left:7.2000pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >This</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >function</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >simulates</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >a</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >sudden</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >death</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >game</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >to</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >produce</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >exponential</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.3500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:19.3500pt;" ><td width=166  valign=top  rowspan=2  style="width:100.1000pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:1.0000pt solid windowtext;
-mso-border-left-alt:0.5000pt solid windowtext;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:none;border-bottom:1.0000pt solid windowtext;
-mso-border-bottom-alt:0.5000pt solid windowtext;" ><p class=MsoNormal  style="line-height:136%;" ><span style="font-family:Arial;color:rgb(0,0,0);font-size:10.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p><p class=MsoNormal  style="margin-top:3.2000pt;margin-right:6.0000pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >mc</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >distributions</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:5.5000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >poisson</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.7000pt;margin-right:14.6000pt;margin-left:7.8500pt;
-text-indent:-0.6500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >This</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.6500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >function</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >will</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >demonstrate</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >that</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Poisson</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >is</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >a</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >limit</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >of </span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >b</span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:1.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >n</span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >,</span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >p</span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >) </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >when</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >n</span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >is</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >large</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >, </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >and</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >p</span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >is</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >small</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:28.0000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:5.1000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >benford</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.3000pt;margin-right:33.4000pt;margin-left:7.2500pt;
-text-indent:-0.1500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Benford</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >s</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >law</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >using</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >real</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >-</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >life</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >datasets</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >, </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >including</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >stock market</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >data</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >, </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >international</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >trade</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >data</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >, </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >and</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Fibonacci</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >series</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:21.1000pt;" ><td width=166  valign=top  rowspan=17  style="width:100.1000pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:1.0000pt solid windowtext;
-mso-border-left-alt:0.5000pt solid windowtext;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:none;border-bottom:1.0000pt solid windowtext;
-mso-border-bottom-alt:0.5000pt solid windowtext;" ><p class=MsoNormal  style="line-height:101%;" ><span style="font-family:Arial;color:rgb(0,0,0);font-size:10.5000pt;
-mso-font-kerning:0.0000pt;" >mc</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >samplings</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=170  valign=top  rowspan=8  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:none;border-bottom:1.0000pt solid windowtext;
-mso-border-bottom-alt:0.5000pt solid windowtext;" ><p class=MsoNormal  align=justify  style="text-align:justify;text-justify:inter-ideograph;line-height:146%;" ><span style="font-family:Arial;color:rgb(0,0,0);font-size:10.5000pt;
-mso-font-kerning:0.0000pt;" >clt()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ></span></p><p class=MsoNormal ><span style="font-family:Arial;color:rgb(0,0,0);font-size:10.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.7000pt;margin-right:6.0500pt;margin-left:7.0500pt;
-text-indent:0.1500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Using</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >various</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >underlying</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distributions</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >to</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >central</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >limit</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><span style="font-family:微软雅黑;mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span>theorem</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >This</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >function</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >provides</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >following</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >underlying</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distributions</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:10.1000pt;" ><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.3500pt;margin-left:7.6500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >uniform</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’ - </font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >a</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >uniform</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >U</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(-1,1).</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:10.1000pt;" ><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4000pt;margin-left:7.6500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >expon</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’- </font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >an</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >exponential distribution Expon(1).</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:10.1000pt;" ><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4000pt;margin-left:7.6500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >poisson</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’ - </font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >poisson</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >distribution </span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:-0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="Arial" >&#960;</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(1).</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:10.1000pt;" ><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4000pt;margin-left:7.6500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >coin</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >- </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Bernoulli</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >with</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >p</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span>= 0.5.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:18.8000pt;" ><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4000pt;margin-left:7.6500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >tampered</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.6000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >_</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >coin</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span>- </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >PMF</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >:{0:0.2,1:0.8}, </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >i</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >e</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >., </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >head</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >more</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >likely</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >than</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >tail</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:10.1000pt;" ><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4500pt;margin-left:7.6500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >dice</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >- </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >PMF</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >:{1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6}.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:19.5000pt;" ><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4500pt;margin-right:39.3500pt;margin-left:7.2500pt;
-text-indent:0.3500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >tampered</span><u><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-text-decoration:underline;text-underline:single;font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span></u><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >dice</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’ - </font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >PMF</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >: {1:0.1,2:</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >0.1,3:0.1,4:0.1,5:0.1,6:0.5},</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >i</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >e</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.,</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >6</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >is</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >more</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >likely</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:19.5000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.5000pt solid windowtext;border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:5.2500pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >t</span><u><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.2500pt;
-text-decoration:underline;text-underline:single;font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_stat</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4500pt;margin-right:31.7000pt;margin-left:7.0500pt;
-text-indent:0.1000pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >This</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >function</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >constructs</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >an</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >r</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >v</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >. <span style="mso-spacerun:'yes';" >&nbsp;</span>(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >random</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >variable</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >) </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >following</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the t</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.7000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:14.8000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.4500pt;margin-right:10.8000pt;text-align:justify;
-text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >chisq</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >_</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >\_gof</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >_</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_stat</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >)</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.3500pt;margin-right:28.2000pt;margin-left:7.0500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >statistic</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >used</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >in</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Pearson</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >s</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Chi</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >-</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Square</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Goodness</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.4000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >-</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >of</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >-</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Fit test</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >follows</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="Arial" >&#967;</font></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:5.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-2.5000pt;mso-text-raise:2.5000pt;" >2 <span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:14.7000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:5.2500pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >fk</span><u><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1500pt;
-text-decoration:underline;text-underline:single;font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_stat</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >)</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4000pt;margin-left:7.1000pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:2.0000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Fligner</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >-</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Killeen</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Test</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >statistic</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >FK</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >) </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >follows</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><span style="font-family:微软雅黑;mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="Arial" >&#967;</font></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.8500pt;
-font-size:5.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-2.5000pt;mso-text-raise:2.5000pt;" >2 <span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:13.5000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.4000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >b</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >a</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >rtlett</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >_</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_stat</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >)</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:4.4500pt;margin-left:7.1000pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Bartlett</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >s</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >test</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >statistic</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >follows</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="Arial" >&#967;</font></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:5.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-2.5000pt;mso-text-raise:2.5000pt;" >2 <span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:12.7000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.4000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><font face="微软雅黑" >anova</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><font face="微软雅黑" >\_stat()</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4000pt;margin-left:7.0500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;position:relative;top:-0.5000pt;
-mso-text-raise:0.5000pt;" >Verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.6500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;position:relative;top:-0.5000pt;
-mso-text-raise:0.5000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;position:relative;top:-0.5000pt;
-mso-text-raise:0.5000pt;" >statistic</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;position:relative;top:-0.5000pt;
-mso-text-raise:0.5000pt;" >of</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;position:relative;top:-0.5000pt;
-mso-text-raise:0.5000pt;" >ANOVA</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;position:relative;top:-0.5000pt;
-mso-text-raise:0.5000pt;" >follows</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;position:relative;top:-0.5000pt;
-mso-text-raise:0.5000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;position:relative;top:-0.5000pt;
-mso-text-raise:0.5000pt;" >F</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;position:relative;top:-0.5000pt;
-mso-text-raise:0.5000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-0.5000pt;mso-text-raise:0.5000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:10.9500pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:1.2500pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >kw</span><u><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.2500pt;
-text-decoration:underline;text-underline:single;font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_stat</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.2000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4500pt;margin-left:7.0500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.3000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Kruskal</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >-</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Wallis</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >test</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >statistic</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span>(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >H</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >) </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >is</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >a</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="Arial" >&#967;</font></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:5.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-2.5000pt;mso-text-raise:2.5000pt;" >2 <span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >r</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >v</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:19.5000pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.4000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >sign</span><u><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.6500pt;
-text-decoration:underline;text-underline:single;font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_test</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >_</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_stat</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >)</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.4500pt;margin-right:15.9000pt;margin-left:7.2000pt;
-text-indent:0.0500pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >For</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >sign</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >test</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span>(</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >medium</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >test</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >), </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >its</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >N</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >- </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >and</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >N</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >+ </span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >statistics</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >both follow</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.0000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >b</span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >(</span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >n</span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >,1/2)</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.7500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:10.8500pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  align=justify  style="margin-top:0.4000pt;text-align:justify;text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >c</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >ochr</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >ane</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >_</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_q</span><u><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9500pt;
-text-decoration:underline;text-underline:single;font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span></u><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_stat</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-left:7.1000pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.5500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >statistic</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >T</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >in</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Cochrane</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >-</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Q</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >test</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >follows</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="Arial" >&#967;</font></span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:5.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-2.5000pt;mso-text-raise:2.5000pt;" >2</span><span style="font-family:宋体;mso-ascii-font-family:Arial;mso-hansi-font-family:Arial;
-mso-bidi-font-family:Arial;color:rgb(0,0,0);letter-spacing:1.1000pt;
-font-size:5.5000pt;mso-font-kerning:0.0000pt;position:relative;
-top:-2.5000pt;mso-text-raise:2.5000pt;" ><span style="font-family:Arial;mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:2.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr><tr style="height:20.7500pt;" ><td width=170  valign=top  style="width:102.2500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid windowtext;
-mso-border-bottom-alt:0.5000pt solid windowtext;" ><p class=MsoNormal  align=justify  style="margin-top:0.5000pt;margin-right:10.3000pt;text-align:justify;
-text-justify:inter-ideograph;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:-0.0500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >hotelling</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >_</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >\_t2</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.9500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >_</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >stat</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.8500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >()</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td><td width=512  valign=top  style="width:307.5500pt;padding:0.0000pt 0.0000pt 0.0000pt 0.0000pt ;border-left:none;
-mso-border-left-alt:none;border-right:1.0000pt solid windowtext;mso-border-right-alt:0.5000pt solid windowtext;
-border-top:none;mso-border-top-alt:0.2500pt solid rgb(0,0,0);border-bottom:1.0000pt solid rgb(0,0,0);
-mso-border-bottom-alt:0.2500pt solid rgb(0,0,0);" ><p class=MsoNormal  style="margin-top:0.0500pt;margin-right:22.0000pt;margin-left:7.2000pt;
-text-indent:-0.1000pt;" ><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Verify</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.3500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.3500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >$T^2$ </span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:1.3500pt;
-font-size:5.5000pt;mso-font-kerning:0.0000pt;position:relative;
-mso-font-kerning:0.0000pt;" >statistic</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.3500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >from</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.3500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >two</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.3500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >multivariate</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.3500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Gaussian</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:1.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >populations follows</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.2500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >the</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >Hotelling</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><font face="微软雅黑" >’</font></span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >s</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" ><span style="mso-spacerun:'yes';" >&nbsp;</span></span><span style="font-family:Arial;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" >$T^2$ </span><span style="font-family:Arial;color:rgb(0,0,0);letter-spacing:0.1500pt;
-font-size:5.5000pt;mso-font-kerning:0.0000pt;position:relative;
-mso-font-kerning:0.0000pt;" >distribution</span><span style="font-family:微软雅黑;color:rgb(0,0,0);letter-spacing:0.1500pt;
-font-size:7.5000pt;mso-font-kerning:0.0000pt;" >.</span><span style="font-family:微软雅黑;color:rgb(0,0,0);font-size:7.5000pt;
-mso-font-kerning:0.0000pt;" ></span></p></td></tr></table><p class=MsoNormal>
-
+<div>
+<table border="1" cellspacing="0">
+<tbody>
+<tr>
+<td width="166">
+<p>Module</p>
+</td>
+<td width="170">
+<p>Function</p>
+</td>
+<td width="512">
+<p>Description</p>
+</td>
+</tr>
+<tr>
+<td rowspan="7" width="166">
+<p>mc.experiments</p>
+</td>
+<td width="170">
+<p>pi()</p>
+</td>
+<td width="512">
+<p>Perform Buffon&rsquo;s needle experiment to estimate&nbsp;&pi; .</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>parcel()</p>
+</td>
+<td width="512">
+<p>Simulate&nbsp;a&nbsp;bi-directional&nbsp;parcel&nbsp;passing&nbsp;game.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>dices()</p>
+</td>
+<td width="512">
+<p>Estimate&nbsp;the&nbsp;probabilities&nbsp;of&nbsp;various&nbsp;dice&nbsp;combinations.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>prisoners()</p>
+<p>Prisoners_limit()</p>
+</td>
+<td width="512">
+<p>The&nbsp;famous&nbsp;locker&nbsp;puzzle(100-prisoner&nbsp;quiz). This&nbsp;function&nbsp;will&nbsp;prove&nbsp;that&nbsp;the&nbsp;survival&nbsp;chance&nbsp;limit&nbsp;is&nbsp;1&minus;ln2 when&nbsp;n&nbsp;approaches&nbsp;+&infin; .</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>galton_board()</p>
+</td>
+<td width="512">
+<p>Use&nbsp;the&nbsp;classic&nbsp;Galton&nbsp;board&nbsp;experiment&nbsp;to&nbsp;produce&nbsp;a&nbsp;binomial&nbsp;distribution.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>paper_clips()</p>
+</td>
+<td width="512">
+<p>Use&nbsp;the&nbsp;paper&nbsp;clip&nbsp;experiment&nbsp;to&nbsp;produce&nbsp;a&nbsp;Zipf&nbsp;distribution.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>sudden_death()</p>
+</td>
+<td width="512">
+<p>This&nbsp;function&nbsp;simulates&nbsp;a&nbsp;sudden&nbsp;death&nbsp;game&nbsp;to&nbsp;produce the&nbsp;exponential&nbsp;distribution.</p>
+</td>
+</tr>
+<tr>
+<td rowspan="2" width="166">
+<p>mc.distributions</p>
+</td>
+<td width="170">
+<p>poisson()</p>
+</td>
+<td width="512">
+<p>This&nbsp;function&nbsp;will&nbsp;demonstrate&nbsp;that&nbsp;Poisson&nbsp;is&nbsp;a&nbsp;limit&nbsp;distribution&nbsp;of b(n,p) when&nbsp;n&nbsp;is&nbsp;large, and&nbsp;p&nbsp;is&nbsp;small.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>benford()</p>
+</td>
+<td width="512">
+<p>Verify&nbsp;Benford&rsquo;s&nbsp;law&nbsp;using&nbsp;real-life&nbsp;datasets, including&nbsp;the&nbsp;stock market&nbsp;data, international&nbsp;trade&nbsp;data, and&nbsp;the&nbsp;Fibonacci&nbsp;series.</p>
+</td>
+</tr>
+<tr>
+<td rowspan="17" width="166">
+<p>mc.samplings</p>
+</td>
+<td rowspan="8" width="170">
+<p>clt()</p>
+</td>
+<td width="512">
+<p>Using&nbsp;various&nbsp;underlying&nbsp;distributions&nbsp;to&nbsp;verify&nbsp;the&nbsp;central&nbsp;limit&nbsp;&nbsp;theorem.&nbsp;This&nbsp;function&nbsp;provides&nbsp;the&nbsp;following&nbsp;underlying&nbsp;distributions.</p>
+</td>
+</tr>
+<tr>
+<td width="512">
+<p>&rsquo;uniform&rsquo; - a&nbsp;uniform&nbsp;distribution&nbsp;U(-1,1).</p>
+</td>
+</tr>
+<tr>
+<td width="512">
+<p>&rsquo;expon&rsquo;- an&nbsp;exponential distribution Expon(1).</p>
+</td>
+</tr>
+<tr>
+<td width="512">
+<p>&rsquo;poisson&rsquo; - poisson&nbsp;distribution &pi;(1).</p>
+</td>
+</tr>
+<tr>
+<td width="512">
+<p>&rsquo;coin&rsquo;- Bernoulli&nbsp;distribution&nbsp;with&nbsp;p&nbsp;= 0.5.</p>
+</td>
+</tr>
+<tr>
+<td width="512">
+<p>&rsquo;tampered_coin&rsquo;&nbsp;- PMF:{0:0.2,1:0.8}, i.e., head&nbsp;more&nbsp;likely&nbsp;than&nbsp;tail.</p>
+</td>
+</tr>
+<tr>
+<td width="512">
+<p>&rsquo;dice&rsquo;- PMF:{1:1/6,2:1/6,3:1/6,4:1/6,5:1/6,6:1/6}.</p>
+</td>
+</tr>
+<tr>
+<td width="512">
+<p>&rsquo;tampereddice&rsquo; - PMF: {1:0.1,2:0.1,3:0.1,4:0.1,5:0.1,6:0.5},i.e.,&nbsp;6&nbsp;is&nbsp;more&nbsp;likely.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>t_stat()</p>
+</td>
+<td width="512">
+<p>This&nbsp;function&nbsp;constructs&nbsp;an&nbsp;r.v. &nbsp;(random&nbsp;variable) following&nbsp;the t&nbsp;distribution.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>chisq_gof_stat()</p>
+</td>
+<td width="512">
+<p>Verify&nbsp;the&nbsp;statistic&nbsp;used&nbsp;in&nbsp;Pearson&rsquo;s&nbsp;Chi-Square&nbsp;Goodness-of-Fit test&nbsp;follows&nbsp;the&nbsp;&chi;2 &nbsp;distribution.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>fk_stat()</p>
+</td>
+<td width="512">
+<p>Verify&nbsp;the&nbsp;Fligner-Killeen&nbsp;Test&nbsp;statistic(FK) follows&nbsp;the&nbsp;&chi;2 &nbsp;distribution.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>bartlett_stat()</p>
+</td>
+<td width="512">
+<p>Verify&nbsp;the&nbsp;Bartlett&rsquo;s&nbsp;test&nbsp;statistic&nbsp;follows&nbsp;the&nbsp;&chi;2 &nbsp;distribution.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>anova_stat()</p>
+</td>
+<td width="512">
+<p>Verify&nbsp;the&nbsp;statistic&nbsp;of&nbsp;ANOVA&nbsp;follows&nbsp;the&nbsp;F&nbsp;distribution.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>kw_stat()</p>
+</td>
+<td width="512">
+<p>Verify&nbsp;the&nbsp;Kruskal-Wallis&nbsp;test&nbsp;statistic&nbsp;(H) is&nbsp;a&nbsp;&chi;2 &nbsp;r.v.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>sign_test_stat()</p>
+</td>
+<td width="512">
+<p>For&nbsp;the&nbsp;sign&nbsp;test&nbsp;(medium&nbsp;test), verify&nbsp;its&nbsp;N- and&nbsp;N+ statistics&nbsp;both follow&nbsp;b(n,1/2).</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>cochrane_q_stat()</p>
+</td>
+<td width="512">
+<p>Verify&nbsp;the&nbsp;statistic&nbsp;T&nbsp;in&nbsp;Cochrane-Q&nbsp;test&nbsp;follows&nbsp;the&nbsp;&chi;2&nbsp;distribution.</p>
+</td>
+</tr>
+<tr>
+<td width="170">
+<p>hotelling_t2_stat()</p>
+</td>
+<td width="512">
+<p>Verify&nbsp;the&nbsp;T2 &nbsp;statistic&nbsp;from&nbsp;two&nbsp;multivariate&nbsp;Gaussian&nbsp;populations follows&nbsp;the&nbsp;Hotelling&rsquo;s&nbsp;T2 &nbsp;distribution.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 # future plan
 
 gui.py - add a Flask or tk-inter (ttkbootstrap) GUI
