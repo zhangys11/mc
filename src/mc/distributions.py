@@ -11,6 +11,7 @@ import scipy.stats
 
 if __package__:
     from . import DATA_FOLDER, BARPLOT_KWARGS
+    from . import mcbase
 else:
     import os.path
     DATA_FOLDER = os.path.dirname(os.path.realpath(__file__)) + "/data/"
@@ -37,54 +38,58 @@ def zipf(num_rounds=10000, num_clips=16000, verbose=False):
     if num_clips <= num_rounds:  # clip总数，应大于抽样拼接次数，
         print('Error: num_clips must > num_rounds')
         return
+    base = mcbase.McBase(zipf)
+    base.run(N=num_rounds, num_clips=num_clips, verbose=verbose)
+    base.plot(N=num_rounds, num_clips=num_clips, title_freq="Frequency Histogram\nclips=" + str(num_clips) + ", rounds=" + str(num_rounds), title_theory='Theoretical Distribution\nzipf(alpha = '+str(round(a, 2)) + ')', plot_freq_class=0, plot_theory_class=0, display=True)   # a如何导入？
 
-    sets = [1]*num_clips
-    for _ in range(num_rounds):
-        idx1, idx2 = np.random.choice(range(len(sets)), 2, replace=False)
-        # print(idx1, idx2)
-        sets[idx1] = sets[idx1] + sets[idx2]
-        sets.pop(idx2)
-    c = collections.Counter(sets)
-    plt.figure(figsize=(10, 3))
-    plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-    vals = np.array(list(c.values()))
-    vals = vals / vals.sum()
-    plt.bar(c.keys(), vals, **BARPLOT_KWARGS)
-    plt.title("Frequency Histogram\nclips=" +
-              str(num_clips) + ", rounds=" + str(num_rounds))
-    plt.show()
 
-    kld = np.inf
-    best_pwr = 1/2
-    x = list(c.keys())
-
-    num_clips_k = num_clips / num_rounds
-
-    for pwr in [1/6, 1/3, 1/2, 2/3, 1, 3/2]:  # this is an inexact fitting
-
-        a = num_clips_k ** (pwr)
-        kldn = sum(rel_entr(vals, scipy.stats.zipf.pmf(x, a)))  # KLD
-
-        if verbose:
-            print("Previous and new KLD between experiment and theory: ",
-                  round(kld, 3), round(kldn, 3))
-        if kldn < kld:
-            kld = kldn
-            best_pwr = pwr
-
-    a = num_clips_k ** (best_pwr)
-
-    plt.figure(figsize=(10, 3))
-    # np.arange(zipf.ppf(0.01, a), zipf.ppf(0.99, a))
-    x = range(np.array(list(c.keys())).min(),
-              np.array(list(c.keys())).max() + 1)
-    plt.bar(x, scipy.stats.zipf.pmf(x, a), **BARPLOT_KWARGS)
-    # plt.plot(x, zipf.pmf(x, a), 'bo', ms=8, label='zipf pmf')
-    # plt.vlines(x, 0, zipf.pmf(x, a), colors='b', lw=5, alpha=0.5)
-    ax = plt.gca()
-    ax.xaxis.set_major_locator(MultipleLocator(1))  # use interger ticks
-    plt.title('Theoretical Distribution\nzipf(alpha = '+str(round(a, 2)) + ')')
-    plt.show()
+    # sets = [1]*num_clips
+    # for _ in range(num_rounds):
+    #     idx1, idx2 = np.random.choice(range(len(sets)), 2, replace=False)
+    #     # print(idx1, idx2)
+    #     sets[idx1] = sets[idx1] + sets[idx2]
+    #     sets.pop(idx2)
+    # c = collections.Counter(sets)
+    # plt.figure(figsize=(10, 3))
+    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    # vals = np.array(list(c.values()))
+    # vals = vals / vals.sum()
+    # plt.bar(c.keys(), vals, **BARPLOT_KWARGS)
+    # plt.title("Frequency Histogram\nclips=" +
+    #           str(num_clips) + ", rounds=" + str(num_rounds))
+    # plt.show()
+    #
+    # kld = np.inf
+    # best_pwr = 1/2
+    # x = list(c.keys())
+    #
+    # num_clips_k = num_clips / num_rounds
+    #
+    # for pwr in [1/6, 1/3, 1/2, 2/3, 1, 3/2]:  # this is an inexact fitting
+    #
+    #     a = num_clips_k ** (pwr)
+    #     kldn = sum(rel_entr(vals, scipy.stats.zipf.pmf(x, a)))  # KLD
+    #
+    #     if verbose:
+    #         print("Previous and new KLD between experiment and theory: ",
+    #               round(kld, 3), round(kldn, 3))
+    #     if kldn < kld:
+    #         kld = kldn
+    #         best_pwr = pwr
+    #
+    # a = num_clips_k ** (best_pwr)
+    #
+    # plt.figure(figsize=(10, 3))
+    # # np.arange(zipf.ppf(0.01, a), zipf.ppf(0.99, a))
+    # x = range(np.array(list(c.keys())).min(),
+    #           np.array(list(c.keys())).max() + 1)
+    # plt.bar(x, scipy.stats.zipf.pmf(x, a), **BARPLOT_KWARGS)
+    # # plt.plot(x, zipf.pmf(x, a), 'bo', ms=8, label='zipf pmf')
+    # # plt.vlines(x, 0, zipf.pmf(x, a), colors='b', lw=5, alpha=0.5)
+    # ax = plt.gca()
+    # ax.xaxis.set_major_locator(MultipleLocator(1))  # use interger ticks
+    # plt.title('Theoretical Distribution\nzipf(alpha = '+str(round(a, 2)) + ')')
+    # plt.show()
 
 
 def binom(num_layers=20, N=5000, flavor=1, display=True):
@@ -104,89 +109,96 @@ def binom(num_layers=20, N=5000, flavor=1, display=True):
     A [num_layers+1] long vector : Freqency Historgm, i.e., the number of balls that fall into each slot.
     """
 
-    if display:
-        plt.figure(figsize=(10, 3))
-        plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
 
-    result = [0 for i in range(num_layers + 1)]
+    # if display:
+    #     plt.figure(figsize=(10, 3))
+    #     plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    #
+    # result = [0 for i in range(num_layers + 1)]
+    #
+    # if flavor == 1:
+    #     for _ in range(N):
+    #         pos = 0
+    #         for _ in range(num_layers):
+    #             if random.random() > 0.5:
+    #                 pos += 1
+    #         result[pos] += 1
+    #
+    #     if display:
+    #         plt.bar(range(num_layers+1), result, **BARPLOT_KWARGS)
+    #
+    # else:
+    base = mcbase.McBase(binom)
+    base.run(n=num_layers, N=N)
+    base.plot(title_freq="Frequency Histogram\nlayers=" + str(num_layers) + ", balls=" + str(N) + ")", title_theory='Theoretical Distribution\nbinomial(n=' + str(num_layers) + ',p=' + str(0.5) + ')', plot_freq_class=0, plot_theory_class=2, label='b (' + str(num_layers) + ',' + str(0.5) + ')', display=display)
+    #
+    #     history = []
+    #     for _ in range(N):
+    #         position = 0  # 初始位置
+    #         for _ in range(num_layers):
+    #             position = position + random.choice([0, +1])  # 0 向左落，+1 向右落
+    #         history.append(position)
+    #     c = collections.Counter(history)
+    #     for pair in zip(c.keys(), c.values()):
+    #         result[pair[0]] = pair[1]
+    #
+    #     if display:
+    #         plt.bar(c.keys(), c.values(), **BARPLOT_KWARGS)
+    #
+    # if display:
+    #     plt.title("Frequency Histogram\nlayers=" +
+    #               str(num_layers) + ", balls=" + str(N) + ")")
+    #     plt.show()
+    #
+    #     plt.figure(figsize=(10, 3))
+    #     plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    #
+    #     n = num_layers
+    #     p = 0.5
+    #
+    #     x = range(num_layers+1)
+    #     plt.plot(x, scipy.stats.binom.pmf(x, n, p), 'k+', ms=1,
+    #              label='b (' + str(n) + ',' + str(p) + ')')
+    #     plt.legend()
+    #     plt.title('Theoretical Distribution\nbinomial(n=' +
+    #               str(n) + ',p=' + str(p) + ')')
+    #     plt.bar(x, scipy.stats.binom.pmf(x, n, p), **BARPLOT_KWARGS)
+    #     plt.show()
 
-    if flavor == 1:
-        for _ in range(N):
-            pos = 0
-            for _ in range(num_layers):
-                if random.random() > 0.5:
-                    pos += 1
-            result[pos] += 1
-
-        if display:
-            plt.bar(range(num_layers+1), result, **BARPLOT_KWARGS)
-
-    else:
-
-        history = []
-        for _ in range(N):
-            position = 0  # 初始位置
-            for _ in range(num_layers):
-                position = position + random.choice([0, +1])  # 0 向左落，+1 向右落
-            history.append(position)
-        c = collections.Counter(history)
-        for pair in zip(c.keys(), c.values()):
-            result[pair[0]] = pair[1]
-
-        if display:
-            plt.bar(c.keys(), c.values(), **BARPLOT_KWARGS)
-
-    if display:
-        plt.title("Frequency Histogram\nlayers=" +
-                  str(num_layers) + ", balls=" + str(N) + ")")
-        plt.show()
-
-        plt.figure(figsize=(10, 3))
-        plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-
-        n = num_layers
-        p = 0.5
-
-        x = range(num_layers+1)
-        plt.plot(x, scipy.stats.binom.pmf(x, n, p), 'k+', ms=1,
-                 label='b (' + str(n) + ',' + str(p) + ')')
-        plt.legend()
-        plt.title('Theoretical Distribution\nbinomial(n=' +
-                  str(n) + ',p=' + str(p) + ')')
-        plt.bar(x, scipy.stats.binom.pmf(x, n, p), **BARPLOT_KWARGS)
-        plt.show()
-
-    return result
+    return
 
 
-def poisson(n=10000, p=0.0001, N=100000):
+def poisson(n=10000, p=0.0001, N=100000, display=True):
     '''
     possion 是 b(n,p), n很大，p很小的一种极限分布
     假设一个容量为n的群体，每个个体发生特定事件（如意外或事故）的概率为p（极低），那么总体发生事件的总数近似符合泊松
     '''
-    events = scipy.stats.binom.rvs(
-        n, p, size=N)  # directly draw from a b(n,p) dist
-    c = collections.Counter(events)
+    base = mcbase.McBase(poisson)
+    base.run(n=n, N=N, p=p)
+    base.plot(title_freq="Frequency Histogram\nSampling from b(" + str(n) + ',' + str(p) + '). Simulations = ' + str(N), title_theory='Theoretical Distribution\n' + r'$\pi (\lambda=' + str(n*p) + ')$', plot_freq_class=0, plot_theory_class=0, label=r'$\pi (\lambda=' + str(n*p) + ')$', display=display)
+#     events = scipy.stats.binom.rvs(
+#         n, p, size=N)  # directly draw from a b(n,p) dist
+#     c = collections.Counter(events)
+#
+#     plt.figure(figsize=(10, 3))
+#     # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+#     plt.bar(c.keys(), c.values(), **BARPLOT_KWARGS)
+#     plt.title("Frequency Histogram\nSampling from b(" + str(n) + ',' + str(p) + '). \
+# Simulations = ' + str(N))
+#     plt.show()
+#
+#     plt.figure(figsize=(10, 3))
+#     plt.title('Theoretical Distribution\n' +
+#               r'$\pi (\lambda=' + str(n*p) + ')$')
+#     x = range(min(events), max(events) + 1)
+#     plt.bar(x, scipy.stats.poisson.pmf(x, n*p),
+#             label=r'$\pi (\lambda=' + str(n*p) + ')$',
+#             **BARPLOT_KWARGS)
+#     plt.legend()
+#     plt.show()
 
-    plt.figure(figsize=(10, 3))
-    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-    plt.bar(c.keys(), c.values(), **BARPLOT_KWARGS)
-    plt.title("Frequency Histogram\nSampling from b(" + str(n) + ',' + str(p) + '). \
-Simulations = ' + str(N))
-    plt.show()
 
-    plt.figure(figsize=(10, 3))
-    plt.title('Theoretical Distribution\n' +
-              r'$\pi (\lambda=' + str(n*p) + ')$')
-    x = range(min(events), max(events) + 1)
-    plt.bar(x, scipy.stats.poisson.pmf(x, n*p),
-            label=r'$\pi (\lambda=' + str(n*p) + ')$',
-            **BARPLOT_KWARGS)
-    plt.legend()
-    plt.show()
-
-
-def exponential(num_rounds=1000, p=0.01, N=10000):
+def exponential(num_rounds=1000, p=0.01, N=10000,  display=True):
     """
     元器件寿命为何符合指数分布？  
     定义一个survival game（即每回合有p的死亡率；或电容在单位时间内被击穿的概率）的概率
@@ -203,23 +215,26 @@ def exponential(num_rounds=1000, p=0.01, N=10000):
     -------
     Plot of survival histogram.
     """
+    base = mcbase.McBase(exponential)
+    base.run(n=num_rounds, N=N, p=p)
+    base.plot(title_freq="Frequency Histogram\nper-round sudden death probality p=" + str(p) + ', players = ' + str(N), title_theory='Theoretical Distribution\nexponential(θ=' + str(round(1 / p + 0.5)) + ')', plot_freq_class=0, plot_theory_class=1, label=None, display=display)
 
-    survival_rounds = []
-    for _ in range(N):
-        fate = random.choices([0, 1], weights=(1-p, p), k=num_rounds)
-        if 1 in fate:
-            survival_rounds.append(fate.index(1))
-        # else: # still lives, i.e., > num_rounds
-        #     survival_rounds.append(num_rounds)
-
-    c = collections.Counter(survival_rounds)
-
-    plt.figure(figsize=(10, 3))
-    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-    plt.bar(c.keys(), c.values(), **BARPLOT_KWARGS)
-    plt.title("Frequency Histogram\nper-round sudden death probality p=" +
-              str(p) + ', players = ' + str(N))
-    plt.show()
+    # survival_rounds = []
+    # for _ in range(N):
+    #     fate = random.choices([0, 1], weights=(1-p, p), k=num_rounds)
+    #     if 1 in fate:
+    #         survival_rounds.append(fate.index(1))
+    #     # else: # still lives, i.e., > num_rounds
+    #     #     survival_rounds.append(num_rounds)
+    #
+    # c = collections.Counter(survival_rounds)
+    #
+    # plt.figure(figsize=(10, 3))
+    # # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    # plt.bar(c.keys(), c.values(), **BARPLOT_KWARGS)
+    # plt.title("Frequency Histogram\nper-round sudden death probality p=" +
+    #           str(p) + ', players = ' + str(N))
+    # plt.show()
 
     '''
     # survival game.It has survived n rounds; dies in n+1 round. 
@@ -233,55 +248,55 @@ def exponential(num_rounds=1000, p=0.01, N=10000):
     plt.show()
     '''
 
-    plt.figure(figsize=(10, 3))
-    theta = round(1 / p + 0.5)
-    plt.title('Theoretical Distribution\nexponential(θ=' + str(theta) + ')')
-    # pmf: Probability mass function. i.e. pdf
-    # ppf: Percent point function (inverse of cdf — percentiles).
-    # x = np.arange(stats.expon.ppf(q=0.001, scale=theta), stats.expon.ppf(q=0.999, scale=theta))
-    x = range(np.array(list(c.keys())).min(),
-              np.array(list(c.keys())).max() + 1)
-    plt.plot(x, scipy.stats.expon.pdf(x=x, scale=theta))
-    # plt.show();
-    # plt.plot(x,expon.cdf(x=x, scale=s))
-    # plt.plot(x,expon.sf(x=x, scale=s)) # when s = 1, sf and pdf overlaps
-    plt.show()
+    # plt.figure(figsize=(10, 3))
+    # theta = round(1 / p + 0.5)
+    # plt.title('Theoretical Distribution\nexponential(θ=' + str(theta) + ')')
+    # # pmf: Probability mass function. i.e. pdf
+    # # ppf: Percent point function (inverse of cdf — percentiles).
+    # # x = np.arange(stats.expon.ppf(q=0.001, scale=theta), stats.expon.ppf(q=0.999, scale=theta))
+    # x = range(np.array(list(c.keys())).min(),
+    #           np.array(list(c.keys())).max() + 1)
+    # plt.plot(x, scipy.stats.expon.pdf(x=x, scale=theta))
+    # # plt.show();
+    # # plt.plot(x,expon.cdf(x=x, scale=s))
+    # # plt.plot(x,expon.sf(x=x, scale=s)) # when s = 1, sf and pdf overlaps
+    # plt.show()
 
 
-def chisq_pdf(x, k):
-    '''
-    The theoretical PDF of CHISQ dist. 
-    This is a direct implementation based on the definition.
-    Alternately, we may use scipy.stats.chi2
+# def chisq_pdf(x, k):
+#     '''
+#     The theoretical PDF of CHISQ dist.
+#     This is a direct implementation based on the definition.
+#     Alternately, we may use scipy.stats.chi2
+#
+#     Paramters
+#     ---------
+#     k : dof, degree of freedom
+#     '''
+#
+#     return x**(k/2-1)*np.exp(-x/2)/(2**(k/2)*scipy.special.gamma(k/2))
+#
+#
+# def chisq_pdf_dist(ul=0, ub=10, k=2, flavor=1):
+#     '''
+#     Parameters
+#     ----------
+#     flavor :
+#         1 - use self implementation
+#         2 - use scipy.stats.chi2
+#     '''
+#
+#     pdf = chisq_pdf if flavor == 1 else scipy.stats.chi2.pdf
+#
+#     plt.figure(figsize=(10, 3))
+#     plt.title('Theoretical Distribution\n' + r'$\chi^2(dof=' + str(k) + ')$')
+#     plt.plot(np.linspace(ul, ub), pdf(np.linspace(ul, ub), k),
+#              lw=3, alpha=0.6, label=r'$\chi^2(dof=' + str(k) + ')$')
+#     plt.legend()
+#     plt.show()
 
-    Paramters
-    ---------
-    k : dof, degree of freedom
-    '''
 
-    return x**(k/2-1)*np.exp(-x/2)/(2**(k/2)*scipy.special.gamma(k/2))
-
-
-def chisq_pdf_dist(ul=0, ub=10, k=2, flavor=1):
-    '''
-    Parameters
-    ----------
-    flavor : 
-        1 - use self implementation
-        2 - use scipy.stats.chi2
-    '''
-
-    pdf = chisq_pdf if flavor == 1 else scipy.stats.chi2.pdf
-
-    plt.figure(figsize=(10, 3))
-    plt.title('Theoretical Distribution\n' + r'$\chi^2(dof=' + str(k) + ')$')
-    plt.plot(np.linspace(ul, ub), pdf(np.linspace(ul, ub), k),
-             lw=3, alpha=0.6, label=r'$\chi^2(dof=' + str(k) + ')$')
-    plt.legend()
-    plt.show()
-
-
-def chisq(k=10, N=10000):
+def chisq(k=10, N=10000, display=True):
     '''
     Construct a chisq r.v. with [k] degrees of freedom.
 
@@ -295,72 +310,81 @@ def chisq(k=10, N=10000):
     N : MC simulations
     '''
 
-    CHISQS = []
+    base = mcbase.McBase(chisq)
+    base.run(k=k, N=N)
+    base.plot(title_freq="Frequency Histogram\ndegree of freedom =" + str(k) + ', simulations = ' + str(N), title_theory='Theoretical Distribution\n' + r'$\chi^2(dof=' + str(k) + ')$', plot_freq_class=1, plot_theory_class=1, label=r'$\chi^2(dof=' + str(k) + ')$', display=display)
+    # CHISQS = []
+    #
+    # for _ in range(N):
+    #     CHISQS.append(np.sum(np.random.randn(k)**2))
+    #
+    # plt.figure(figsize=(10, 3))
+    # # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    # plt.hist(CHISQS, bins=100, **BARPLOT_KWARGS)
+    # plt.title("Frequency Histogram\ndegree of freedom =" +
+    #           str(k) + ', simulations = ' + str(N))
+    # plt.show()
+    #
+    # ul = min(CHISQS)
+    # ub = max(CHISQS)+0.5
+    # chisq_pdf_dist(round(ul), round(ub), k=k)
 
-    for _ in range(N):
-        CHISQS.append(np.sum(np.random.randn(k)**2))
 
-    plt.figure(figsize=(10, 3))
-    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-    plt.hist(CHISQS, bins=100, **BARPLOT_KWARGS)
-    plt.title("Frequency Histogram\ndegree of freedom =" +
-              str(k) + ', simulations = ' + str(N))
-    plt.show()
-
-    ul = min(CHISQS)
-    ub = max(CHISQS)+0.5
-    chisq_pdf_dist(round(ul), round(ub), k=k)
-
-
-def student(k=5, N=10000):
+def student(k=5, N=10000, display=True):
     '''
     Create a t-distribution r.v. with [k] degrees of freedom.
     '''
-    X = np.random.randn(N)
-    Y = scipy.stats.chi2.rvs(df=k, size=N)
+    base = mcbase.McBase(student)
+    base.run(N=N, k=k)
+    base.plot(title_freq="Frequency Histogram\ndegree of freedom =" + str(k) + ', simulations = ' + str(N), title_theory='Theoretical Distribution\n' + r'$t (dof=' + str(k) + ')$', plot_freq_class=1, plot_theory_class=1, label=r'$t (dof=' + str(k) + ')$', display=display)
+    # X = np.random.randn(N)
+    # Y = scipy.stats.chi2.rvs(df=k, size=N)
+    #
+    # ts = X/np.sqrt(Y/k)
+    #
+    # plt.figure(figsize=(10, 3))
+    # # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    # plt.hist(ts, bins=100, **BARPLOT_KWARGS)
+    # plt.title("Frequency Histogram\ndegree of freedom =" +
+    #           str(k) + ', simulations = ' + str(N))
+    # plt.show()
 
-    ts = X/np.sqrt(Y/k)
-
-    plt.figure(figsize=(10, 3))
-    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-    plt.hist(ts, bins=100, **BARPLOT_KWARGS)
-    plt.title("Frequency Histogram\ndegree of freedom =" +
-              str(k) + ', simulations = ' + str(N))
-    plt.show()
-
-    plt.figure(figsize=(10, 3))
-    plt.title('Theoretical Distribution\n' + r'$t (dof=' + str(k) + ')$')
-    x = np.linspace(round(min(ts)), round(max(ts)+0.5), 200)
-    plt.plot(x, scipy.stats.t.pdf(x=x, df=k),
-             label=r'$t (dof=' + str(k) + ')$')
-    plt.legend()
-    plt.show()
+    # plt.figure(figsize=(10, 3))
+    # plt.title('Theoretical Distribution\n' + r'$t (dof=' + str(k) + ')$')
+    # x = np.linspace(round(min(ts)), round(max(ts)+0.5), 200)
+    # plt.plot(x, scipy.stats.t.pdf(x=x, df=k),
+    #          label=r'$t (dof=' + str(k) + ')$')
+    # plt.legend()
+    # plt.show()
 
 
-def F(df1=10, df2=10, N=1000):
+def F(df1=10, df2=10, N=1000, display=True):
     '''
     Create a F-distribution r.v. with [df1] and [df2] degrees of freedom.
     '''
-    U = scipy.stats.chi2.rvs(df=df1, size=N)
-    V = scipy.stats.chi2.rvs(df=df2, size=N)
-
-    Fs = U/df1 / (V/df2)
-
-    plt.figure(figsize=(10, 3))
-    # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
-    plt.hist(Fs, bins=100, **BARPLOT_KWARGS)
-    plt.title("Frequency Histogram\ndegree of freedom = (" +
-              str(df1) + ',' + str(df2) + '). simulations = ' + str(N))
-    plt.show()
-
-    plt.figure(figsize=(10, 3))
-    plt.title('Theoretical Distribution\n' +
-              r'$F (dof1=' + str(df1) + ', dof2=' + str(df2) + ')$')
-    x = np.linspace(round(min(Fs)), round(max(Fs)+0.5), 200)
-    plt.plot(x, scipy.stats.f.pdf(x=x, dfn=df1, dfd=df2),
-             label=r'$F (dof1=' + str(df1) + ', dof2=' + str(df2) + ')$')
-    plt.legend()
-    plt.show()
+    base = mcbase.McBase(F)
+    base.run(N=N, df1=df1, df2=df2)
+    base.plot(title_freq="Frequency Histogram\ndegree of freedom = (" + str(df1) + ',' + str(df2) + '). simulations = ' + str(N), title_theory='Theoretical Distribution\n' +r'$F (dof1=' + str(df1) + ', dof2=' + str(df2) + ')$', plot_freq_class=1, plot_theory_class=1, label=r'$F (dof1=' + str(df1) + ', dof2=' + str(df2) + ')$', display=display)
+    # U = scipy.stats.chi2.rvs(df=df1, size=N)
+    # V = scipy.stats.chi2.rvs(df=df2, size=N)
+    #
+    # Fs = U/df1 / (V/df2)
+    #
+    # plt.figure(figsize=(10, 3))
+    # # plt.gca().xaxis.set_major_locator(mticker.MultipleLocator(1))
+    # plt.hist(Fs, bins=100, **BARPLOT_KWARGS)
+    # plt.title("Frequency Histogram\ndegree of freedom = (" +
+    #           str(df1) + ',' + str(df2) + '). simulations = ' + str(N))
+    # plt.show()
+    #
+    # plt.figure(figsize=(10, 3))
+    # plt.title('Theoretical Distribution\n' +
+    #           r'$F (dof1=' + str(df1) + ', dof2=' + str(df2) + ')$')
+    # x = np.linspace(round(min(Fs)), round(max(Fs)+0.5), 200)
+    # plt.plot(x, scipy.stats.f.pdf(x=x, dfn=df1, dfd=df2),
+    #          label=r'$F (dof1=' + str(df1) + ', dof2=' + str(df2) + ')$')
+    # plt.legend()
+    # plt.show()
 
 
 def fibonacci(n):

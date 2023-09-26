@@ -13,6 +13,7 @@ from sklearn import preprocessing
 
 if __package__:
     from . import experiments
+    from . import mcbase
     from . import BARPLOT_KWARGS
 else:
     import experiments
@@ -173,19 +174,25 @@ def chisq_gof_stat(dist='binom', K=8, sample_size=100, N=10000):
 
         chisqs.append(chisq)
 
-    plt.figure()
-    plt.hist(chisqs, density=False, bins=10, **BARPLOT_KWARGS)
-    plt.title("Histogram of the GOF test statistic ($\chi^2 = \sum_{i=1}^{k}\dfrac{(f_{j}-np_{j})^2}{np_{j}}$)\n. \
-        Population is " + dist + ", sample size="+str(sample_size))  # $b("+ str(K) +", 1/2)$
-    plt.show()
-
-    plt.figure()
     x = np.linspace(0, np.max(chisqs), 100)
-    plt.plot(x, chi2.pdf(x, df=K-1), lw=3, alpha=0.6,
-             label='dof = ' + str(K-1), c="black")
-    plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(K-1) + ')$')
-    plt.legend()
-    plt.show()
+    y = chi2.pdf(x, df=K-1)
+    base = mcbase.McBase()
+    base.stat_plot(x=x, result1=chisqs, y=y, bins=10, title_freq_1="Histogram of the GOF test statistic ($\chi^2 = \sum_{i=1}^{k}\dfrac{(f_{j}-np_{j})^2}{np_{j}}$)\n. \
+        Population is " + dist + ", sample size="+str(sample_size), title_theory='Theoretical Distribution\n$\chi^2(dof=' + str(K-1) + ')$', label='dof = ' + str(K-1))
+
+    # plt.figure()
+    # plt.hist(chisqs, density=False, bins=10, **BARPLOT_KWARGS)
+    # plt.title("Histogram of the GOF test statistic ($\chi^2 = \sum_{i=1}^{k}\dfrac{(f_{j}-np_{j})^2}{np_{j}}$)\n. \
+    #     Population is " + dist + ", sample size="+str(sample_size))  # $b("+ str(K) +", 1/2)$
+    # plt.show()
+    #
+    # plt.figure()
+    # x = np.linspace(0, np.max(chisqs), 100)
+    # plt.plot(x, chi2.pdf(x, df=K-1), lw=3, alpha=0.6,
+    #          label='dof = ' + str(K-1), c="black")
+    # plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(K-1) + ')$')
+    # plt.legend()
+    # plt.show()
 
 
 def t_stat(n=10, N=10000):
@@ -207,18 +214,23 @@ def t_stat(n=10, N=10000):
         T = (X.mean() - 0) / X.std() * np.sqrt(n)
         ts.append(T)
 
-    plt.hist(ts, density=False, bins=100, **BARPLOT_KWARGS)
-    plt.title(r"Histogram of the test statistic ($t = \dfrac { \bar{X} - \mu } { S / \sqrt{n} } $). \
-        Population is N(0,1). " + str(n) + " samples.")
-    plt.show()
-
-    plt.figure()
     x = np.linspace(np.min(ts), np.max(ts), 100)
-    plt.plot(x, t.pdf(x, df=n-1), lw=3, alpha=0.6, c="black",
-             label='$t (dof=' + str(n-1) + ')$')
-    plt.title('Theoretical Distribution')  # \t$t (dof=' + str(n-1) + ')$
-    plt.legend()
-    plt.show()
+    y = t.pdf(x, df=n-1)
+    base = mcbase.McBase()
+    base.stat_plot(x=x, result1=ts, y=y, bins=100, title_freq_1=r"Histogram of the test statistic ($t = \dfrac { \bar{X} - \mu } { S / \sqrt{n} } $). \Population is N(0,1). " + str(n) + " samples.", title_theory='Theoretical Distribution', label='$t (dof=' + str(n-1) + ')$')
+
+    # plt.hist(ts, density=False, bins=100, **BARPLOT_KWARGS)
+    # plt.title(r"Histogram of the test statistic ($t = \dfrac { \bar{X} - \mu } { S / \sqrt{n} } $). \
+    #     Population is N(0,1). " + str(n) + " samples.")
+    # plt.show()
+    #
+    # plt.figure()
+    # x = np.linspace(np.min(ts), np.max(ts), 100)
+    # plt.plot(x, t.pdf(x, df=n-1), lw=3, alpha=0.6, c="black",
+    #          label='$t (dof=' + str(n-1) + ')$')
+    # plt.title('Theoretical Distribution')  # \t$t (dof=' + str(n-1) + ')$
+    # plt.legend()
+    # plt.show()
 
 
 def anova_stat(K=10, n=10, N=10000):
@@ -249,20 +261,26 @@ def anova_stat(K=10, n=10, N=10000):
         F = 1.0*MSTR/MSE
         FS.append(F)
 
-    plt.hist(FS, density=False, bins=100, **BARPLOT_KWARGS)
-    plt.title("Histogram of the ANOVA test statistic ($F = \dfrac{MSTR}{MSE}$)\n. \
-        Population is N(0,1). " + str(K) + " groups, " + str(n) + " samples per group.")
-    plt.show()
-
-    plt.figure()
     x = np.linspace(0, np.max(FS), 100)
-    plt.plot(x, f.pdf(x, dfn=K-1, dfd=n*K-K), lw=3, alpha=0.6, c="black",
-             label='$F(' + str(K-1) + ',' + str(n*K-K) + ')$')
-    plt.title('Theoretical Distribution\n$F(' +
-              str(K-1) + ',' + str(n*K-K) + ')$')
-    plt.legend()
-    plt.show()
+    y = f.pdf(x, dfn=K-1, dfd=n*K-K)
+    base = mcbase.McBase()
+    base.stat_plot(x=x, result1=FS, y=y, bins=100, title_freq_1="Histogram of the ANOVA test statistic ($F = \dfrac{MSTR}{MSE}$)\n. \
+        Population is N(0,1). " + str(K) + " groups, " + str(n) + " samples per group.", title_theory='Theoretical Distribution\n$F(' +
+              str(K-1) + ',' + str(n*K-K) + ')$', label='$F(' + str(K-1) + ',' + str(n*K-K) + ')$')
 
+    # plt.hist(FS, density=False, bins=100, **BARPLOT_KWARGS)
+    # plt.title("Histogram of the ANOVA test statistic ($F = \dfrac{MSTR}{MSE}$)\n. \
+    #     Population is N(0,1). " + str(K) + " groups, " + str(n) + " samples per group.")
+    # plt.show()
+    #
+    # plt.figure()
+    # x = np.linspace(0, np.max(FS), 100)
+    # plt.plot(x, f.pdf(x, dfn=K-1, dfd=n*K-K), lw=3, alpha=0.6, c="black",
+    #          label='$F(' + str(K-1) + ',' + str(n*K-K) + ')$')
+    # plt.title('Theoretical Distribution\n$F(' +
+    #           str(K-1) + ',' + str(n*K-K) + ')$')
+    # plt.legend()
+    # plt.show()
 
 def kw_stat(dist='uniform', K=3, n=100, N=10000):
     '''
@@ -286,7 +304,7 @@ def kw_stat(dist='uniform', K=3, n=100, N=10000):
 
     Hs = []
 
-    for _ in tqdm(range(10000)):  # MC试验次数
+    for _ in tqdm(range(N)):  # MC试验次数
 
         if dist == 'uniform':
             y1 = np.random.uniform(0, 1, ni)
@@ -308,18 +326,26 @@ def kw_stat(dist='uniform', K=3, n=100, N=10000):
 
         Hs.append(H)
 
-    plt.hist(Hs, density=False, bins=100, **BARPLOT_KWARGS)
-    plt.title("Histogram of Kruskal-Wallis test's H statistic ($H = [{\dfrac{12}{n_{T}(n_{T}+1)}\sum_{i=1}^{k}\dfrac{R_{i}^2}{n_{i}}]-3(n_{T}+1)}$)\n. \
-        Population is " + ("U(0,1). " if dist == 'uniform' else "N(0,1). ") + str(K) + " groups, " + str(n) + " samples per group.")
-    plt.show()
-
     x = np.linspace(np.min(Hs) - np.min(Hs), np.max(Hs) -
                     np.min(Hs), 100)  # 差一个平移，research later
-    plt.figure()
-    plt.plot(x, chi2.pdf(x, df=K-1), label='dof = ' + str(K - 1))
-    plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(K-1) + ')$')
-    plt.legend()
-    plt.show()
+    y = chi2.pdf(x, df=K-1)
+    base = mcbase.McBase()
+    base.stat_plot(x=x, result1=Hs, y=y, bins=100, title_freq_1="Histogram of Kruskal-Wallis test's H statistic ($H = [{\dfrac{12}{n_{T}(n_{T}+1)}\sum_{i=1}^{k}\dfrac{R_{i}^2}{n_{i}}]-3(n_{T}+1)}$)\n. \
+        Population is " + ("U(0,1). " if dist == 'uniform' else "N(0,1). ") + str(K) + " groups, " + str(n) + " samples per group.", title_theory='Theoretical Distribution\n$\chi^2(dof=' + str(K-1) + ')$', label='dof = ' + str(K - 1))
+
+
+    # plt.hist(Hs, density=False, bins=100, **BARPLOT_KWARGS)
+    # plt.title("Histogram of Kruskal-Wallis test's H statistic ($H = [{\dfrac{12}{n_{T}(n_{T}+1)}\sum_{i=1}^{k}\dfrac{R_{i}^2}{n_{i}}]-3(n_{T}+1)}$)\n. \
+    #     Population is " + ("U(0,1). " if dist == 'uniform' else "N(0,1). ") + str(K) + " groups, " + str(n) + " samples per group.")
+    # plt.show()
+    #
+    # x = np.linspace(np.min(Hs) - np.min(Hs), np.max(Hs) -
+    #                 np.min(Hs), 100)  # 差一个平移，research later
+    # plt.figure()
+    # plt.plot(x, chi2.pdf(x, df=K-1), label='dof = ' + str(K - 1))
+    # plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(K-1) + ')$')
+    # plt.legend()
+    # plt.show()
 
 
 def median_stat(k=5, n=1000, N=10000):
@@ -362,18 +388,24 @@ def median_stat(k=5, n=1000, N=10000):
         MT = (N**2/(a*(N-a)))*accu
         MTs.append(MT)
 
-    plt.hist(MTs, density=False, bins=100, **BARPLOT_KWARGS)
-    plt.title(
-        "Histogram of Median Test $MT$ statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)")
-    plt.show()
-
-    # np.linspace(np.min(MTs) - np.min(MTs), np.max(MTs) - np.min(MTs), 100)
     x = np.linspace(chi2.ppf(0.0001, df=k-1), chi2.ppf(0.9999, df=k-1), 100)
-    plt.figure()
-    plt.plot(x, chi2.pdf(x, df=k-1), label='dof = ' + str(k - 1))  # 差
-    plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(k-1) + ')$')
-    plt.legend()
-    plt.show()
+    y = chi2.pdf(x, df=k-1)
+    base = mcbase.McBase()
+    base.stat_plot(x=x, result1=MTs, y=y, bins=100, title_freq_1="Histogram of Median Test $MT$ statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)", title_theory='Theoretical Distribution\n$\chi^2(dof=' + str(k-1) + ')$',
+                   label='dof = ' + str(k- 1))
+
+    # plt.hist(MTs, density=False, bins=100, **BARPLOT_KWARGS)
+    # plt.title(
+    #     "Histogram of Median Test $MT$ statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)")
+    # plt.show()
+    #
+    # # np.linspace(np.min(MTs) - np.min(MTs), np.max(MTs) - np.min(MTs), 100)
+    # x = np.linspace(chi2.ppf(0.0001, df=k-1), chi2.ppf(0.9999, df=k-1), 100)
+    # plt.figure()
+    # plt.plot(x, chi2.pdf(x, df=k-1), label='dof = ' + str(k - 1))  # 差
+    # plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(k-1) + ')$')
+    # plt.legend()
+    # plt.show()
 
 
 def fk_stat(n=10, k=5, N=1000):
@@ -398,17 +430,24 @@ def fk_stat(n=10, k=5, N=1000):
             sum = sum+k*(a_j_bar[j]-a_bar)**2
         FK = sum/X_normal.var()
         FKs.append(FK)
-    plt.hist(FKs, density=False, bins=100, **BARPLOT_KWARGS)
-    plt.title(
-        "Histogram of Fligner-Killeen test $FK$ statistic ($FK = \dfrac{\sum_{j=1}^{k}n_{j}(\overline{a_{j}}-\overline{a})^2}{s^2}$)")
-    plt.show()
 
     x = np.linspace(np.min(FKs), np.max(FKs), 100)
-    plt.figure()
-    plt.plot(x, chi2.pdf(x, df=k-1), label='dof = ' + str(k - 1))
-    plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(k-1) + ')$')
-    plt.legend()
-    plt.show()
+    y = chi2.pdf(x, df=k-1)
+    base = mcbase.McBase()
+    base.stat_plot(x=x, results1=FKs, y=y, bins=100, title_freq_1="Histogram of Fligner-Killeen test $FK$ statistic ($FK = \dfrac{\sum_{j=1}^{k}n_{j}(\overline{a_{j}}-\overline{a})^2}{s^2}$)", title_theory='Theoretical Distribution\n$\chi^2(dof=' + str(k-1) + ')$',
+                   label='dof = ' + str(k- 1))
+
+    # plt.hist(FKs, density=False, bins=100, **BARPLOT_KWARGS)
+    # plt.title(
+    #     "Histogram of Fligner-Killeen test $FK$ statistic ($FK = \dfrac{\sum_{j=1}^{k}n_{j}(\overline{a_{j}}-\overline{a})^2}{s^2}$)")
+    # plt.show()
+    #
+    # x = np.linspace(np.min(FKs), np.max(FKs), 100)
+    # plt.figure()
+    # plt.plot(x, chi2.pdf(x, df=k-1), label='dof = ' + str(k - 1))
+    # plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(k-1) + ')$')
+    # plt.legend()
+    # plt.show()
 
 
 def levene_stat(ni=5, k=2, n=1000):
@@ -447,17 +486,23 @@ def bartlett_stat(k=5, ni=10, n=1000):
               for i in ln_Si2]))/(1+(1/(3*(k-1)))*(k*((1/ni)-1/(N-k))))
         BTs.append(BT)
 
-    plt.hist(BTs, density=False, bins=100, **BARPLOT_KWARGS)
-    plt.title(
-        "Histogram of Bartlett's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}(n_{i}-1)\ln^{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}})-\dfrac{1}{N-k})}$)")
-    plt.show()
-
     x = np.linspace(np.min(BTs), np.max(BTs), 100)
-    plt.figure()
-    plt.plot(x, chi2.pdf(x, df=k-1), label='dof = ' + str(k - 1))
-    plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(k-1) + ')$')
-    plt.legend()
-    plt.show()
+    y = chi2.pdf(x, df=k-1)
+    base = mcbase.McBase()
+    base.stat_plot(x=x, results1=BTs, y=y, bins=100, title_freq_1="Histogram of Bartlett's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}(n_{i}-1)\ln^{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}})-\dfrac{1}{N-k})}$)", title_theory='Theoretical Distribution\n$\chi^2(dof=' + str(k-1) + ')$',
+                   label='dof = ' + str(k- 1))
+    #
+    # plt.hist(BTs, density=False, bins=100, **BARPLOT_KWARGS)
+    # plt.title(
+    #     "Histogram of Bartlett's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}(n_{i}-1)\ln^{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}})-\dfrac{1}{N-k})}$)")
+    # plt.show()
+    #
+    # x = np.linspace(np.min(BTs), np.max(BTs), 100)
+    # plt.figure()
+    # plt.plot(x, chi2.pdf(x, df=k-1), label='dof = ' + str(k - 1))
+    # plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(k-1) + ')$')
+    # plt.legend()
+    # plt.show()
 
 
 def bartlett_sphericity_stat(N=10000):
@@ -494,25 +539,35 @@ def sign_test_stat(dist='expon', n=100, N=10000):
         poss.append(n_pos)
         negs.append(n_neg)
 
-    plt.hist(poss, density=True, bins=100, **BARPLOT_KWARGS)
-    plt.title("Histogram of sign test's N+ statistic\n. \
-        Population is expon(1). " + str(n) + " samples.")
-    plt.show()
-
-    plt.hist(negs, density=True, bins=100, **BARPLOT_KWARGS)
-    plt.title("Histogram of sign test's N- statistic\n. \
-        Population is expon(1). " + str(n) + " samples.")
-    plt.show()
-
-    plt.figure()
-    plt.title("b ({}, 0.5)".format(n))
     x = np.linspace(0, n, n+1)
     pmf = binom.pmf(x, n, 0.5)
     lb = round(min(np.min(poss), np.min(negs)))
     ub = round(max(np.max(poss), np.max(negs)))
-    plt.plot(x[lb:ub], pmf[lb:ub])
-    plt.title('Theoretical Distribution\n$b(n=' + str(n) + ',p=1/2)$')
-    plt.show()
+    base = mcbase.McBase()
+    base.stat_plot(x=x[lb:ub], results1=poss, result2=negs, y=pmf[lb:ub], bins=100, title_freq_1="Histogram of sign test's N+ statistic\n. \
+        Population is expon(1). " + str(n) + " samples.",  title_freq_2="Histogram of sign test's N- statistic\n. \
+        Population is expon(1). " + str(n) + " samples.", title_theory='Theoretical Distribution\n$b(n=' + str(n) + ',p=1/2)$')
+
+
+    # plt.hist(poss, density=True, bins=100, **BARPLOT_KWARGS)
+    # plt.title("Histogram of sign test's N+ statistic\n. \
+    #     Population is expon(1). " + str(n) + " samples.")
+    # plt.show()
+    #
+    # plt.hist(negs, density=True, bins=100, **BARPLOT_KWARGS)
+    # plt.title("Histogram of sign test's N- statistic\n. \
+    #     Population is expon(1). " + str(n) + " samples.")
+    # plt.show()
+    #
+    # plt.figure()
+    # plt.title("b ({}, 0.5)".format(n))
+    # x = np.linspace(0, n, n+1)
+    # pmf = binom.pmf(x, n, 0.5)
+    # lb = round(min(np.min(poss), np.min(negs)))
+    # ub = round(max(np.max(poss), np.max(negs)))
+    # plt.plot(x[lb:ub], pmf[lb:ub])
+    # plt.title('Theoretical Distribution\n$b(n=' + str(n) + ',p=1/2)$')
+    # plt.show()
 
 
 def cochrane_q_stat(p=0.5, K=3, n=100, N=10000):
@@ -538,17 +593,24 @@ def cochrane_q_stat(p=0.5, K=3, n=100, N=10000):
                    ** 2) / np.sum((K - X.sum(axis=1)) * X.sum(axis=1))
         Ts.append(T)  # / (K * n)
 
-    plt.hist(Ts, density=False, bins=100, **BARPLOT_KWARGS)
-    plt.title("Histogram of Cochrane-Q test's T statistic ($T = \dfrac{(k-1)[k\sum_{j=1}^{k}X_{.j}^2-(\sum_{j=1}^{k} X_{.j})^2]}{k\sum_{i=1}^{b}X_{i.}-\sum_{i=1}^{b} X_{i.}^2}$)\n. \
-        Population is " + "Bernoulli(" + str(p) + "). " + str(K) + " groups, " + str(n) + " samples per group.")
-    plt.show()
-
     x = np.linspace(np.min(Ts), np.max(Ts), 100)
-    plt.figure()
-    plt.plot(x, chi2.pdf(x, df=K-1), label='dof = ' + str(K - 1))
-    plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(K-1) + ')$')
-    plt.legend()
-    plt.show()
+    y = chi2.pdf(x, df=K-1)
+    base = mcbase.McBase()
+    base.stat_plot(x=x, results1=Ts, y=y, bins=100, title_freq_1="Histogram of Cochrane-Q test's T statistic ($T = \dfrac{(k-1)[k\sum_{j=1}^{k}X_{.j}^2-(\sum_{j=1}^{k} X_{.j})^2]}{k\sum_{i=1}^{b}X_{i.}-\sum_{i=1}^{b} X_{i.}^2}$)\n. \
+        Population is " + "Bernoulli(" + str(p) + "). " + str(K) + " groups, " + str(n) + " samples per group.", title_theory='Theoretical Distribution\n$\chi^2(dof=' + str(K-1) + ')$',
+                   label='dof = ' + str(K- 1))
+
+    # plt.hist(Ts, density=False, bins=100, **BARPLOT_KWARGS)
+    # plt.title("Histogram of Cochrane-Q test's T statistic ($T = \dfrac{(k-1)[k\sum_{j=1}^{k}X_{.j}^2-(\sum_{j=1}^{k} X_{.j})^2]}{k\sum_{i=1}^{b}X_{i.}-\sum_{i=1}^{b} X_{i.}^2}$)\n. \
+    #     Population is " + "Bernoulli(" + str(p) + "). " + str(K) + " groups, " + str(n) + " samples per group.")
+    # plt.show()
+    #
+    # x = np.linspace(np.min(Ts), np.max(Ts), 100)
+    # plt.figure()
+    # plt.plot(x, chi2.pdf(x, df=K-1), label='dof = ' + str(K - 1))
+    # plt.title('Theoretical Distribution\n$\chi^2(dof=' + str(K-1) + ')$')
+    # plt.legend()
+    # plt.show()
 
 
 def hotelling_t2_stat(n=50, k=2, N=1000):
@@ -578,18 +640,27 @@ def hotelling_t2_stat(n=50, k=2, N=1000):
         SIGMA = sum_xs/(n-1)
         T2 = (n*X1.T)*(np.linalg.inv(SIGMA))*X1
         T2s.append(T2[0, 0])
-    plt.hist(T2s, density=False, bins=100, **BARPLOT_KWARGS)
-    plt.title(
-        "Histogram of Hotelling's $T^2$ statistic ($T^2 = n(\overline{X}-\mu)^{T}S^{-1}(\overline{x}-\mu)$)")
-    plt.show()
 
     x = np.linspace(np.min(T2s), np.max(T2s), 100)
     y = ((gamma((n+1)/2))*((1+x/n)**(-(n+1)/2))) / \
         ((gamma((n-1)/2))*(gamma(1)*n))
-    plt.figure()
-    plt.plot(x, y, lw=3, alpha=0.6, c="black",
-             label='$T^2(' + str(k) + ',' + str(n+k-1) + ')$')
-    plt.title('Theoretical Distribution $T^2(' + str(k) + ',' + str(n+k-1) +
-              ')$ \n $p(x) = \dfrac{\Gamma((n+1)/2)x^{k/2-1}(1+x/n)^{-(n+1)/2}}{\Gamma((n-k+1)/2)\Gamma(k/2)n^{k/2}}$')
-    plt.legend()
-    plt.show()
+    base = mcbase.McBase()
+    base.stat_plot(x=x, results1=T2s, y=y, bins=100, title_freq_1="Histogram of Hotelling's $T^2$ statistic ($T^2 = n(\overline{X}-\mu)^{T}S^{-1}(\overline{x}-\mu)$)", title_theory='Theoretical Distribution $T^2(' + str(k) + ',' + str(n+k-1) +
+              ')$ \n $p(x) = \dfrac{\Gamma((n+1)/2)x^{k/2-1}(1+x/n)^{-(n+1)/2}}{\Gamma((n-k+1)/2)\Gamma(k/2)n^{k/2}}$',
+                   label='$T^2(' + str(k) + ',' + str(n+k-1) + ')$')
+
+    # plt.hist(T2s, density=False, bins=100, **BARPLOT_KWARGS)
+    # plt.title(
+    #     "Histogram of Hotelling's $T^2$ statistic ($T^2 = n(\overline{X}-\mu)^{T}S^{-1}(\overline{x}-\mu)$)")
+    # plt.show()
+    #
+    # x = np.linspace(np.min(T2s), np.max(T2s), 100)
+    # y = ((gamma((n+1)/2))*((1+x/n)**(-(n+1)/2))) / \
+    #     ((gamma((n-1)/2))*(gamma(1)*n))
+    # plt.figure()
+    # plt.plot(x, y, lw=3, alpha=0.6, c="black",
+    #          label='$T^2(' + str(k) + ',' + str(n+k-1) + ')$')
+    # plt.title('Theoretical Distribution $T^2(' + str(k) + ',' + str(n+k-1) +
+    #           ')$ \n $p(x) = \dfrac{\Gamma((n+1)/2)x^{k/2-1}(1+x/n)^{-(n+1)/2}}{\Gamma((n-k+1)/2)\Gamma(k/2)n^{k/2}}$')
+    # plt.legend()
+    # plt.show()
