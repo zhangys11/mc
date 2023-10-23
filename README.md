@@ -229,6 +229,10 @@ A Monte-Carlo toolkit for educational purposes.
     </tbody>
 </table>
 
+This version is major upgrade on the original version.   
+All the functions were refactored by the OOP (Object Oriented Programming) pattern.  
+`McBase` acts as a common base class for all MC derivative classes. 
+
 # future plan
 
 gui.py - add a Flask or tk-inter (ttkbootstrap) GUI
