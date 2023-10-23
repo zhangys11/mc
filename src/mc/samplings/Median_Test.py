@@ -44,8 +44,8 @@ class Median_Stat(McBase):
                         a += 1
             accu = 0
             for x in range(0, self.k):
-                accu += ((Os[x] - (self.n * a) / self.N) ** 2) / self.n
-            MT = (self.N ** 2 / (a * (self.N - a))) * accu
+                accu += ((Os[x] - (self.n * a) / (self.n * self.k)) ** 2) / self.n
+            MT = ((self.n * self.k) ** 2 / (a * ((self.n * self.k) - a))) * accu
             MTs.append(MT)
 
         x_theory = np.linspace(chi2.ppf(0.0001, df=self.k-1), chi2.ppf(0.9999, df=self.k-1), 100)

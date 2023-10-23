@@ -10,5 +10,5 @@ class Galton_Board(McBase):
 
     def run(self, display=True):
         binom = Binom.Binom(self.N, self.num_layers, self.flavor)
-        result = binom.run(display=display)
-        return result
+        binom.run(display=display)
+        return

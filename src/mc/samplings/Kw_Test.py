@@ -28,29 +28,28 @@ class Kw_Stat(McBase):
 
     def run(self, display=True):
 
-        ni = self.n
-        nT = self.k * ni
+        nT = self.k * self.n
 
         Hs = []
 
         for _ in tqdm(range(self.N)):
             if self.underlying_dist == 'uniform':
-                y1 = np.random.uniform(0, 1, ni)
-                y2 = np.random.uniform(0, 1, ni)
-                y3 = np.random.uniform(0, 1, ni)
+                y1 = np.random.uniform(0, 1, self.n)
+                y2 = np.random.uniform(0, 1, self.n)
+                y3 = np.random.uniform(0, 1, self.n)
             else:  # 'gaussian'
-                y1 = np.random.randn(ni)  # normal
-                y2 = np.random.randn(ni)
-                y3 = np.random.randn(ni)
+                y1 = np.random.randn(self.n)  # normal
+                y2 = np.random.randn(self.n)
+                y3 = np.random.randn(self.n)
 
             yall = y1.tolist() + y2.tolist() + y3.tolist()
             sorted_id = sorted(range(len(yall)), key=lambda k: yall[k])
 
-            R1 = np.sum(sorted_id[:ni])
-            R2 = np.sum(sorted_id[ni:ni + ni])
-            R3 = np.sum(sorted_id[ni + ni:])
+            R1 = np.sum(sorted_id[:self.n])
+            R2 = np.sum(sorted_id[self.n:self.n + self.n])
+            R3 = np.sum(sorted_id[self.n + self.n:])
 
-            H = 12 / nT / (nT + 1) * (R1 ** 2 + R2 ** 2 + R3 ** 2) / ni - 3 * (nT + 1)
+            H = 12 / nT / (nT + 1) * (R1 ** 2 + R2 ** 2 + R3 ** 2) / self.n - 3 * (nT + 1)
 
             Hs.append(H)
 

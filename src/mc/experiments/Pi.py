@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from ..mcbase import McBase
 
 
@@ -28,7 +29,7 @@ class Pi(McBase):
         self.l = l
         self.flavor = flavor
 
-    def run(self):
+    def run(self, display=True):
         if self.flavor == 0:
             xl = np.pi*np.random.random(self.N)
             yl = 0.5*self.a*np.random.random(self.N)
@@ -80,5 +81,25 @@ class Pi(McBase):
             PI = freq*4
             print("frequency = {}/{} = {}".format(idx.sum(), self.N, idx.sum()/self.N))
             print("PI = {}".format(idx.sum()/self.N*4))
+
+        if self.flavor == 1:
+            if self.N > 10000:
+                print('Warning: Due to the excessively large value of N provided, resulting in an excessive density of \
+                points, the image quality is compromised. Please reduce the value of N and try again.')
+            r = np.round(self.N / 500 + 0.5)
+
+            xs = np.random.uniform(-r, r, self.N)
+            ys = np.random.uniform(-r, r, self.N)
+
+            plt.figure(figsize=(min(4 * r, 20), min(4 * r, 20)))
+            draw_circle = plt.Circle((0., 0.), r, fill=False)
+            plt.gcf().gca().add_artist(draw_circle)
+            plt.scatter(xs, ys, s=round(self.N / 50 + 0.5), marker='o',
+                        edgecolor='gray', facecolor='none')
+            plt.axis("square")
+            plt.axis("off")
+            plt.xticks([-r, 0, r])
+            plt.yticks([-r, 0, r])
+            plt.show()
 
         return freq, PI

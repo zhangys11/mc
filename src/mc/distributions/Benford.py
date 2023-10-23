@@ -6,10 +6,6 @@ from matplotlib.pyplot import MultipleLocator
 if __package__:
     from .. import DATA_FOLDER, BARPLOT_KWARGS
     from ..mcbase import McBase
-else:
-    import os.path
-    from ..mcbase import McBase
-    DATA_FOLDER = os.path.dirname(os.path.realpath(__file__)) + "/data/"
 
 
 class Benford(McBase):
