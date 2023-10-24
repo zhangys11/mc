@@ -14,6 +14,10 @@ A Monte-Carlo toolkit for educational purposes.
     samplings
         - sampling distributions of statistic used in hypothesis tests
 
+# The structure diagram of the mc-tk package
+
+![The structure diagram of the mc-tk package](https://raw.githubusercontent.com/zhangmengrui/mc/main/structure%20diagram.jpg)
+
 # functions
 
 <table border="1" cellspacing="0">
@@ -23,7 +27,7 @@ A Monte-Carlo toolkit for educational purposes.
                 Module
             </td>
             <td>
-                Function
+                Class
             </td>
             <td>
                 Description
@@ -34,7 +38,7 @@ A Monte-Carlo toolkit for educational purposes.
                 mc.experiments
             </td>
             <td>
-                pi()
+                Pi
             </td>
             <td>
                 Perform Buffon&rsquo;s needle experiment to estimate&nbsp;&pi; .
@@ -42,7 +46,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                parcel()
+                Parcel
             </td>
             <td>
                 Simulate&nbsp;a&nbsp;bi-directional&nbsp;parcel&nbsp;passing&nbsp;game.
@@ -50,7 +54,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                dices()
+                Dices
             </td>
             <td>
                 Estimate&nbsp;the&nbsp;probabilities&nbsp;of&nbsp;various&nbsp;dice&nbsp;combinations.
@@ -58,16 +62,16 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                prisoners()
-                Prisoners_limit()
+                Prisoners
+                asymptotic_analysis()
             </td>
             <td>
-                The&nbsp;famous&nbsp;locker&nbsp;puzzle(100-prisoner&nbsp;quiz). This&nbsp;function&nbsp;will&nbsp;prove&nbsp;that&nbsp;the&nbsp;survival&nbsp;chance&nbsp;limit&nbsp;is&nbsp;1&minus;ln2 when&nbsp;n&nbsp;approaches&nbsp;+&infin; .
+                The&nbsp;famous&nbsp;locker&nbsp;puzzle(100-prisoner&nbsp;quiz). And the asymptotic_analysis()&nbsp;function&nbsp;will&nbsp;prove&nbsp;that&nbsp;the&nbsp;survival&nbsp;chance&nbsp;limit&nbsp;is&nbsp;1&minus;ln2 when&nbsp;n&nbsp;approaches&nbsp;+&infin; .
             </td>
         </tr>
         <tr>
             <td>
-                galton_board()
+                Galton_Board
             </td>
             <td>
                 Use&nbsp;the&nbsp;classic&nbsp;Galton&nbsp;board&nbsp;experiment&nbsp;to&nbsp;produce&nbsp;a&nbsp;binomial&nbsp;distribution.
@@ -75,7 +79,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                paper_clips()
+                Paper_Clips
             </td>
             <td>
                 Use&nbsp;the&nbsp;paper&nbsp;clip&nbsp;experiment&nbsp;to&nbsp;produce&nbsp;a&nbsp;Zipf&nbsp;distribution.
@@ -83,10 +87,10 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                sudden_death()
+                Sudden_Death
             </td>
             <td>
-                This&nbsp;function&nbsp;simulates&nbsp;a&nbsp;sudden&nbsp;death&nbsp;game&nbsp;to&nbsp;produce the&nbsp;exponential&nbsp;distribution.
+                This&nbsp;class&nbsp;simulates&nbsp;a&nbsp;sudden&nbsp;death&nbsp;game&nbsp;to&nbsp;produce the&nbsp;exponential&nbsp;distribution.
             </td>
         </tr>
         <tr>
@@ -94,15 +98,15 @@ A Monte-Carlo toolkit for educational purposes.
                 mc.distributions
             </td>
             <td>
-                poisson()
+                Poisson
             </td>
             <td>
-                This&nbsp;function&nbsp;will&nbsp;demonstrate&nbsp;that&nbsp;Poisson&nbsp;is&nbsp;a&nbsp;limit&nbsp;distribution&nbsp;of b(n,p) when&nbsp;n&nbsp;is&nbsp;large, and&nbsp;p&nbsp;is&nbsp;small.
+                This&nbsp;class&nbsp;will&nbsp;demonstrate&nbsp;that&nbsp;Poisson&nbsp;is&nbsp;a&nbsp;limit&nbsp;distribution&nbsp;of b(n,p) when&nbsp;n&nbsp;is&nbsp;large, and&nbsp;p&nbsp;is&nbsp;small.
             </td>
         </tr>
         <tr>
             <td>
-                benford()
+                Benford
             </td>
             <td>
                 Verify&nbsp;Benford&rsquo;s&nbsp;law&nbsp;using&nbsp;real-life&nbsp;datasets, including&nbsp;the&nbsp;stock market&nbsp;data, international&nbsp;trade&nbsp;data, and&nbsp;the&nbsp;Fibonacci&nbsp;series.
@@ -113,10 +117,10 @@ A Monte-Carlo toolkit for educational purposes.
                 mc.samplings
             </td>
             <td rowspan="8">
-                clt()
+                Clt
             </td>
             <td>
-                Using&nbsp;various&nbsp;underlying&nbsp;distributions&nbsp;to&nbsp;verify&nbsp;the&nbsp;central&nbsp;limit&nbsp;&nbsp;theorem.&nbsp;This&nbsp;function&nbsp;provides&nbsp;the&nbsp;following&nbsp;underlying&nbsp;distributions.
+                Using&nbsp;various&nbsp;underlying&nbsp;distributions&nbsp;to&nbsp;verify&nbsp;the&nbsp;central&nbsp;limit&nbsp;&nbsp;theorem.&nbsp;This&nbsp;class&nbsp;provides&nbsp;the&nbsp;following&nbsp;underlying&nbsp;distributions.
             </td>
         </tr>
         <tr>
@@ -156,15 +160,15 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                t_stat()
+                T_Test
             </td>
             <td>
-                This&nbsp;function&nbsp;constructs&nbsp;an&nbsp;r.v. &nbsp;(random&nbsp;variable) following&nbsp;the t&nbsp;distribution.
+                This&nbsp;class&nbsp;constructs&nbsp;an&nbsp;r.v. &nbsp;(random&nbsp;variable) following&nbsp;the t&nbsp;distribution.
             </td>
         </tr>
         <tr>
             <td>
-                chisq_gof_stat()
+                Chisq_Gof_Test
             </td>
             <td>
                 Verify&nbsp;the&nbsp;statistic&nbsp;used&nbsp;in&nbsp;Pearson&rsquo;s&nbsp;Chi-Square&nbsp;Goodness-of-Fit test&nbsp;follows&nbsp;the&nbsp;&chi;2 &nbsp;distribution.
@@ -172,7 +176,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                fk_stat()
+                Fk_Test
             </td>
             <td>
                 Verify&nbsp;the&nbsp;Fligner-Killeen&nbsp;Test&nbsp;statistic(FK) follows&nbsp;the&nbsp;&chi;2 &nbsp;distribution.
@@ -180,7 +184,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                bartlett_stat()
+                Bartlett_Test
             </td>
             <td>
                 Verify&nbsp;the&nbsp;Bartlett&rsquo;s&nbsp;test&nbsp;statistic&nbsp;follows&nbsp;the&nbsp;&chi;2 &nbsp;distribution.
@@ -188,7 +192,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                anova_stat()
+                Anova
             </td>
             <td>
                 Verify&nbsp;the&nbsp;statistic&nbsp;of&nbsp;ANOVA&nbsp;follows&nbsp;the&nbsp;F&nbsp;distribution.
@@ -196,7 +200,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                kw_stat()
+                Kw_Test
             </td>
             <td>
                 Verify&nbsp;the&nbsp;Kruskal-Wallis&nbsp;test&nbsp;statistic&nbsp;(H) is&nbsp;a&nbsp;&chi;2 &nbsp;r.v.
@@ -204,7 +208,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                sign_test_stat()
+                Sign_Test
             </td>
             <td>
                 For&nbsp;the&nbsp;sign&nbsp;test&nbsp;(medium&nbsp;test), verify&nbsp;its&nbsp;N- and&nbsp;N+ statistics&nbsp;both follow&nbsp;b(n,1/2).
@@ -212,7 +216,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                cochrane_q_stat()
+                Cochrane_Q_Test
             </td>
             <td>
                 Verify&nbsp;the&nbsp;statistic&nbsp;T&nbsp;in&nbsp;Cochrane-Q&nbsp;test&nbsp;follows&nbsp;the&nbsp;&chi;2&nbsp;distribution.
@@ -220,7 +224,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                hotelling_t2_stat()
+                Hotelling_T2_Test
             </td>
             <td>
                 Verify&nbsp;the&nbsp;T2 &nbsp;statistic&nbsp;from&nbsp;two&nbsp;multivariate&nbsp;Gaussian&nbsp;populations follows&nbsp;the&nbsp;Hotelling&rsquo;s&nbsp;T2 &nbsp;distribution.

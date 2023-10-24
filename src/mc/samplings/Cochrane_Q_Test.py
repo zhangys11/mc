@@ -3,7 +3,7 @@ from tqdm import tqdm
 from ..mcbase import McBase
 
 
-class Cochrane_Q_Stat(McBase):
+class Cochrane_Q_Test(McBase):
     """
     Cochrane-Q test T statistic is a X2 (CHISQ) random variable.
     Cochrane-Q is an extension of McNemar that support more than 2 samples/groups.

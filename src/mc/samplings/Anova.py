@@ -2,7 +2,8 @@ import numpy as np
 from ..mcbase import McBase
 
 
-class Anova_Stat(McBase):
+
+class Anova(McBase):
 
     """
     验证 ANOVA的F分布假设

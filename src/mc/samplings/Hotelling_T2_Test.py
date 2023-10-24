@@ -4,7 +4,7 @@ from scipy.special import gamma
 from ..mcbase import McBase
 
 
-class Hotelling_T2_Stat(McBase):
+class Hotelling_T2_Test(McBase):
 
     """
     The Hotelling T2- distribution was proposed by H. Hotelling for testing equality of means of two normal populations.

@@ -3,7 +3,7 @@ from tqdm import tqdm
 from ..mcbase import McBase
 
 
-class Kw_Stat(McBase):
+class Kw_Test(McBase):
 
     """
     Verify the Kruskal-Wallis test statistic (H) is a X2 random variable.

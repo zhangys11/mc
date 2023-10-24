@@ -1,7 +1,7 @@
 from ..mcbase import McBase
 
 
-class Levene_Stat(McBase):
+class Levene_Test(McBase):
 
     """
     Levene's test is used to test if k samples have equal variances.

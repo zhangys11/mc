@@ -3,7 +3,7 @@ from tqdm import tqdm
 from ..mcbase import McBase
 
 
-class Bartlett_Stat(McBase):
+class Bartlett_Test(McBase):
 
     """
     Bartlett's test is used to test homoscedasticity, that is, if multiple samples are from populations with equal
