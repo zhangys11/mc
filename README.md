@@ -15,6 +15,7 @@ A Monte-Carlo toolkit for educational purposes.
         - sampling distributions of statistic used in hypothesis tests
 
 # The structure diagram of the mc-tk package
+
 ![The structure diagram of the mc-tk package](https://raw.githubusercontent.com/zhangmengrui/mc/main/structure%20diagram.jpg)
 
 # functions
