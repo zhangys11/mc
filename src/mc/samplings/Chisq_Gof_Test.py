@@ -9,6 +9,7 @@ else:
 
 
 class Chisq_Gof_Test(McBase):
+
     """
     Verify the chisq statistic used in Pearson's Chi-Square Goodness-of-Fit Test.
     验证皮尔逊卡方拟合优度检验的卡方分布假设
