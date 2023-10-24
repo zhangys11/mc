@@ -4,7 +4,7 @@ from tqdm import tqdm
 from ..mcbase import McBase
 
 
-class Fk_Stat(McBase):
+class Fk_Test(McBase):
 
     """
     The Fligner-Killeen test is a non-parametric test for homogeneity of group variances based on ranks.

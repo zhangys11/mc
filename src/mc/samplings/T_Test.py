@@ -2,7 +2,7 @@ import numpy as np
 from ..mcbase import McBase
 
 
-class T_Stat(McBase):
+class T_Test(McBase):
 
     """
     Sample [n] samples from a normal distribution, and compute the t statistic follows the student's distribution.

@@ -4,7 +4,7 @@ from tqdm import tqdm
 from ..mcbase import McBase
 
 
-class Median_Stat(McBase):
+class Median_Test(McBase):
 
     """
     This test is performed by analyzing multiple sets of independent samples.
@@ -27,21 +27,17 @@ class Median_Stat(McBase):
 
         for _ in tqdm(range(self.N)):
             X = np.random.randint(0, 100, [self.k, self.n])
+            x_median = np.median(X)
+
             Os = []
             for j in range(0, self.k):
-                x_median = np.median(X[j])
                 O_1i = 0
                 for y in range(0, self.n):
                     if X[j][y] > x_median:
                         O_1i += 1
                 Os.append(O_1i)
 
-            X_median = np.median(X)
-            a = 0
-            for j in range(0, self.k):
-                for y in range(0, self.n):
-                    if X[j][y] > X_median:
-                        a += 1
+            a = sum(Os)
             accu = 0
             for x in range(0, self.k):
                 accu += ((Os[x] - (self.n * a) / (self.n * self.k)) ** 2) / self.n

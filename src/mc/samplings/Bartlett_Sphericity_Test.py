@@ -1,7 +1,7 @@
 from ..mcbase import McBase
 
 
-class Bartlett_Sphericity_Stat(McBase):
+class Bartlett_Sphericity_Test(McBase):
 
     """
     Bartlett’s Test of Sphericity compares an observed correlation matrix to

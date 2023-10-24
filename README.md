@@ -59,10 +59,10 @@ A Monte-Carlo toolkit for educational purposes.
         <tr>
             <td>
                 Prisoners
-                Prisoners_limit()
+                asymptotic_analysis()
             </td>
             <td>
-                The&nbsp;famous&nbsp;locker&nbsp;puzzle(100-prisoner&nbsp;quiz). And Prisoners_limit()&nbsp;function&nbsp;will&nbsp;prove&nbsp;that&nbsp;the&nbsp;survival&nbsp;chance&nbsp;limit&nbsp;is&nbsp;1&minus;ln2 when&nbsp;n&nbsp;approaches&nbsp;+&infin; .
+                The&nbsp;famous&nbsp;locker&nbsp;puzzle(100-prisoner&nbsp;quiz). And the asymptotic_analysis()&nbsp;function&nbsp;will&nbsp;prove&nbsp;that&nbsp;the&nbsp;survival&nbsp;chance&nbsp;limit&nbsp;is&nbsp;1&minus;ln2 when&nbsp;n&nbsp;approaches&nbsp;+&infin; .
             </td>
         </tr>
         <tr>
@@ -86,7 +86,7 @@ A Monte-Carlo toolkit for educational purposes.
                 Sudden_Death
             </td>
             <td>
-                This&nbsp;function&nbsp;simulates&nbsp;a&nbsp;sudden&nbsp;death&nbsp;game&nbsp;to&nbsp;produce the&nbsp;exponential&nbsp;distribution.
+                This&nbsp;class&nbsp;simulates&nbsp;a&nbsp;sudden&nbsp;death&nbsp;game&nbsp;to&nbsp;produce the&nbsp;exponential&nbsp;distribution.
             </td>
         </tr>
         <tr>
@@ -97,7 +97,7 @@ A Monte-Carlo toolkit for educational purposes.
                 Poisson
             </td>
             <td>
-                This&nbsp;function&nbsp;will&nbsp;demonstrate&nbsp;that&nbsp;Poisson&nbsp;is&nbsp;a&nbsp;limit&nbsp;distribution&nbsp;of b(n,p) when&nbsp;n&nbsp;is&nbsp;large, and&nbsp;p&nbsp;is&nbsp;small.
+                This&nbsp;class&nbsp;will&nbsp;demonstrate&nbsp;that&nbsp;Poisson&nbsp;is&nbsp;a&nbsp;limit&nbsp;distribution&nbsp;of b(n,p) when&nbsp;n&nbsp;is&nbsp;large, and&nbsp;p&nbsp;is&nbsp;small.
             </td>
         </tr>
         <tr>
@@ -116,7 +116,7 @@ A Monte-Carlo toolkit for educational purposes.
                 Clt
             </td>
             <td>
-                Using&nbsp;various&nbsp;underlying&nbsp;distributions&nbsp;to&nbsp;verify&nbsp;the&nbsp;central&nbsp;limit&nbsp;&nbsp;theorem.&nbsp;This&nbsp;function&nbsp;provides&nbsp;the&nbsp;following&nbsp;underlying&nbsp;distributions.
+                Using&nbsp;various&nbsp;underlying&nbsp;distributions&nbsp;to&nbsp;verify&nbsp;the&nbsp;central&nbsp;limit&nbsp;&nbsp;theorem.&nbsp;This&nbsp;class&nbsp;provides&nbsp;the&nbsp;following&nbsp;underlying&nbsp;distributions.
             </td>
         </tr>
         <tr>
@@ -156,10 +156,10 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                T_Test()
+                T_Test
             </td>
             <td>
-                This&nbsp;function&nbsp;constructs&nbsp;an&nbsp;r.v. &nbsp;(random&nbsp;variable) following&nbsp;the t&nbsp;distribution.
+                This&nbsp;class&nbsp;constructs&nbsp;an&nbsp;r.v. &nbsp;(random&nbsp;variable) following&nbsp;the t&nbsp;distribution.
             </td>
         </tr>
         <tr>
@@ -188,7 +188,7 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
-                Anova_Test
+                Anova
             </td>
             <td>
                 Verify&nbsp;the&nbsp;statistic&nbsp;of&nbsp;ANOVA&nbsp;follows&nbsp;the&nbsp;F&nbsp;distribution.

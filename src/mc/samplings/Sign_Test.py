@@ -3,7 +3,7 @@ from tqdm import tqdm
 from ..mcbase import McBase
 
 
-class Sign_Test_Stat(McBase):
+class Sign_Test(McBase):
 
     """
     For sign test, if H0 is true (m = m0), the N- and N+ both follow b(n,1/2)
