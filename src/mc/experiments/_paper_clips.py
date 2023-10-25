@@ -8,6 +8,6 @@ class Paper_Clips(McBase):
         self.num_clips = num_clips
 
     def run(self, verbose=False, display=True):
-        zipf = Zipf.Zipf(self.N, self.num_clips)
+        zipf = Zipf(self.N, self.num_clips)
         zipf.run(verbose=verbose, display=display)
         return

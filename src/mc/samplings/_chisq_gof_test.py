@@ -9,7 +9,6 @@ else:
 
 
 class Chisq_Gof_Test(McBase):
-
     """
     Verify the chisq statistic used in Pearson's Chi-Square Goodness-of-Fit Test.
     验证皮尔逊卡方拟合优度检验的卡方分布假设
@@ -34,7 +33,7 @@ class Chisq_Gof_Test(McBase):
 
         for i in range(self.N):  # MC试验次数
             if self.underlying_dist == 'binom' or self.underlying_dist == 'galton':
-                galton_board = Galton_Board.Galton_Board(N=self.sample_size, num_layers=self.k - 1, flavor=1)
+                galton_board = Galton_Board(N=self.sample_size, num_layers=self.k - 1, flavor=1)
                 h = galton_board.run(display=False)  # rounds, layers
                 # print('experiment', h)
                 chisq = 0

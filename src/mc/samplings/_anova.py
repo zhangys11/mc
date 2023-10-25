@@ -2,7 +2,6 @@ import numpy as np
 from ..mcbase import McBase
 
 
-
 class Anova(McBase):
 
     """

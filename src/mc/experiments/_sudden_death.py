@@ -9,6 +9,6 @@ class Sudden_Death(McBase):
         self.p = p
 
     def run(self, display=True):
-        exponential = Exponential.Exponential(self.N, self.num_rounds, self.p)
+        exponential = Exponential(self.N, self.num_rounds, self.p)
         exponential.run(display=display)
         return
