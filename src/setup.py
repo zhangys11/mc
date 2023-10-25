@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="mc-tk",
-    version="1.0",
+    version="1.1",
     packages=["mc"],
     install_requires=[
         "numpy",
