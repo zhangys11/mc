@@ -1,29 +1,25 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Pi(McBase):
 
     """
     Perform a mc experiment to estimate PI.
-
-    Parameters
-    ----------
-    a : the distance between two parallel lines in the Buffon's needle problem.
-    l : the length of the needle arbitrarily cast in the Buffon's needle problem.
-    flavor : which implementation to use.
-        0 - the classic Buffon's needle problem.
-        1 - circle inside square. N points (x,y) are drawn from uniform random distributions in the range of -1 to +1.
-        The points within the unit circle divided by N is an approximation of PI/4.
-
-    Returns
-    -------
-    freq : The ratio / percentage of points within the unit circle divided by N.
-    PI :  An estimated value of PI.
     """
 
-    def __init__(self, N=1000000, a=4, l=1, flavor=1):
+    def __init__(self, N=10000, a=4, l=1, flavor=1):
+        '''
+        Parameters
+        ----------
+        a : the distance between two parallel lines in the Buffon's needle problem.
+        l : the length of the needle arbitrarily cast in the Buffon's needle problem.
+        flavor : which implementation to use.
+            0 - the classic Buffon's needle problem.
+            1 - circle inside square. N points (x,y) are drawn from uniform random distributions in the range of -1 to +1.
+            The points within the unit circle divided by N is an approximation of PI/4.
+        '''
         super().__init__(None, N)
         self.a = a
         self.l = l
@@ -69,7 +65,7 @@ class Pi(McBase):
             freq = cnt / self.N
             PI = freq*4
             print("frequency = {}/{} = {}".format(cnt, self.N, cnt/self.N))
-            print("PI = {}".format(cnt/self.N*4))
+            print("PI estimate = {}".format(cnt/self.N*4))
 
         else:
             # Implementation 2: Monte-Carlo: PI
@@ -80,26 +76,28 @@ class Pi(McBase):
             freq = idx.sum()/self.N
             PI = freq*4
             print("frequency = {}/{} = {}".format(idx.sum(), self.N, idx.sum()/self.N))
-            print("PI = {}".format(idx.sum()/self.N*4))
+            print("PI estimate = {}".format(idx.sum()/self.N*4))
 
         if self.flavor == 1:
             if self.N > 10000:
                 print('Warning: Due to the excessively large value of N provided, resulting in an excessive density of \
                 points, the image quality is compromised. Please reduce the value of N and try again.')
-            r = np.round(self.N / 500 + 0.5)
+            r = np.round(self.N / 1000 + 0.5)
 
             xs = np.random.uniform(-r, r, self.N)
             ys = np.random.uniform(-r, r, self.N)
 
-            plt.figure(figsize=(min(4 * r, 20), min(4 * r, 20)))
+            plt.figure(figsize=(min(2 * r, 15), min(2 * r, 15)))
             draw_circle = plt.Circle((0., 0.), r, fill=False)
             plt.gcf().gca().add_artist(draw_circle)
-            plt.scatter(xs, ys, s=round(self.N / 50 + 0.5), marker='o',
+            plt.scatter(xs, ys, s=round(self.N / 1000 + 0.5), marker='o',
                         edgecolor='gray', facecolor='none')
             plt.axis("square")
             plt.axis("off")
             plt.xticks([-r, 0, r])
             plt.yticks([-r, 0, r])
             plt.show()
-
-        return freq, PI
+ 
+        # #    freq : The ratio / percentage of points within the unit circle divided by N.
+        # #    PI :  An estimated value of PI.
+        self.freq = freq

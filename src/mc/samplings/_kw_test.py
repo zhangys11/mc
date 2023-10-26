@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Kw_Test(McBase):
@@ -11,16 +11,17 @@ class Kw_Test(McBase):
     The Mann-Whitney or Wilcoxon test compares two groups while the Kruskal-Wallis test compares 3.
     Kruskal-Wallis test is a non-parametric version of one-way ANOVA. It is rank based.
     Kruskal-Wallis H: a X2 test statistic.
-
-    Parameters
-    ----------
-    underlying_dist : population assumption. As KW test is non-parametric, the choice of dist doesn't matter.
-        By default, we use unform.
-    k : groups / classes
-    n : samples per class. In this experiment, we use equal group size, i.e., n1=n2=n3=...
     """
 
     def __init__(self, underlying_dist='uniform', k=3, n=100, N=10000):
+        '''
+        Parameters
+        ----------
+        underlying_dist : population assumption. As KW test is non-parametric, the choice of dist doesn't matter.
+            By default, we use unform.
+        k : groups / classes
+        n : samples per class. In this experiment, we use equal group size, i.e., n1=n2=n3=...
+        '''
         super().__init__("chi2", N)
         self.underlying_dist = underlying_dist
         self.k = k
@@ -58,10 +59,8 @@ class Kw_Test(McBase):
 
         if display:
             super().hist(y=Hs,
-                         title="Histogram of Kruskal-Wallis test's H statistic ($H = [{\dfrac{12}{n_{T}(n_{T}+1)}\sum_{i=1}^{k}\dfrac{R_{i}^2}{n_{i}}]-3(n_{T}+1)}$)\n. \
+                         title="Histogram of the Kruskal-Wallis test's H statistic ($H = [{\dfrac{12}{n_{T}(n_{T}+1)}\sum_{i=1}^{k}\dfrac{R_{i}^2}{n_{i}}]-3(n_{T}+1)}$)\n. \
                          Population is " + ("U(0,1). " if self.underlying_dist == 'uniform' else "N(0,1). ") +
                                str(self.k) + " groups, " + str(self.n) + " samples per group.")
             super().plot(x=x_theory, y=theory, label='dof = ' + str(self.k - 1),
                          title='Theoretical Distribution\n$\chi^2(dof=' + str(self.k-1) + ')$')
-
-        return

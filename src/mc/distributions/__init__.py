@@ -1,3 +1,6 @@
+'''
+This module uses MC to generate various distributions.
+'''
 from ._benford import Benford
 from ._binom import Binom
 from ._chisq import Chisq

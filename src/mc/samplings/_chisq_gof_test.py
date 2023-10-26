@@ -1,31 +1,34 @@
 import collections
 import numpy as np
 from scipy.stats import binom
-from ..mcbase import McBase
-if __package__:
-    from ..experiments import Galton_Board
-else:
-    from ..experiments import Galton_Board
-
+from .. import McBase
+from ..experiments import Galton_Board
 
 class Chisq_Gof_Test(McBase):
     """
     Verify the chisq statistic used in Pearson's Chi-Square Goodness-of-Fit Test.
-    验证皮尔逊卡方拟合优度检验的卡方分布假设
 
-    Parameters
-    ----------
-    underlying_dist : what kind of population dist to use. Default we use binom, i.e., the Galton board
-        'binom' / 'galton' - the population is binom
-        'dice' - 6 * 1/6
-    k : classes in the PMF
+    Because Pearson’s chi- square GOF test is non-parametric, there is no restriction on the population distribution. 
+    chisq_gof_stat() provides two MC experiment settings. 
+    (1) The first is the Galton board (use the binominal population). 
+    (2) The second is the dice game (use the uniform PMF). 
+    In both cases, the statistic histogram from the MC experiment is very close to the theoretical χ2(k - 1) distribution.
     """
 
-    def __init__(self, underlying_dist='binom', k=8, sample_size=100, N=10000):
+    def __init__(self, underlying_dist='binom', k=8, n=100, N=10000):
+        '''
+        Parameters
+        ----------
+        underlying_dist : what kind of population dist to use. Default we use binom, i.e., the Galton board
+            'binom' / 'galton' - the population is binom
+            'dice' - 6 * 1/6
+        k : classes in the PMF
+        n : sample size
+        '''
         super().__init__('chi2', N)
         self.underlying_dist = underlying_dist
         self.k = k
-        self.sample_size = sample_size
+        self.sample_size = n
 
     def run(self, display=True):
         # test with b(n,p)
@@ -33,8 +36,9 @@ class Chisq_Gof_Test(McBase):
 
         for i in range(self.N):  # MC试验次数
             if self.underlying_dist == 'binom' or self.underlying_dist == 'galton':
-                galton_board = Galton_Board(N=self.sample_size, num_layers=self.k - 1, flavor=1)
-                h = galton_board.run(display=False)  # rounds, layers
+                galton_board = Galton_Board(N=self.sample_size, n=self.k - 1, flavor=1)
+                galton_board.run(display=False)  # rounds, layers
+                h = galton_board.hist
                 # print('experiment', h)
                 chisq = 0
                 for j in range(self.k):
@@ -62,5 +66,3 @@ class Chisq_Gof_Test(McBase):
                  Population is " + self.dist + ", sample size="+str(self.sample_size))
             super().plot(x=x_theory, y=theory, label='dof = ' + str(self.k-1),
                          title='Theoretical Distribution\n$\chi^2(dof=' + str(self.k-1) + ')$')
-
-        return

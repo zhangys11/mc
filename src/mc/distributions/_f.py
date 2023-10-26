@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.special
 import scipy.stats
-from ..mcbase import McBase
+from .. import McBase
 
 
 class F(McBase):
@@ -25,10 +25,8 @@ class F(McBase):
         theory = super().init_theory(dist=self.dist, x_theory=x_theory, df1=self.df1, df2=self.df2)
 
         if display:
-            super().hist(y=Fs, title="Frequency Histogram\ndegree of freedom = (" + str(self.df1) + ',' +
+            super().hist(y=Fs, title="Frequency Histogram\ndofs = (" + str(self.df1) + ',' +
                                      str(self.df2) + '). simulations = ' + str(self.N))
             super().plot(x=x_theory, y=theory, label=r'$F (dof1=' + str(self.df1) + ', dof2=' + str(self.df2) + ')$',
                          title='Theoretical Distribution\n' + r'$F (dof1=' + str(self.df1) + ', dof2=' +
                                str(self.df2) + ')$')
-
-        return

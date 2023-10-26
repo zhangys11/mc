@@ -1,6 +1,6 @@
 import numpy as np
 from tqdm import tqdm
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Bartlett_Test(McBase):
@@ -8,14 +8,15 @@ class Bartlett_Test(McBase):
     """
     Bartlett's test is used to test homoscedasticity, that is, if multiple samples are from populations with equal
     variances. Verify the Bartlett's Test statistic is a X2 random variable.
-
-    Parameters
-    ----------
-    k : groups / classes
-    n : samples per class. In this experiment, all group sizes are equal.
     """
 
     def __init__(self, k=5, n=10, N=1000):
+        '''
+        Parameters
+        ----------
+        k : groups / classes
+        n : samples per class. In this experiment, all group sizes are equal.
+        '''
         super().__init__('chi2', N)
         self.k = k
         self.n = n
@@ -37,9 +38,7 @@ class Bartlett_Test(McBase):
         if display:
             super().hist(
                 y=BTs,
-                title="Histogram of Bartlett's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}\
+                title="Histogram of the Bartlett's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}\
                 (n_{i}-1)\ln^{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}})-\dfrac{1}{N-k})}$)")
             super().plot(x=x_theory, y=theory, label='dof = ' + str(self.k - 1),
                          title='Theoretical Distribution \n $\chi^2(dof=' + str(self.k-1) + ')$')
-
-        return

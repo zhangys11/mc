@@ -1,13 +1,10 @@
-from ..mcbase import McBase
+from .. import McBase
 from ..distributions import Zipf
 
 
-class Paper_Clips(McBase):
-    def __init__(self, N=10000, num_clips=16000):
-        super().__init__(None, N)
-        self.num_clips = num_clips
-
-    def run(self, verbose=False, display=True):
-        zipf = Zipf(self.N, self.num_clips)
-        zipf.run(verbose=verbose, display=display)
-        return
+class Paper_Clips(Zipf):
+    '''
+    Use the paper clip experiment to generate the Zipf distribution.
+    It uses the same implementation of the [distributions.Zipf] class.
+    '''
+    pass

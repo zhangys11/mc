@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.stats import chi2
 from tqdm import tqdm
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Median_Test(McBase):
@@ -9,14 +9,15 @@ class Median_Test(McBase):
     """
     This test is performed by analyzing multiple sets of independent samples.
     Examine whether there is a significant difference in the median of the population from which they come.
-
-    Parameters
-    ----------
-    n : samples per class. In this experiment, all group sizes are equal.
-    k : groups / classes
     """
 
     def __init__(self, n=1000, k=5, N=10000):
+        '''
+        Parameters
+        ----------
+        n : samples per class. In this experiment, all group sizes are equal.
+        k : groups / classes
+        '''
         super().__init__("chi2", N)
         self.n = n
         self.k = k
@@ -48,8 +49,6 @@ class Median_Test(McBase):
         theory = super().init_theory(dist=self.dist, x_theory=x_theory, k=self.k-1)
 
         if display:
-            super().hist(y=MTs, title="Histogram of Median Test $MT$ statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)")
+            super().hist(y=MTs, title="Histogram of the median test statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)")
             super().plot(x=x_theory, y=theory, label='dof = ' + str(self.k - 1),
                          title='Theoretical Distribution\n$\chi^2$(dof=' + str(self.k-1) + ')')
-
-        return

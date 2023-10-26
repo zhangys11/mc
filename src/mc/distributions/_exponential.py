@@ -1,32 +1,29 @@
 import collections
 import random
 import numpy as np
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Exponential(McBase):
 
     """
-    元器件寿命为何符合指数分布？
-    定义一个survival game（即每回合有p的死亡率；或电容在单位时间内被击穿的概率）的概率
-    取p = 0.001（每回合很小的死亡率），绘制出pmf曲线（离散、等比数组）
-    This code defines the probability calculation function of the survival game.
-    (e.g. a mortality rate of [p] per turn, or a capacitor having a probability of [p] being broken down per unit
-    of time).
-
-    Parameters
-    ----------
-    num_rounds : survival game rounds
-    p : The probability of sudden death / failure / accident per round
-
-    Returns
-    -------
-    Plot of survival histogram.
+    This class defines a survival game, i.e., each round has p death rate.
+    p is very small. p is per-turn mortality rate, or a capacitor having a probability of being broken down per unit of time).     
+    We define this survival game to illustrate the underlying mechanism of the exponential distribution. Because the sudden death game can approximate many real-life accidents or electronic component failures (e.g., capacity breakdown or LCD pixel defect), the resulting exponential distribution can be used in survival analysis and lifespan estimation. In each round of this survival game, the test subject (player) is faced with a very low sudden death probability (p).
+    If you choose p = 0.001 and simulate 10,000 MC rounds. The generated histogram is very close to the exponential distribution. This function can be used to illustrate the generation mechanism of the exponential distribution.
+    
+    p(x) = $ 1/\theta * exp(-x/\theta) $ , if x > 0
     """
 
-    def __init__(self, N=10000, num_rounds=1000, p=0.01):
+    def __init__(self, N=10000, n=1000, p=0.01):
+        '''
+        Parameters
+        ----------
+        n : survival game rounds
+        p : The probability of sudden death / failure / accident per round
+        '''
         super().__init__("expon", N)
-        self.num_rounds = num_rounds
+        self.num_rounds = n
         self.p = p
 
     def run(self, display=True):
@@ -44,8 +41,6 @@ class Exponential(McBase):
 
         if display:
             super().bar(x=c.keys(), y=c.values(), title="Frequency Histogram\nper-round sudden death probability p=" +
-                                                        str(self.p) + ', players = ' + str(self.N), draw_points=False)
+                                                        str(self.p) + ', game rounds = ' + str(self.num_rounds) + ', simulations = ' + str(self.N), draw_points=False)
             super().plot(x=x_theory, y=theory, label='θ=' + str(round(1 / self.p + 0.5)),
                          title='Theoretical Distribution\nexponential(θ=' + str(round(1 / self.p + 0.5)) + ')')
-
-        return

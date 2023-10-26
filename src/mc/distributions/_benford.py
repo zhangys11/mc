@@ -5,7 +5,7 @@ from matplotlib.pyplot import MultipleLocator
 
 if __package__:
     from .. import DATA_FOLDER, BARPLOT_KWARGS
-    from ..mcbase import McBase
+    from .. import McBase
 
 
 class Benford(McBase):
@@ -14,27 +14,38 @@ class Benford(McBase):
     Benford's law: also called the Newcomb–Benford law, the law of anomalous numbers, or the first-digit law, is an
     observation about the frequency distribution of leading digits in many real-life sets of numerical data. The law
     states that in many naturally occurring collections of numbers, the leading significant digit is likely to be small.
-    本福特定律揭示了十进制数据的一个统计学规律，即首位数字出现的概率为：
+    
+    The PMF (Probability Mass Function) of Benford: 
+
     d 1 2 3 4 5 6 7 8 9
     p 30.1% 17.6% 12.5% 9.7% 7.9% 6.7% 5.8% 5.1% 4.6%
-
-    Parameters
-    ----------
-    data : data set / experiment to use
-        'stock' - use 20-year stock trading volume data of Apple Inc. (AAPL)
-        'trade' - annual trade data for countries. https://comtrade.un.org/data/mbs
-        'fibonacci' - use the top-N fibonacci series
-
+    
+    Benford's law applies to a wide variety of data sets, including electricity bills, street addresses, stock prices, population numbers, death rates, lengths of rivers, physical and mathematical constants, and processes described by power laws (which are very common in nature).
+    
     Note
     ----
-    If for some reason, the AAPL.csv is missing, use the following code to retrieve:
-
-        import yfinance as yf
-        data = yf.download('AAPL','2000-01-01','2020-05-01') # may also try 'GOOG', etc.
-        data.to_csv('AAPL.csv')
+    This class support real-life stock datasets and the fibonacci series as input. Fibonacci represents how a population (e.g., rabbits) grows in a resource-unlimited environment.
+    In intuitive explanation of why it follows Benford: at a steady breeding speed, it takes much longer time from 1000 to 2000 (need to increase by 1000) than from 900 to 1000 (only need to increase by 100). Therefore, it stays longer at leading digit 1 than other digits.
     """
 
     def __init__(self, N=1000, data="stock"):
+        '''
+        Parameters
+        ----------
+        data : data set / experiment to use
+            'stock' - use 20-year stock trading volume data of Apple Inc. (AAPL)
+            'trade' - annual trade data for countries. https://comtrade.un.org/data/mbs
+            'fibonacci' - use the top-N fibonacci series
+
+        Note
+        ----
+        If for some reason, the AAPL.csv is missing, use the following code to retrieve:
+
+            import yfinance as yf
+            data = yf.download('AAPL','2000-01-01','2020-05-01') # may also try 'GOOG', etc.
+            data.to_csv('AAPL.csv')
+        '''
+
         super().__init__(None, N)
         self.data = data
 
@@ -69,7 +80,7 @@ class Benford(McBase):
                 plt.text(a, b, '%.0f %%' % (b*100/total), ha='center', va='bottom')
 
             plt.gca().xaxis.set_major_locator(MultipleLocator(1))
-            plt.title("Frequency Histogram of Leading Digits\n" + title)
+            plt.title("Frequency histogram of the leading digits\n" + title)
 
             plt.figure(figsize=(10, 3))
             plt.title('Theoretical Distribution\nBenford PMF')

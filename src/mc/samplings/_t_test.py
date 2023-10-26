@@ -1,18 +1,19 @@
 import numpy as np
-from ..mcbase import McBase
+from .. import McBase
 
 
 class T_Test(McBase):
 
     """
-    Sample [n] samples from a normal distribution, and compute the t statistic follows the student's distribution.
-
-    Parameters
-    ----------
-    n : samples
+    Sample [n] samples from a normal distribution, and compute the t statistic that should follow the student's distribution.
     """
 
     def __init__(self, n=10, N=10000):
+        '''
+        Parameters
+        ----------
+        n : sample size
+        '''
         super().__init__("t", N)
         self.n = n
 
@@ -30,9 +31,7 @@ class T_Test(McBase):
 
         if display:
             super().hist(y=ts,
-                         title="Histogram of the test statistic ($t = \dfrac{X\u0305 -\mu}{S/\sqrt{n}}$).\n \
+                         title="Histogram of the student test statistic ($t = \dfrac{X\u0305 -\mu}{S/\sqrt{n}}$).\n \
                          Population is N(0,1). " + str(self.n) + " samples.")
             super().plot(x=x_theory, y=theory, label='$t (dof=' + str(self.n-1) + ')$',
                          title='Theoretical Distribution')
-
-        return

@@ -1,22 +1,23 @@
 import numpy as np
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Anova(McBase):
 
     """
-    验证 ANOVA的F分布假设
+    Use MC to verify ANOVA has a F sampling dist.
     F = MSTR/MSE ~ F(k-1, n-k)
     The H0 assumes mu1=mu2=...=muK.
     In this experiment, all samples are drawn from N(0,1)
-
-    Parameters
-    ----------
-    k : classes / groups
-    n : samples per group. Total sample count is [K]*[n]
     """
 
     def __init__(self, k=10, n=10, N=10000):
+        '''
+        Parameters
+        ----------
+        k : classes / groups
+        n : samples per group. Total sample count is [K]*[n]
+        '''
         super().__init__("f", N)
         self.k = k
         self.n = n
@@ -43,5 +44,3 @@ class Anova(McBase):
                             + str(self.k) + " groups, " + str(self.n) + " samples per group.")
             super().plot(x=x_theory, y=theory, label='$F(' + str(self.k-1) + ',' + str(self.n*self.k-self.k) + ')$',
                          title='Theoretical Distribution\n$F(' + str(self.k-1) + ',' + str(self.n*self.k-self.k) + ')$')
-
-        return

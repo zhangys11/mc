@@ -1,6 +1,6 @@
 import random
 import numpy as np
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Parcel(McBase):
@@ -9,18 +9,9 @@ class Parcel(McBase):
     Simulate a bi-directional parcel passing game.
     [num_players] players form a circle.
     Then, each round the parcel can be passed to the left or right person.
-    球回到A手中的试验次数 / 总试验次数 = parcel(试验次数, 玩家数目，每次试验传球次数)
+    This class will calculate the approximated probability the parcel returning to the starter player.
 
-    Parameters
-    ----------
-    num_players : the number of players.
-    num_ops : the number of passes per experiment.
-
-    Returns
-    -------
-    p : the approximated probability the parcel returns to the starter player.
-
-    Example
+    Note
     ----
     ### Five people (A, B, C, D, E) stand in a circle to play the game of parcel passing.
     # The rule is that each person can only pass to the neighbor (to the left or to the right).
@@ -28,12 +19,24 @@ class Parcel(McBase):
     # Q: After 10 passes, what is the probability that the ball will return to A's hand?
     # Use the Monte Carlo method for calculations and compare them with classical probability calculations.
 
-    p = parcel(100000, 5, 10) # simulates 100000 times
+    p = parcel(100000, 5, 10) # simulates a game of 5 players passing 10 times. Run 100000 times
+
+    The theoretical solution:
+    $P = { { 2 + C_{10}^5 } \over { 2^ {10} } }= 24.8 \% $    
+    The MC and the theoretical results should be very close.
     """
 
-    def __init__(self, N=100000, num_players=5, num_ops=10, flavor=1):
+    def __init__(self, N=100000, n=5, num_ops=10, flavor=1):
+        '''
+        Parameters
+        ----------
+        n : the number of players.
+        num_ops : the number of passes per experiment.
+        flavor : flavor 1 is the original game; flavor 2 is a variant where the ball can be passed to ANY OTHER player.
+        '''
+        
         super().__init__(None, N)
-        self.num_players = num_players
+        self.num_players = n
         self.num_ops = num_ops
         self.flavor = flavor
 
@@ -50,7 +53,7 @@ class Parcel(McBase):
                     L += 1
             freq = L / self.N
             print('frequency = {}'.format(freq))
-        else:
+        else: # All-directional Parcel Passing Game
             L = 0
             history = []
             for _ in range(self.N):
@@ -76,5 +79,3 @@ class Parcel(McBase):
 
             print("Probability = {}".format(prob))
             print("MC frequency = {}/{} = {}".format(L, self.N, L / self.N))
-
-        return

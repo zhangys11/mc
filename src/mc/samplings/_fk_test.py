@@ -1,22 +1,23 @@
 import numpy as np
 from sklearn import preprocessing
 from tqdm import tqdm
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Fk_Test(McBase):
 
     """
-    The Fligner-Killeen test is a non-parametric test for homogeneity of group variances based on ranks.
     Verify the Fligner-Killeen Test statistic (FK) is a X2 random variable.
-
-    Parameters
-    ----------
-    n : samples per class. In this experiment, all group sizes are equal.
-    k : groups / classes
+    The Fligner-Killeen test is a non-parametric test for homogeneity of group variances based on ranks.
     """
 
     def __init__(self, n=10, k=5, N=1000):
+        '''
+        Parameters
+        ----------
+        n : samples per class. In this experiment, all group sizes are equal.
+        k : groups / classes
+        '''
         super().__init__("chi2", N)
         self.n = n
         self.k = k
@@ -37,8 +38,6 @@ class Fk_Test(McBase):
         x_theory = np.linspace(np.min(FKs), np.max(FKs), 100)
         theory = super().init_theory(dist=self.dist, x_theory=x_theory, k=self.k-1)
         if display:
-            super().hist(y=FKs, title="Histogram of Fligner-Killeen test $FK$ statistic ($FK = \dfrac{\sum_{j=1}^{k}n_{j}(\overline{a_{j}}-\overline{a})^2}{s^2}$)")
+            super().hist(y=FKs, title="Histogram of the Fligner-Killeen test statistic ($FK = \dfrac{\sum_{j=1}^{k}n_{j}(\overline{a_{j}}-\overline{a})^2}{s^2}$)")
             super().plot(x=x_theory, y=theory, label='dof = ' + str(self.k - 1),
                          title='Theoretical Distribution\n$\chi^2$(dof=' + str(self.k-1) + ')')
-
-        return

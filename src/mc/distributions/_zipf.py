@@ -3,7 +3,7 @@ import numpy as np
 from scipy.special import rel_entr
 import scipy.special
 import scipy.stats
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Zipf(McBase):
@@ -18,18 +18,19 @@ class Zipf(McBase):
     then put back, and then do the above again.
     After enough rounds, the clips of different lengths will obey zipf distribution.
 
-    Parameters
-    ----------
-    num_clips : The total number of paper clips. It should always be greater than [num_rounds].
-
     Note
     ----
     Internally, we use grid search via the KLD metric to determine the best-fit zipf dist.
     """
 
-    def __init__(self, N=10000, num_clips=16000):
+    def __init__(self, N=10000, n=16000):
+        '''        
+        Parameters
+        ----------
+        n : The total number of paper clips. It should always be greater than N, i.e., num_rounds.
+        '''
         super().__init__("zipf", N)
-        self.num_clips = num_clips
+        self.num_clips = n
 
     def run(self, verbose=False, display=True):
         if self.num_clips <= self.N:  # clip总数，应大于抽样拼接次数，
@@ -66,7 +67,5 @@ class Zipf(McBase):
         if display:
             super().bar(x=c.keys(), y=vals, title="Frequency Histogram\nclips=" + str(self.num_clips) + ", rounds=" +
                                                   str(self.N), draw_points=False)
-            super().bar(x=x_theory, y=theory, title='Theoretical Distribution\nzipf(alpha = '+str(round(a, 2)) + ')',
+            super().bar(x=x_theory, y=theory, title='Theoretical Distribution\nzipf(α = '+str(round(a, 2)) + ')',
                         draw_points=False)
-
-        return

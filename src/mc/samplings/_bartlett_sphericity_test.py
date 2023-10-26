@@ -1,9 +1,11 @@
-from ..mcbase import McBase
+from .. import McBase
 
 
 class Bartlett_Sphericity_Test(McBase):
 
     """
+    NOte
+    ----
     Bartlett’s Test of Sphericity compares an observed correlation matrix to
     the identity matrix. Essentially it checks to see if there is a certain redundancy
     between the variables that we can summarize with a few number of factors.

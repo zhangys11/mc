@@ -1,0 +1,1 @@
+#  TODO: add a gui. Use the code in test.run_all() to iterate all functions and modify their run() funciton to return the html result (or add a self.html field).
