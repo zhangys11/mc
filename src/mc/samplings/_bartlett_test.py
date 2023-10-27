@@ -38,7 +38,7 @@ class Bartlett_Test(McBase):
         if display:
             super().hist(
                 y=BTs,
-                title="Histogram of the Bartlett's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln^{(S_{P}^2)}-\sum_{i=1}^{k}\
-                (n_{i}-1)\ln^{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}})-\dfrac{1}{N-k})}$)")
+                title="Histogram of the Bartlett's $\chi^2$ statistic ($\chi^2 = \dfrac{(N-k)\ln{(S_{P}^2)}-\sum_{i=1}^{k}\
+                (n_{i}-1)\ln{(S_{i}^2)}}{1+\dfrac{1}{3(k-1)}(\sum_{i=1}^{k}(\dfrac{1}{n_{i}-1})-\dfrac{1}{N-k})}$)")
             super().plot(x=x_theory, y=theory, label='dof = ' + str(self.k - 1),
                          title='Theoretical Distribution \n $\chi^2(dof=' + str(self.k-1) + ')$')
