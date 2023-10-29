@@ -16,9 +16,9 @@ class Dices(McBase):
     |----------|:-------------:|
     | 456 |  16  |
     | 123 |  16  |
-    | ooo 三个相同 <br> Triple, or Three of a Kind (e.g., 4 4 4)  |  8  |
-    | oox 两个相同 <br/> Pair (e.g., 4 4 3) |  2  |
-    | xyz 各不相同 <br/> Single (e.g., 1 2 6) |  0  |
+    | ooo  <br> Triple, or Three of a Kind (e.g., 4 4 4)  |  8  |
+    | oox  <br/> Pair, or Two of a kind (e.g., 4 4 3) |  2  |
+    | xyz  <br/> Single (e.g., 1 2 6) |  0  |
 
     The question is:   
     What is the mathematical expectation of the reward? In other words, what will be a fair price for each game if you are the casino boss?  

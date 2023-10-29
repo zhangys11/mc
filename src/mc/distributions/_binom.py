@@ -57,8 +57,8 @@ class Binom(McBase):
         theory = super().init_theory(dist=self.dist, x_theory=x_theory, n=self.num_layers, p=0.5)
 
         if display:
-            super().bar(x=x_freq, y=freq, title="Frequency histogram of the Galton board result\n" + "(" + "layers=" + str(self.num_layers) + ", balls=" +
-                                                str(self.N) + ")", draw_points=False)
+            super().bar(x=x_freq, y=freq, title="Frequency histogram of the Galton board result\n" + "layers=" + str(self.num_layers) + ", balls=" +
+                                                str(self.N), draw_points=False)
             super().bar(x=x_theory, y=theory, label='b (' + str(self.num_layers) + ',' + str(0.5) + ')',
                         title='Theoretical Distribution\nbinomial(n=' + str(self.num_layers) + ',p=' + str(0.5) + ')',
                         draw_points=True)
