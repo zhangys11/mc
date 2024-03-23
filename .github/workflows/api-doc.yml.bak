@@ -1,0 +1,28 @@
+name: Build PDF
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install TeX Live and necessary packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y --no-install-recommends texlive-latex-extra texlive-fonts-recommended texlive-fonts-extra dvipng texlive-latex-recommended lmodern biber texlive-publishers
+
+    - name: Compile LaTeX document
+      run: |
+        pdflatex -interaction=nonstopmode -halt-on-error Appendix.tex
+        bibtex Appendix
+        pdflatex -interaction=nonstopmode -halt-on-error Appendix.tex
+        pdflatex -interaction=nonstopmode -halt-on-error Appendix.tex
+
+    - name: Upload PDF
+      uses: actions/upload-artifact@v2
+      with:
+        name: Compiled-PDF
+        path: ./Appendix.pdf
