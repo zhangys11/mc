@@ -237,7 +237,7 @@ All the functions were refactored by the OOP (Object Oriented Programming) patte
 
 # publication
 
-[JOSS paper](joss/paper.pdf)
+[JOSE paper](jose/paper.pdf)
 
 # doc
 
