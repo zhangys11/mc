@@ -1,3 +1,4 @@
+import collections.abc
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -33,9 +34,11 @@ class Benford(McBase):
         Parameters
         ----------
         data : data set / experiment to use
+            'fibonacci' - use the top-N fibonacci series
             'stock' - use 20-year stock trading volume data of Apple Inc. (AAPL)
             'trade' - annual trade data for countries. https://comtrade.un.org/data/mbs
-            'fibonacci' - use the top-N fibonacci series
+            list or array-like - directly use the passed data 
+        N : only used for 'fibonacci'
 
         Note
         ----
@@ -62,6 +65,9 @@ class Benford(McBase):
             phi = (1 + 5 ** 0.5) / 2.0
             volumes = np.round((np.power(phi, range(1, self.N+1)) - np.power(1-phi, range(1, self.N+1))) / 5**0.5)
             title = 'Fibonacci series (Top-' + str(self.N) + ')'
+        elif isinstance(self.data, collections.abc.Sequence): # isinstance(self.data, list):
+            volumes = np.array(self.data)
+            title = str(len(volumes)) + ' data points'
 
         cnts = np.zeros(10)
 
