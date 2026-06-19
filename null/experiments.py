@@ -1,6 +1,6 @@
 """
 Finite-Sample Adequacy and Robustness of Null Distributions
-A Systematic Monte Carlo Study Across Eleven Hypothesis Tests
+A Systematic Monte Carlo Study Across Ten Hypothesis Tests
 
 Experiment script for generating all results, figures, and tables.
 """
@@ -21,7 +21,8 @@ FIG_DIR = OUT_DIR
 
 try:
     import matplotlib
-    matplotlib.use('Agg')
+    if __name__ == '__main__':
+        matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     plt.rcParams.update({'font.size': 9, 'figure.dpi': 150, 'savefig.dpi': 150,
                          'figure.figsize': (10, 6)})
@@ -366,6 +367,40 @@ def compute_type1_error(stat_values, dist_name, df_args, alpha=0.05, two_sided=F
             return np.nan
         return np.mean(stat_values > crit)
 
+def compute_kl(stat_values, dist_name, df_args, n_bins=80):
+    eps = 1e-12
+    if dist_name == 'binom':
+        n_binom, p_binom = df_args
+        vals = np.arange(0, n_binom + 1)
+        emp_pmf = np.bincount(stat_values.astype(int), minlength=n_binom+1) / len(stat_values)
+        theo_pmf = stats.binom.pmf(vals, n_binom, p_binom)
+        mask = (emp_pmf > eps) & (theo_pmf > eps)
+        if mask.sum() < 2:
+            return np.nan
+        return float(np.sum(emp_pmf[mask] * np.log(emp_pmf[mask] / theo_pmf[mask])))
+    sv = stat_values[np.isfinite(stat_values)]
+    if len(sv) < 50:
+        return np.nan
+    try:
+        kde = stats.gaussian_kde(sv, bw_method='silverman')
+    except Exception:
+        return np.nan
+    lo = np.percentile(sv, 0.5)
+    hi = np.percentile(sv, 99.5)
+    x_grid = np.linspace(lo, hi, 500)
+    p_emp = kde(x_grid)
+    dist_obj = getattr(stats, dist_name) if dist_name != 'norm' else stats.norm
+    if dist_name == 'norm':
+        q_theo = dist_obj.pdf(x_grid)
+    else:
+        q_theo = dist_obj.pdf(x_grid, *df_args)
+    mask = (p_emp > eps) & (q_theo > eps)
+    if mask.sum() < 10:
+        return np.nan
+    dx = x_grid[1] - x_grid[0]
+    kl = float(np.sum(p_emp[mask] * np.log(p_emp[mask] / q_theo[mask]) * dx))
+    return max(kl, 0.0)
+
 # ============================================================
 # SECTION 3: Study 1 - Finite-sample convergence
 # ============================================================
@@ -389,11 +424,10 @@ def run_study1(N_mc=10000):
         'T8_cochran_q': {'label': 'Cochran Q'},
         'T9_median_test': {'label': 'Median test'},
         'T10_hotelling': {'label': 'Hotelling T2'},
-        'T11_clt': {'label': 'CLT'},
     }
 
     for test_id, info in tests.items():
-        results[test_id] = {'ks': [], 'type1': [], 'ns': []}
+        results[test_id] = {'ks': [], 'kl': [], 'type1': [], 'ns': []}
         print(f"\n  {info['label']}...", end=' ', flush=True)
         t0 = time.time()
 
@@ -403,17 +437,20 @@ def run_study1(N_mc=10000):
                     sv = mc_t_test(n, N_mc)
                     ks_s, ks_p = compute_ks(sv, 't', n-1)
                     t1e = compute_type1_error(sv, 't', (n-1,), two_sided=True)
+                    kl_val = compute_kl(sv, 't', (n-1,))
 
                 elif test_id == 'T2_anova':
                     sv, df1, df2 = mc_anova(k_default, n, N_mc)
                     ks_s, ks_p = compute_ks(sv, 'f', df1, df2)
                     t1e = compute_type1_error(sv, 'f', (df1, df2))
+                    kl_val = compute_kl(sv, 'f', (df1, df2))
 
                 elif test_id == 'T3_kruskal_wallis':
                     N_kw = min(N_mc, 5000) if n >= 100 else N_mc
                     sv = mc_kruskal_wallis(k_default, n, N_kw)
                     ks_s, ks_p = compute_ks(sv, 'chi2', k_default-1)
                     t1e = compute_type1_error(sv, 'chi2', (k_default-1,))
+                    kl_val = compute_kl(sv, 'chi2', (k_default-1,))
 
                 elif test_id == 'T4_chisq_gof':
                     k_gof = 6
@@ -421,17 +458,20 @@ def run_study1(N_mc=10000):
                     sv = mc_chisq_gof(k_gof, sample_n, N_mc)
                     ks_s, ks_p = compute_ks(sv, 'chi2', k_gof-1)
                     t1e = compute_type1_error(sv, 'chi2', (k_gof-1,))
+                    kl_val = compute_kl(sv, 'chi2', (k_gof-1,))
 
                 elif test_id == 'T5_bartlett':
                     sv = mc_bartlett(k_default, n, N_mc)
                     ks_s, ks_p = compute_ks(sv, 'chi2', k_default-1)
                     t1e = compute_type1_error(sv, 'chi2', (k_default-1,))
+                    kl_val = compute_kl(sv, 'chi2', (k_default-1,))
 
                 elif test_id == 'T6_fligner_killeen':
                     N_fk = min(N_mc, 3000)
                     sv = mc_fligner_killeen(k_default, n, N_fk)
                     ks_s, ks_p = compute_ks(sv, 'chi2', k_default-1)
                     t1e = compute_type1_error(sv, 'chi2', (k_default-1,))
+                    kl_val = compute_kl(sv, 'chi2', (k_default-1,))
 
                 elif test_id == 'T7_sign_test':
                     sv = mc_sign_test(n, N_mc)
@@ -443,39 +483,40 @@ def run_study1(N_mc=10000):
                         d_max = max(d_max, abs(emp_cdf - theo_cdf))
                     ks_s = d_max
                     ks_p = np.nan
+                    kl_val = compute_kl(sv, 'binom', (n, 0.5))
 
                 elif test_id == 'T8_cochran_q':
                     sv = mc_cochran_q(k_default, n, N_mc)
                     ks_s, ks_p = compute_ks(sv, 'chi2', k_default-1)
                     t1e = compute_type1_error(sv, 'chi2', (k_default-1,))
+                    kl_val = compute_kl(sv, 'chi2', (k_default-1,))
 
                 elif test_id == 'T9_median_test':
                     N_mt = min(N_mc, 5000) if n >= 100 else N_mc
                     sv = mc_median_test(k_default, n, N_mt)
                     ks_s, ks_p = compute_ks(sv, 'chi2', k_default-1)
                     t1e = compute_type1_error(sv, 'chi2', (k_default-1,))
+                    kl_val = compute_kl(sv, 'chi2', (k_default-1,))
 
                 elif test_id == 'T10_hotelling':
                     p_dim = 2
                     if n <= p_dim + 1:
-                        ks_s, t1e = np.nan, np.nan
+                        ks_s, t1e, kl_val = np.nan, np.nan, np.nan
                     else:
                         N_ht = min(N_mc, 5000)
                         sv, dfn, dfd = mc_hotelling_t2(p_dim, n, N_ht)
                         ks_s, ks_p = compute_ks(sv, 'f', dfn, dfd)
                         t1e = compute_type1_error(sv, 'f', (dfn, dfd))
-
-                elif test_id == 'T11_clt':
-                    sv = mc_clt(n, N_mc, dist='expon')
-                    ks_s, ks_p = compute_ks(sv, 'norm')
-                    t1e = compute_type1_error(sv, 'norm', (), two_sided=True)
+                        kl_val = compute_kl(sv, 'f', (dfn, dfd))
 
                 results[test_id]['ks'].append(float(ks_s))
+                results[test_id]['kl'].append(float(kl_val) if not np.isnan(kl_val) else np.nan)
                 results[test_id]['type1'].append(float(t1e))
                 results[test_id]['ns'].append(n)
             except Exception as e:
                 print(f"[ERR n={n}: {e}]", end=' ')
                 results[test_id]['ks'].append(np.nan)
+                results[test_id]['kl'].append(np.nan)
                 results[test_id]['type1'].append(np.nan)
                 results[test_id]['ns'].append(n)
 
@@ -514,29 +555,37 @@ def run_study1(N_mc=10000):
         print(f"  {info['label']}: n* = {n_star[test_id]}")
 
     if HAS_MPL:
-        fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
+        fig, axes = plt.subplots(3, 1, figsize=(12, 11), sharex=True)
         for test_id, info in tests.items():
             ns_arr = np.array(results[test_id]['ns'])
             ks_arr = np.array(results[test_id]['ks'])
+            kl_arr = np.array(results[test_id]['kl'])
             t1_arr = np.array(results[test_id]['type1'])
             mask = ~np.isnan(ks_arr)
             axes[0].plot(ns_arr[mask], ks_arr[mask], 'o-', label=info['label'], markersize=3)
+            mask_kl = ~np.isnan(kl_arr)
+            axes[1].plot(ns_arr[mask_kl], kl_arr[mask_kl], 'o-', label=info['label'], markersize=3)
             mask2 = ~np.isnan(t1_arr)
-            axes[1].plot(ns_arr[mask2], t1_arr[mask2], 'o-', label=info['label'], markersize=3)
+            axes[2].plot(ns_arr[mask2], t1_arr[mask2], 'o-', label=info['label'], markersize=3)
         axes[0].set_ylabel('KS Distance')
         axes[0].set_title('Study 1: Convergence of Empirical Null Distribution')
         axes[0].legend(fontsize=7, ncol=3)
         axes[0].set_xscale('log')
         axes[0].grid(True, alpha=0.3)
-        axes[1].axhline(y=0.05, color='black', linestyle='--', linewidth=1, label='Nominal α=0.05')
-        axes[1].axhspan(0.04, 0.06, alpha=0.1, color='green', label='±0.01 band')
-        axes[1].set_ylabel('Empirical Type I Error')
-        axes[1].set_xlabel('Sample size n')
+        axes[1].set_ylabel('KL Divergence')
         axes[1].legend(fontsize=7, ncol=3)
         axes[1].set_xscale('log')
         axes[1].grid(True, alpha=0.3)
+        axes[2].axhline(y=0.05, color='black', linestyle='--', linewidth=1, label='Nominal α=0.05')
+        axes[2].axhspan(0.04, 0.06, alpha=0.1, color='green', label='±0.01 band')
+        axes[2].set_ylabel('Empirical Type I Error')
+        axes[2].set_xlabel('Sample size n')
+        axes[2].legend(fontsize=7, ncol=3)
+        axes[2].set_xscale('log')
+        axes[2].grid(True, alpha=0.3)
         plt.tight_layout()
         plt.savefig(os.path.join(FIG_DIR, 'fig_study1_convergence.png'))
+        plt.show()
         plt.close()
         print(f"  Saved fig_study1_convergence.png")
 
@@ -692,22 +741,31 @@ def run_study2(N_mc=10000, n_fixed=50):
 
     if HAS_MPL:
         fig, ax = plt.subplots(figsize=(12, 6))
-        test_labels = [cfg['label'] for cfg in test_configs.values()]
-        x = np.arange(len(test_labels))
-        width = 0.15
-        for i, (sc_name, _) in enumerate(scenarios):
-            vals = [results[tid].get(sc_name, np.nan) for tid in test_configs]
-            ax.bar(x + i*width, vals, width, label=sc_name)
-        ax.axhline(y=0.05, color='red', linestyle='--', linewidth=1)
-        ax.axhspan(0.04, 0.06, alpha=0.1, color='green')
+        sc_names = [s[0] for s in scenarios]
+        sc_labels = {'baseline': 'Baseline', 'skewed': 'Skewed', 'heavy_tail': 'Heavy-tailed',
+                     'hetero_var': 'Var. heterogeneity', 'unbalanced': 'Unbalanced'}
+        x = np.arange(len(sc_names))
+        test_ids_list = [tid for tid in test_configs]
+        n_tests = len(test_ids_list)
+        width = 0.8 / n_tests
+        for i, tid in enumerate(test_ids_list):
+            vals = []
+            for sc_name in sc_names:
+                v = results[tid].get(sc_name, np.nan)
+                vals.append(v if not np.isnan(v) else 0)
+            mask = np.array([not np.isnan(results[tid].get(sc, np.nan)) for sc in sc_names])
+            vals_arr = np.array(vals)
+            ax.bar(x[mask] + i * width, vals_arr[mask], width * 0.9, label=test_configs[tid]['label'])
+        ax.axhline(y=0.05, color='red', linestyle='--', linewidth=1, label='α=0.05')
         ax.set_ylabel('Empirical Type I Error Rate')
         ax.set_title('Study 2: Type I Error Under Assumption Violations (n=50, α=0.05)')
-        ax.set_xticks(x + width * 2)
-        ax.set_xticklabels(test_labels, rotation=45, ha='right', fontsize=8)
-        ax.legend(fontsize=8)
+        ax.set_xticks(x + width * n_tests / 2)
+        ax.set_xticklabels([sc_labels.get(s, s) for s in sc_names])
+        ax.legend(fontsize=7, ncol=4, loc='upper left')
         ax.grid(True, alpha=0.3, axis='y')
         plt.tight_layout()
         plt.savefig(os.path.join(FIG_DIR, 'fig_study2_robustness.png'))
+        plt.show()
         plt.close()
         print(f"  Saved fig_study2_robustness.png")
 
@@ -721,24 +779,30 @@ def run_study3(n_fixed=50, n_repeats=30):
     print("\n" + "=" * 60)
     print("STUDY 3: MC precision requirements")
     print("=" * 60)
-    N_values = [100, 500, 1000, 5000, 10000, 50000]
+    N_values = [100, 500, 1000, 1500, 2000, 3000, 5000, 10000, 50000]
     k = 3
     results = {}
 
     test_funcs = {
-        'T1_t_test': ('Student t', lambda N: mc_t_test(n_fixed, N), 't', (n_fixed-1,), True),
-        'T2_anova': ('ANOVA F', lambda N: mc_anova(k, n_fixed, N)[0], 'f', (k-1, k*(n_fixed-1)), False),
-        'T5_bartlett': ('Bartlett', lambda N: mc_bartlett(k, n_fixed, N), 'chi2', (k-1,), False),
-        'T7_sign_test': ('Sign test', lambda N: mc_sign_test(n_fixed, N), 'binom', (n_fixed, 0.5), False),
-        'T8_cochran_q': ('Cochran Q', lambda N: mc_cochran_q(k, n_fixed, N), 'chi2', (k-1,), False),
-        'T11_clt': ('CLT', lambda N: mc_clt(n_fixed, N, 'expon'), 'norm', (), True),
+        'T1_t_test': ('Student t', lambda N: mc_t_test(n_fixed, N), 't', (n_fixed-1,), True, None),
+        'T2_anova': ('ANOVA F', lambda N: mc_anova(k, n_fixed, N)[0], 'f', (k-1, k*(n_fixed-1)), False, None),
+        'T3_kruskal_wallis': ('Kruskal-Wallis', lambda N: mc_kruskal_wallis(k, n_fixed, N), 'chi2', (k-1,), False, 10000),
+        'T4_chisq_gof': ('Chi-sq GOF', lambda N: mc_chisq_gof(6, 250, N), 'chi2', (5,), False, None),
+        'T5_bartlett': ('Bartlett', lambda N: mc_bartlett(k, n_fixed, N), 'chi2', (k-1,), False, None),
+        'T6_fligner_killeen': ('Fligner-Killeen', lambda N: mc_fligner_killeen(k, n_fixed, N), 'chi2', (k-1,), False, 10000),
+        'T7_sign_test': ('Sign test', lambda N: mc_sign_test(n_fixed, N), 'binom', (n_fixed, 0.5), False, None),
+        'T8_cochran_q': ('Cochran Q', lambda N: mc_cochran_q(k, n_fixed, N), 'chi2', (k-1,), False, None),
+        'T9_median_test': ('Median test', lambda N: mc_median_test(k, n_fixed, N), 'chi2', (k-1,), False, 10000),
+        'T10_hotelling': ('Hotelling T2', lambda N: mc_hotelling_t2(2, n_fixed, N)[0], 'f', (2, n_fixed-2), False, 10000),
     }
 
-    for test_id, (label, gen_fn, dist_name, df_args, two_sided) in test_funcs.items():
+    for test_id, (label, gen_fn, dist_name, df_args, two_sided, max_N) in test_funcs.items():
         results[test_id] = {'N_values': [], 'mean_t1e': [], 'std_t1e': [], 'cv_t1e': []}
         print(f"\n  {label}...", end=' ', flush=True)
         t0 = time.time()
         for Nmc in N_values:
+            if max_N is not None and Nmc > max_N:
+                continue
             t1e_list = []
             for rep in range(n_repeats):
                 sv = gen_fn(Nmc)
@@ -762,14 +826,14 @@ def run_study3(n_fixed=50, n_repeats=30):
     header = f"{'Test':<15}" + "".join(f"{'N='+str(n):>10}" for n in N_values)
     print(header)
     print("-" * len(header))
-    for test_id, (label, _, _, _, _) in test_funcs.items():
+    for test_id, (label, _, _, _, _, _) in test_funcs.items():
         row = f"{label:<15}"
         for cv in results[test_id]['cv_t1e']:
             row += f"{cv:>10.4f}"
         print(row)
 
     n_star_mc = {}
-    for test_id, (label, _, _, _, _) in test_funcs.items():
+    for test_id, (label, _, _, _, _, _) in test_funcs.items():
         found = None
         for j, (Nmc, cv) in enumerate(zip(results[test_id]['N_values'], results[test_id]['cv_t1e'])):
             if cv < 0.10:
@@ -780,7 +844,7 @@ def run_study3(n_fixed=50, n_repeats=30):
 
     if HAS_MPL:
         fig, ax = plt.subplots(figsize=(10, 5))
-        for test_id, (label, _, _, _, _) in test_funcs.items():
+        for test_id, (label, _, _, _, _, _) in test_funcs.items():
             ax.plot(results[test_id]['N_values'], results[test_id]['cv_t1e'],
                     'o-', label=label, markersize=4)
         ax.axhline(y=0.10, color='red', linestyle='--', linewidth=1, label='CV = 0.10 threshold')
@@ -792,6 +856,7 @@ def run_study3(n_fixed=50, n_repeats=30):
         ax.grid(True, alpha=0.3)
         plt.tight_layout()
         plt.savefig(os.path.join(FIG_DIR, 'fig_study3_precision.png'))
+        plt.show()
         plt.close()
         print(f"  Saved fig_study3_precision.png")
 
