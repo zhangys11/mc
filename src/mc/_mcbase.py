@@ -12,17 +12,20 @@ class McBase(object):
     This class provides common member variables, e.g., self.dist, self.N. 
     It also provides common plotting functions for all the derived classes.
     """
-    def __init__(self, dist, N):
+    def __init__(self, dist, N, seed=None):
         """
         Parameters
         ----------
         dist : the name of the theoretical distribution
         N : the number of MC experiments to run.
+        seed : optional random seed for reproducibility.
         """
         self.dist = dist
         self.N = N
-        self.hist = None # store the observed histogram / MC result
-        self.freq = None # store the observed frequency, if it is a probablistic problem.
+        self.obs = None   # store the observed histogram / MC result
+        self.freq = None  # store the observed frequency
+        if seed is not None:
+            np.random.seed(seed)
 
     def init_theory(self, dist=None, n=0, p=0, x_theory=0, a=0, k=0, df1=0, df2=0):
         if dist is None:
@@ -45,7 +48,7 @@ class McBase(object):
         elif dist == "f":
             theory = scipy.stats.f.pdf(x=x_theory, dfn=df1, dfd=df2)
         else:
-            raise ValueError("Unsupported theoretical distribution: {}".format(self.dist))
+            raise ValueError("Unsupported theoretical distribution: {}".format(dist))
 
         return theory
 

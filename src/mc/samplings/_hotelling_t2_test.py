@@ -32,21 +32,21 @@ class Hotelling_T2_Test(McBase):
         for i in tqdm(range(self.N)):
             # Draw from a standard normal dist. The returned X is de-meaned, no need to do (X-mu) afterwards.
             X = np.random.randn(self.k, self.n)
-            X_mat = np.mat(X)
-            X1 = (X_mat.sum(axis=1)) / self.n
-            sum_xs = 0
-            for j in range(0, self.n):
-                sum_xs = sum_xs + (X_mat[:, j] - X1) * (X_mat[:, j] - X1).T
-            SIGMA = sum_xs / (self.n - 1)
-            T2 = (self.n * X1.T) * (np.linalg.inv(SIGMA)) * X1
-            T2s.append(T2[0, 0])
+            xbar = X.mean(axis=1, keepdims=True)
+            S = np.cov(X)
+            try:
+                T2 = self.n * xbar.T @ np.linalg.inv(S) @ xbar
+                T2s.append(T2.item())
+            except np.linalg.LinAlgError:
+                T2s.append(0)
 
-        x_theory = np.linspace(np.min(T2s), np.max(T2s), 100)
-        theory = \
-            ((gamma((self.n+1)/2))*((1+x_theory/self.n)**(-(self.n+1)/2))) / ((gamma((self.n-1)/2))*(gamma(1)*self.n))
+        T2s = np.array(T2s)
+        x_theory = np.linspace(0, np.percentile(T2s, 99.9), 100)
+        theory = super().init_theory(dist='f', x_theory=x_theory,
+                                      df1=self.k, df2=self.n - self.k)
 
         if display:
-            super().hist(y=T2s, title="Histogram of the Hotelling's $T^2$ statistic ($T^2 = n(\overline{X}-\mu)^{T}S^{-1}(\overline{x}-\mu)$)")
+            super().hist(y=T2s, title=r"Histogram of the Hotelling's $T^2$ statistic ($T^2 = n(\overline{X}-\mu)^{T}S^{-1}(\overline{x}-\mu)$)")
             super().plot(x=x_theory, y=theory, label='$T^2(' + str(self.k) + ',' + str(self.n+self.k-1) + ')$',
                          title='Theoretical Distribution $T^2(' + str(self.k) + ',' + str(self.n+self.k-1) + ')$ \n \
                     $p(x) = \dfrac{\Gamma((n+1)/2)x^{k/2-1}(1+x/n)^{-(n+1)/2}}{\Gamma((n-k+1)/2)\Gamma(k/2)n^{k/2}}$')

@@ -195,13 +195,33 @@ def mc_bartlett(k, n, N, dist='normal', unbalanced=False):
         return num / den
 
 def mc_fligner_killeen(k, n, N, dist='normal', unbalanced=False):
+    if not unbalanced:
+        if dist == 'normal':
+            X = np.random.normal(0, 1, (N, k, n))
+        elif dist == 'expon':
+            X = np.random.exponential(1, (N, k, n)) - 1
+        elif dist == 'tdist':
+            X = np.random.standard_t(5, (N, k, n))
+        else:
+            X = np.random.normal(0, 1, (N, k, n))
+        Ntot = k * n
+        med = np.median(X, axis=2, keepdims=True)
+        z = np.abs(X - med).reshape(N, Ntot)
+        order = z.argsort(axis=1)
+        ranks = np.empty_like(order)
+        rr = np.broadcast_to(np.arange(1, Ntot + 1), (N, Ntot))
+        np.put_along_axis(ranks, order, rr, axis=1)
+        scores = stats.norm.ppf(ranks / (2 * (Ntot + 1.0)) + 0.5)
+        sg = scores.reshape(N, k, n)
+        abar = scores.mean(axis=1)
+        aibar = sg.mean(axis=2)
+        varsq = scores.var(axis=1, ddof=1)
+        varsq[varsq <= 0] = 1e-15
+        return (n * ((aibar - abar[:, None]) ** 2).sum(axis=1)) / varsq
     FKs = np.empty(N)
-    if unbalanced:
-        ns = [n, 2*n, 3*n][:k]
-        while len(ns) < k:
-            ns.append(n)
-    else:
-        ns = [n] * k
+    ns = [n, 2*n, 3*n][:k]
+    while len(ns) < k:
+        ns.append(n)
     for i in range(N):
         groups = []
         for j in range(k):
@@ -217,12 +237,15 @@ def mc_fligner_killeen(k, n, N, dist='normal', unbalanced=False):
         FKs[i] = stat
     return FKs
 
-def mc_sign_test(n, N, dist='expon'):
+def mc_sign_test(n, N, dist='normal'):
     if dist == 'expon':
         X = np.random.exponential(1, (N, n))
         median_theory = np.log(2)
     elif dist == 'normal':
         X = np.random.normal(0, 1, (N, n))
+        median_theory = 0.0
+    elif dist == 'tdist':
+        X = np.random.standard_t(5, (N, n))
         median_theory = 0.0
     elif dist == 'uniform':
         X = np.random.uniform(0, 1, (N, n))
@@ -231,8 +254,8 @@ def mc_sign_test(n, N, dist='expon'):
         X = np.random.randint(1, 7, (N, n)).astype(float)
         median_theory = 3.5
     else:
-        X = np.random.exponential(1, (N, n))
-        median_theory = np.log(2)
+        X = np.random.normal(0, 1, (N, n))
+        median_theory = 0.0
     N_plus = (X > median_theory).sum(axis=1)
     return N_plus
 
@@ -342,6 +365,16 @@ def mc_clt(n, N, dist='expon'):
 def compute_ks(stat_values, dist_name, *args):
     return stats.kstest(stat_values, dist_name, args=args)
 
+def wilson_ci(t1e, N, z=1.959963984540054):
+    """95% Wilson score interval for an empirical rejection rate t1e from N trials."""
+    if N <= 0 or np.isnan(t1e):
+        return (np.nan, np.nan)
+    phat = t1e
+    denom = 1 + z**2 / N
+    center = (phat + z**2 / (2*N)) / denom
+    half = (z * np.sqrt(phat*(1-phat)/N + z**2/(4*N**2))) / denom
+    return (max(0.0, center - half), min(1.0, center + half))
+
 def compute_type1_error(stat_values, dist_name, df_args, alpha=0.05, two_sided=False):
     if dist_name == 'binom':
         n_binom, p_binom = df_args
@@ -427,7 +460,7 @@ def run_study1(N_mc=10000):
     }
 
     for test_id, info in tests.items():
-        results[test_id] = {'ks': [], 'kl': [], 'type1': [], 'ns': []}
+        results[test_id] = {'ks': [], 'kl': [], 'type1': [], 'ci_lo': [], 'ci_hi': [], 'ns': [], 'N': N_mc}
         print(f"\n  {info['label']}...", end=' ', flush=True)
         t0 = time.time()
 
@@ -446,8 +479,7 @@ def run_study1(N_mc=10000):
                     kl_val = compute_kl(sv, 'f', (df1, df2))
 
                 elif test_id == 'T3_kruskal_wallis':
-                    N_kw = min(N_mc, 5000) if n >= 100 else N_mc
-                    sv = mc_kruskal_wallis(k_default, n, N_kw)
+                    sv = mc_kruskal_wallis(k_default, n, N_mc)
                     ks_s, ks_p = compute_ks(sv, 'chi2', k_default-1)
                     t1e = compute_type1_error(sv, 'chi2', (k_default-1,))
                     kl_val = compute_kl(sv, 'chi2', (k_default-1,))
@@ -467,8 +499,7 @@ def run_study1(N_mc=10000):
                     kl_val = compute_kl(sv, 'chi2', (k_default-1,))
 
                 elif test_id == 'T6_fligner_killeen':
-                    N_fk = min(N_mc, 3000)
-                    sv = mc_fligner_killeen(k_default, n, N_fk)
+                    sv = mc_fligner_killeen(k_default, n, N_mc)
                     ks_s, ks_p = compute_ks(sv, 'chi2', k_default-1)
                     t1e = compute_type1_error(sv, 'chi2', (k_default-1,))
                     kl_val = compute_kl(sv, 'chi2', (k_default-1,))
@@ -492,8 +523,7 @@ def run_study1(N_mc=10000):
                     kl_val = compute_kl(sv, 'chi2', (k_default-1,))
 
                 elif test_id == 'T9_median_test':
-                    N_mt = min(N_mc, 5000) if n >= 100 else N_mc
-                    sv = mc_median_test(k_default, n, N_mt)
+                    sv = mc_median_test(k_default, n, N_mc)
                     ks_s, ks_p = compute_ks(sv, 'chi2', k_default-1)
                     t1e = compute_type1_error(sv, 'chi2', (k_default-1,))
                     kl_val = compute_kl(sv, 'chi2', (k_default-1,))
@@ -503,7 +533,7 @@ def run_study1(N_mc=10000):
                     if n <= p_dim + 1:
                         ks_s, t1e, kl_val = np.nan, np.nan, np.nan
                     else:
-                        N_ht = min(N_mc, 5000)
+                        N_ht = N_mc
                         sv, dfn, dfd = mc_hotelling_t2(p_dim, n, N_ht)
                         ks_s, ks_p = compute_ks(sv, 'f', dfn, dfd)
                         t1e = compute_type1_error(sv, 'f', (dfn, dfd))
@@ -512,12 +542,17 @@ def run_study1(N_mc=10000):
                 results[test_id]['ks'].append(float(ks_s))
                 results[test_id]['kl'].append(float(kl_val) if not np.isnan(kl_val) else np.nan)
                 results[test_id]['type1'].append(float(t1e))
+                ci_lo, ci_hi = wilson_ci(t1e, N_mc)
+                results[test_id]['ci_lo'].append(float(ci_lo))
+                results[test_id]['ci_hi'].append(float(ci_hi))
                 results[test_id]['ns'].append(n)
             except Exception as e:
                 print(f"[ERR n={n}: {e}]", end=' ')
                 results[test_id]['ks'].append(np.nan)
                 results[test_id]['kl'].append(np.nan)
                 results[test_id]['type1'].append(np.nan)
+                results[test_id]['ci_lo'].append(np.nan)
+                results[test_id]['ci_hi'].append(np.nan)
                 results[test_id]['ns'].append(n)
 
         elapsed = time.time() - t0
@@ -542,17 +577,29 @@ def run_study1(N_mc=10000):
             row += f"{v:>8.4f}" if not np.isnan(v) else f"{'N/A':>8}"
         print(row)
 
+    ks_threshold = 1.358 / np.sqrt(N_mc)
+    print(f"\n  KS adequacy threshold (95% KS critical value at N={N_mc}): {ks_threshold:.4f}")
     n_star = {}
+    n_star_ks = {}
     for test_id, info in tests.items():
         t1es = results[test_id]['type1']
+        kss = results[test_id]['ks']
         ns_list = results[test_id]['ns']
         found = None
-        for j, (nn, t1e) in enumerate(zip(ns_list, t1es)):
+        for nn, t1e in zip(ns_list, t1es):
             if not np.isnan(t1e) and abs(t1e - 0.05) < 0.01:
                 found = nn
                 break
         n_star[test_id] = found if found else '>500'
-        print(f"  {info['label']}: n* = {n_star[test_id]}")
+        found_ks = None
+        for nn, ks in zip(ns_list, kss):
+            if not np.isnan(ks) and ks < ks_threshold:
+                found_ks = nn
+                break
+        n_star_ks[test_id] = found_ks if found_ks else '>500'
+        print(f"  {info['label']}: n*(alpha) = {n_star[test_id]}, n*(KS) = {n_star_ks[test_id]}")
+    results['_ks_threshold'] = ks_threshold
+    results['_n_star_ks'] = n_star_ks
 
     if HAS_MPL:
         fig, axes = plt.subplots(3, 1, figsize=(12, 11), sharex=True)
@@ -608,6 +655,7 @@ def run_study2(N_mc=10000, n_fixed=50):
         ('heavy_tail', {'dist': 'tdist'}),
         ('hetero_var', {'hetero': True}),
         ('unbalanced', {'unbalanced': True}),
+        ('small_freq', {'small_freq': True}),
     ]
 
     test_configs = {
@@ -635,16 +683,17 @@ def run_study2(N_mc=10000, n_fixed=50):
             'label': 'Kruskal-Wallis',
             'applicable': ['baseline', 'skewed', 'heavy_tail', 'hetero_var', 'unbalanced'],
             'run': lambda sc, N: (
-                mc_kruskal_wallis(k, n_fixed, min(N, 5000), dist=sc.get('dist', 'uniform'),
+                mc_kruskal_wallis(k, n_fixed, N, dist=sc.get('dist', 'uniform'),
                                   hetero=sc.get('hetero', False), unbalanced=sc.get('unbalanced', False)),
                 'chi2', (k-1,), False
             ),
         },
         'T4_chisq_gof': {
             'label': 'Chi-sq GOF',
-            'applicable': ['baseline'],
+            'applicable': ['baseline', 'small_freq'],
             'run': lambda sc, N: (
-                mc_chisq_gof(6, 250, N),
+                mc_chisq_gof(6, 30, N, small_expected=True) if sc.get('small_freq')
+                else mc_chisq_gof(6, 250, N),
                 'chi2', (5,), False
             ),
         },
@@ -661,7 +710,7 @@ def run_study2(N_mc=10000, n_fixed=50):
             'label': 'Fligner-Killeen',
             'applicable': ['baseline', 'skewed', 'heavy_tail', 'unbalanced'],
             'run': lambda sc, N: (
-                mc_fligner_killeen(k, n_fixed, min(N, 3000), dist=sc.get('dist', 'normal'),
+                mc_fligner_killeen(k, n_fixed, N, dist=sc.get('dist', 'normal'),
                                     unbalanced=sc.get('unbalanced', False)),
                 'chi2', (k-1,), False
             ),
@@ -670,23 +719,25 @@ def run_study2(N_mc=10000, n_fixed=50):
             'label': 'Sign test',
             'applicable': ['baseline', 'skewed', 'heavy_tail'],
             'run': lambda sc, N: (
-                mc_sign_test(n_fixed, N, dist={'expon': 'expon', 'tdist': 'normal'}.get(sc.get('dist',''), 'expon')),
+                mc_sign_test(n_fixed, N,
+                             dist={'expon': 'expon', 'tdist': 'tdist'}.get(sc.get('dist', ''), 'normal')),
                 'binom', (n_fixed, 0.5), False
             ),
         },
         'T8_cochran_q': {
             'label': 'Cochran Q',
-            'applicable': ['baseline', 'unbalanced'],
+            'applicable': ['baseline', 'unbalanced', 'small_freq'],
             'run': lambda sc, N: (
-                mc_cochran_q(k, n_fixed, N),
+                mc_cochran_q(k, n_fixed, N, p=(0.05 if sc.get('small_freq') else 0.5)),
                 'chi2', (k-1,), False
             ),
         },
         'T9_median_test': {
             'label': 'Median test',
-            'applicable': ['baseline', 'skewed', 'heavy_tail', 'hetero_var', 'unbalanced'],
+            'applicable': ['baseline', 'skewed', 'heavy_tail', 'hetero_var', 'unbalanced', 'small_freq'],
             'run': lambda sc, N: (
-                mc_median_test(k, n_fixed, min(N, 5000), dist=sc.get('dist', 'uniform'),
+                mc_median_test(k, (8 if sc.get('small_freq') else n_fixed), N,
+                               dist=sc.get('dist', 'uniform'),
                                hetero=sc.get('hetero', False), unbalanced=sc.get('unbalanced', False)),
                 'chi2', (k-1,), False
             ),
@@ -695,19 +746,22 @@ def run_study2(N_mc=10000, n_fixed=50):
             'label': 'Hotelling T2',
             'applicable': ['baseline', 'skewed', 'heavy_tail'],
             'run': lambda sc, N: (
-                mc_hotelling_t2(2, n_fixed, min(N, 5000), dist=sc.get('dist', 'normal'))[0],
+                mc_hotelling_t2(2, n_fixed, N, dist=sc.get('dist', 'normal'))[0],
                 'f', (2, n_fixed-2), False
             ),
         },
     }
 
+    ci_results = {}
     for test_id, cfg in test_configs.items():
         results[test_id] = {}
+        ci_results[test_id] = {}
         print(f"\n  {cfg['label']}...", end=' ', flush=True)
         t0 = time.time()
         for sc_name, sc_params in scenarios:
             if sc_name not in cfg['applicable']:
                 results[test_id][sc_name] = np.nan
+                ci_results[test_id][sc_name] = [np.nan, np.nan]
                 continue
             try:
                 sv, dist_name, df_args, two_sided = cfg['run'](sc_params, N_mc)
@@ -716,8 +770,11 @@ def run_study2(N_mc=10000, n_fixed=50):
                 else:
                     t1e = compute_type1_error(sv, dist_name, df_args, two_sided=two_sided)
                 results[test_id][sc_name] = float(t1e)
+                lo, hi = wilson_ci(t1e, len(sv))
+                ci_results[test_id][sc_name] = [float(lo), float(hi)]
             except Exception as e:
                 results[test_id][sc_name] = np.nan
+                ci_results[test_id][sc_name] = [np.nan, np.nan]
                 print(f"[ERR {sc_name}: {e}]", end=' ')
         elapsed = time.time() - t0
         print(f"({elapsed:.1f}s)")
@@ -743,7 +800,8 @@ def run_study2(N_mc=10000, n_fixed=50):
         fig, ax = plt.subplots(figsize=(12, 6))
         sc_names = [s[0] for s in scenarios]
         sc_labels = {'baseline': 'Baseline', 'skewed': 'Skewed', 'heavy_tail': 'Heavy-tailed',
-                     'hetero_var': 'Var. heterogeneity', 'unbalanced': 'Unbalanced'}
+                     'hetero_var': 'Var. heterogeneity', 'unbalanced': 'Unbalanced',
+                     'small_freq': 'Small exp. freq.'}
         x = np.arange(len(sc_names))
         test_ids_list = [tid for tid in test_configs]
         n_tests = len(test_ids_list)
@@ -769,7 +827,7 @@ def run_study2(N_mc=10000, n_fixed=50):
         plt.close()
         print(f"  Saved fig_study2_robustness.png")
 
-    return results
+    return results, ci_results
 
 # ============================================================
 # SECTION 5: Study 3 - MC precision
@@ -789,7 +847,7 @@ def run_study3(n_fixed=50, n_repeats=30):
         'T3_kruskal_wallis': ('Kruskal-Wallis', lambda N: mc_kruskal_wallis(k, n_fixed, N), 'chi2', (k-1,), False, 10000),
         'T4_chisq_gof': ('Chi-sq GOF', lambda N: mc_chisq_gof(6, 250, N), 'chi2', (5,), False, None),
         'T5_bartlett': ('Bartlett', lambda N: mc_bartlett(k, n_fixed, N), 'chi2', (k-1,), False, None),
-        'T6_fligner_killeen': ('Fligner-Killeen', lambda N: mc_fligner_killeen(k, n_fixed, N), 'chi2', (k-1,), False, 10000),
+        'T6_fligner_killeen': ('Fligner-Killeen', lambda N: mc_fligner_killeen(k, n_fixed, N), 'chi2', (k-1,), False, None),
         'T7_sign_test': ('Sign test', lambda N: mc_sign_test(n_fixed, N), 'binom', (n_fixed, 0.5), False, None),
         'T8_cochran_q': ('Cochran Q', lambda N: mc_cochran_q(k, n_fixed, N), 'chi2', (k-1,), False, None),
         'T9_median_test': ('Median test', lambda N: mc_median_test(k, n_fixed, N), 'chi2', (k-1,), False, 10000),
@@ -863,6 +921,78 @@ def run_study3(n_fixed=50, n_repeats=30):
     return results, n_star_mc
 
 # ============================================================
+# SECTION 6: Auto-generate markdown tables from results
+# ============================================================
+
+TEST_ORDER = ['T1_t_test', 'T2_anova', 'T3_kruskal_wallis', 'T4_chisq_gof', 'T5_bartlett',
+              'T6_fligner_killeen', 'T7_sign_test', 'T8_cochran_q', 'T9_median_test', 'T10_hotelling']
+TEST_LABELS = {
+    'T1_t_test': 'T1: Student\'s t', 'T2_anova': 'T2: ANOVA F', 'T3_kruskal_wallis': 'T3: Kruskal-Wallis',
+    'T4_chisq_gof': 'T4: Pearson\'s $\\chi^2$ GOF', 'T5_bartlett': 'T5: Bartlett\'s',
+    'T6_fligner_killeen': 'T6: Fligner-Killeen', 'T7_sign_test': 'T7: Sign test',
+    'T8_cochran_q': 'T8: Cochran\'s Q', 'T9_median_test': 'T9: Median test', 'T10_hotelling': 'T10: Hotelling\'s $T^2$',
+}
+
+def _fmt(v, nd=3):
+    return '—' if (v is None or (isinstance(v, float) and np.isnan(v))) else f'{v:.{nd}f}'
+
+def generate_tables(s1, n_star_alpha, n_star_ks, ks_thr, s2, s2_ci, s3, n_star_mc, out_path):
+    lines = []
+    lines.append('# Auto-generated result tables\n')
+    lines.append(f'Generated by experiments.py. Study 1/2 use N=10,000 MC replications (uniform across all tests). '
+                 f'Study 1 KS adequacy threshold = 95% KS critical value at N=10,000 = {ks_thr:.4f}. '
+                 f'CIs are 95% Wilson score intervals.\n')
+
+    # ---- Table 3: n* ----
+    lines.append('\n## Table 3: Minimum adequate sample size\n')
+    lines.append('| Test | $n^*_\\alpha$ ($|\\hat\\alpha-0.05|<0.01$) | $n^*_{KS}$ ($D_{KS}<' + f'{ks_thr:.3f}' + '$) |')
+    lines.append('| --- | --- | --- |')
+    for tid in TEST_ORDER:
+        lines.append(f'| {TEST_LABELS[tid]} | {n_star_alpha.get(tid,"—")} | {n_star_ks.get(tid,"—")} |')
+
+    # ---- Table 4: robustness ----
+    sc_cols = ['baseline', 'skewed', 'heavy_tail', 'hetero_var', 'unbalanced', 'small_freq']
+    sc_hdr = ['Baseline', 'Skewed', 'Heavy-tailed', 'Var. het.', 'Unbalanced', 'Small exp. freq.']
+    lines.append('\n## Table 4: Empirical Type I error under assumption violations (α=0.05, n=50, N=10,000)\n')
+    lines.append('| Test | ' + ' | '.join(sc_hdr) + ' |')
+    lines.append('| --- |' + ' --- |' * len(sc_cols))
+    for tid in TEST_ORDER:
+        row = [TEST_LABELS[tid]]
+        for sc in sc_cols:
+            row.append(_fmt(s2.get(tid, {}).get(sc)))
+        lines.append('| ' + ' | '.join(row) + ' |')
+
+    lines.append('\n### Table 4 with 95% Wilson CIs\n')
+    lines.append('| Test | ' + ' | '.join(sc_hdr) + ' |')
+    lines.append('| --- |' + ' --- |' * len(sc_cols))
+    for tid in TEST_ORDER:
+        row = [TEST_LABELS[tid]]
+        for sc in sc_cols:
+            v = s2.get(tid, {}).get(sc)
+            ci = s2_ci.get(tid, {}).get(sc, [np.nan, np.nan])
+            if v is None or (isinstance(v, float) and np.isnan(v)):
+                row.append('—')
+            else:
+                row.append(f'{v:.3f} [{ci[0]:.3f}, {ci[1]:.3f}]')
+        lines.append('| ' + ' | '.join(row) + ' |')
+
+    # ---- Table 5: MC precision ----
+    lines.append('\n## Table 5: Minimum MC replications $N^*$ for CV < 0.10\n')
+    lines.append('| Test | $N^*$ | CV at N=1,000 | CV at N=10,000 |')
+    lines.append('| --- | --- | --- | --- |')
+    for tid in TEST_ORDER:
+        Ns = s3[tid]['N_values']
+        cvs = s3[tid]['cv_t1e']
+        cv_at = {N: cv for N, cv in zip(Ns, cvs)}
+        lines.append(f'| {TEST_LABELS[tid]} | {n_star_mc.get(tid,"—")} | '
+                     f'{_fmt(cv_at.get(1000), 3)} | {_fmt(cv_at.get(10000), 3)} |')
+
+    with open(out_path, 'w') as f:
+        f.write('\n'.join(lines) + '\n')
+    print(f'  Saved {os.path.basename(out_path)}')
+
+
+# ============================================================
 # MAIN
 # ============================================================
 
@@ -872,18 +1002,28 @@ if __name__ == '__main__':
     t_total = time.time()
 
     s1_results, n_star = run_study1(N_mc=10000)
-    s2_results = run_study2(N_mc=10000, n_fixed=50)
+    ks_thr = s1_results.pop('_ks_threshold')
+    n_star_ks = s1_results.pop('_n_star_ks')
+    s2_results, s2_ci = run_study2(N_mc=10000, n_fixed=50)
     s3_results, n_star_mc = run_study3(n_fixed=50, n_repeats=30)
 
+    generate_tables(s1_results, n_star, n_star_ks, ks_thr, s2_results, s2_ci,
+                    s3_results, n_star_mc, os.path.join(OUT_DIR, 'generated_tables.md'))
+
+    def _clean_list(vv):
+        return [float(x) if not (isinstance(x, float) and np.isnan(x)) else None for x in vv]
+
     all_results = {
-        'study1': {k: {kk: [float(x) if not np.isnan(x) else None for x in vv]
-                        if isinstance(vv, list) else vv
-                        for kk, vv in v.items()}
-                   for k, v in s1_results.items()},
-        'study1_nstar': {k: str(v) for k, v in n_star.items()},
-        'study2': {k: {kk: float(vv) if not np.isnan(vv) else None
-                        for kk, vv in v.items()}
-                   for k, v in s2_results.items()},
+        'study1': {tid: {kk: (_clean_list(vv) if isinstance(vv, list) else vv)
+                         for kk, vv in s1_results[tid].items()}
+                   for tid in s1_results},
+        'study1_nstar_alpha': {k: str(v) for k, v in n_star.items()},
+        'study1_nstar_ks': {k: str(v) for k, v in n_star_ks.items()},
+        'study1_ks_threshold': ks_thr,
+        'study2': {tid: {kk: (float(vv) if not (isinstance(vv, float) and np.isnan(vv)) else None)
+                         for kk, vv in s2_results[tid].items()}
+                   for tid in s2_results},
+        'study2_ci': s2_ci,
         'study3': {k: v for k, v in s3_results.items()},
         'study3_nstar_mc': {k: str(v) for k, v in n_star_mc.items()},
     }

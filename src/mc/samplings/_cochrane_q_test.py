@@ -36,7 +36,7 @@ class Cochrane_Q_Test(McBase):
         theory = super().init_theory(dist=self.dist, x_theory=x_theory, k=self.k-1)
 
         if display:
-            super().hist(y=Ts, title="Histogram of the Cochrane-Q test's T statistic ($T = \dfrac{(k-1)[k\sum_{j=1}^{k}X_{.j}^2-(\sum_{j=1}^{k} X_{.j})^2]}{k\sum_{i=1}^{b}X_{i.}-\sum_{i=1}^{b} X_{i.}^2}$)\n. \
+            super().hist(y=Ts, title=r"Histogram of the Cochrane-Q test's T statistic ($T = \dfrac{(k-1)[k\sum_{j=1}^{k}X_{.j}^2-(\sum_{j=1}^{k} X_{.j})^2]}{k\sum_{i=1}^{b}X_{i.}-\sum_{i=1}^{b} X_{i.}^2}$)\n. \
              Population is " + "Bernoulli(" + str(self.p) + "). " + str(self.k) + " groups, " + str(self.n) +
                                      " samples per group.")
             super().plot(x=x_theory, y=theory, label='dof = ' + str(self.k - 1),

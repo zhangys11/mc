@@ -1,5 +1,5 @@
 # mc-tk
-A Monte-Carlo toolkit for educational purposes.
+A reproducible Monte Carlo toolkit for statistical inference.
 
 > pip install mc-tk
 
@@ -222,6 +222,14 @@ A Monte-Carlo toolkit for educational purposes.
         </tr>
         <tr>
             <td>
+                Median_Test
+            </td>
+            <td>
+                Verify&nbsp;the&nbsp;Median&nbsp;test statistic (MT) follows&nbsp;the&nbsp;&chi;2 &nbsp;distribution.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 Hotelling_T2_Test
             </td>
             <td>
@@ -231,18 +239,16 @@ A Monte-Carlo toolkit for educational purposes.
     </tbody>
 </table>
 
-This version is major upgrade on the original version.   
-All the functions were refactored by the OOP (Object Oriented Programming) pattern.  
-`McBase` acts as a common base class for all MC derivative classes. 
+All classes inherit from a common `McBase` base class, providing a consistent `run(display=True)` interface and shared plotting utilities.
 
-# publication
+# documentation
 
-[JOSE paper](jose/paper.pdf)
-
-# doc
-
-[API document](doc/api.pdf)
+See the demo notebooks (`demo.ipynb`, `demo_CO.ipynb`) for quick-start examples. The `null/` directory contains a fully reproducible ten-test comparison study (`experiments.py` + `experiments.ipynb`) that can be used as a vignette.
 
 # future plan
 
 gui.py - add a Flask or tk-inter (ttkbootstrap) GUI
+
+# license
+
+Apache 2.0

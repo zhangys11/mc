@@ -23,7 +23,7 @@ class T_Test(McBase):
         for i in range(self.N):
             # 添加for循环
             X = np.random.normal(0, 1, size=self.n)
-            T = (X.mean() - 0) / X.std() * np.sqrt(self.n)
+            T = (X.mean() - 0) / X.std(ddof=1) * np.sqrt(self.n)
             ts.append(T)
 
         x_theory = np.linspace(np.min(ts), np.max(ts), 100)
@@ -31,7 +31,7 @@ class T_Test(McBase):
 
         if display:
             super().hist(y=ts,
-                         title="Histogram of the student test statistic ($t = \dfrac{X\u0305 -\mu}{S/\sqrt{n}}$).\n \
+                         title=r"Histogram of the student test statistic ($t = \dfrac{X\u0305 -\mu}{S/\sqrt{n}}$).\n \
                          Population is N(0,1). " + str(self.n) + " samples.")
             super().plot(x=x_theory, y=theory, label='$t (dof=' + str(self.n-1) + ')$',
                          title='Theoretical Distribution')

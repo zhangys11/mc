@@ -49,6 +49,6 @@ class Median_Test(McBase):
         theory = super().init_theory(dist=self.dist, x_theory=x_theory, k=self.k-1)
 
         if display:
-            super().hist(y=MTs, title="Histogram of the median test statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)")
+            super().hist(y=MTs, title=r"Histogram of the median test statistic ($MT = \dfrac{N^2}{ab}\sum_{i=1}^{k}\dfrac{(O_{1i}-n_{i}a/N)^2}{n_{i}}$)")
             super().plot(x=x_theory, y=theory, label='dof = ' + str(self.k - 1),
                          title='Theoretical Distribution\n$\chi^2$(dof=' + str(self.k-1) + ')')

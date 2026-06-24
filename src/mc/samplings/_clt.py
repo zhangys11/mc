@@ -112,5 +112,5 @@ def clt_all():
 
     for underlying_dist in ['uniform', 'expon', 'poisson', 'coin', 'tampered_coin', 'dice', 'tampered_dice']:
         print('-----------', underlying_dist, '-----------')
-        clt = Clt(underlying_dist, sample_size=[1, 2, 5, 20, 50], N=10000)
+        clt = Clt(underlying_dist, n=[1, 2, 5, 20, 50], N=10000)
         clt.run()

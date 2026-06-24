@@ -28,10 +28,12 @@ class Anova(McBase):
         for i in range(self.N):
 
             X = np.random.normal(0, 1, size=(self.n, self.k))
-            SSTR = self.n * ((X.mean(axis=0) - X.mean()) ** 2).sum()
+            group_means = X.mean(axis=0)
+            grand_mean = X.mean()
+            SSTR = self.n * ((group_means - grand_mean) ** 2).sum()
             MSTR = SSTR / (self.k - 1)
-            SSE = ((X - X.mean()) ** 2).sum()
-            MSE = SSE / (self.k * self.n - self.k)  # 此处K*n为公式中n，样本总量
+            SSE = ((X - group_means) ** 2).sum()
+            MSE = SSE / (self.k * self.n - self.k)  # N-k, N=k*n
             F = 1.0 * MSTR / MSE
             FS.append(F)
 
@@ -40,7 +42,7 @@ class Anova(McBase):
 
         if display:
             super().hist(
-                y=FS, title="Histogram of the ANOVA test statistic ($F = \dfrac{MSTR}{MSE}$)\n. Population is N(0,1)."
+                y=FS, title=r"Histogram of the ANOVA test statistic ($F = \dfrac{MSTR}{MSE}$)\n. Population is N(0,1)."
                             + str(self.k) + " groups, " + str(self.n) + " samples per group.")
             super().plot(x=x_theory, y=theory, label='$F(' + str(self.k-1) + ',' + str(self.n*self.k-self.k) + ')$',
                          title='Theoretical Distribution\n$F(' + str(self.k-1) + ',' + str(self.n*self.k-self.k) + ')$')

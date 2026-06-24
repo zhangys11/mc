@@ -62,7 +62,7 @@ class Chisq_Gof_Test(McBase):
         theory = super().init_theory(dist=self.dist, x_theory=x_theory, k=self.k-1)
 
         if display:
-            super().hist(y=chisqs, title="Histogram of the GOF test statistic ($\chi^2 = \sum_{i=1}^{k}\dfrac{(f_{j}-np_{j})^2}{np_{j}}$).\n \
+            super().hist(y=chisqs, title=r"Histogram of the GOF test statistic ($\chi^2 = \sum_{i=1}^{k}\dfrac{(f_{j}-np_{j})^2}{np_{j}}$).\n \
                  Population is " + self.underlying_dist + ", sample size="+str(self.sample_size))
             super().plot(x=x_theory, y=theory, label='dof = ' + str(self.k-1),
                          title='Theoretical Distribution\n$\chi^2(dof=' + str(self.k-1) + ')$')

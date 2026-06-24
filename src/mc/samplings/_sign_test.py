@@ -38,9 +38,9 @@ class Sign_Test(McBase):
         theory = super().init_theory(dist=self.dist, x_theory=x_theory, n=self.n, p=0.5)
 
         if display:
-            super().hist(y=poss, title="Histogram of the sign test's N+ statistic.\n Population is expon(1). " +
+            super().hist(y=poss, title=r"Histogram of the sign test's N+ statistic.\n Population is expon(1). " +
                                        str(self.n) + " samples.", density=True)
-            super().hist(y=negs, title="Histogram of the sign test's N- statistic.\n Population is expon(1). " +
+            super().hist(y=negs, title=r"Histogram of the sign test's N- statistic.\n Population is expon(1). " +
                                        str(self.n) + " samples.", density=True)
             super().plot(x=x_theory[lb:ub], y=theory[lb:ub], label="b("+str(self.n)+',1/2)',
                          title='Theoretical Distribution\n$b(n=' + str(self.n) + ',p=1/2)$')
