@@ -332,32 +332,6 @@ def mc_hotelling_t2(p_dim, n, N, dist='normal'):
     F_trans = (n - p_dim) / (p_dim * (n - 1)) * T2s
     return F_trans, p_dim, n - p_dim
 
-def mc_clt(n, N, dist='expon'):
-    if dist == 'expon':
-        X = np.random.exponential(1, (N, n))
-        mu, sigma = 1.0, 1.0
-    elif dist == 'uniform':
-        X = np.random.uniform(-1, 1, (N, n))
-        mu, sigma = 0.0, np.sqrt(1/3)
-    elif dist == 'poisson':
-        X = np.random.poisson(1, (N, n)).astype(float)
-        mu, sigma = 1.0, 1.0
-    elif dist == 'bernoulli':
-        X = np.random.binomial(1, 0.5, (N, n)).astype(float)
-        mu, sigma = 0.5, 0.5
-    elif dist == 'tampered_dice':
-        probs = [0.1, 0.1, 0.1, 0.1, 0.1, 0.5]
-        vals = np.array([1,2,3,4,5,6], dtype=float)
-        X = np.random.choice(vals, size=(N, n), p=probs)
-        mu = (vals * probs).sum()
-        sigma = np.sqrt(((vals - mu)**2 * probs).sum())
-    else:
-        X = np.random.exponential(1, (N, n))
-        mu, sigma = 1.0, 1.0
-    xbars = X.mean(axis=1)
-    z = (xbars - mu) / (sigma / np.sqrt(n))
-    return z
-
 # ============================================================
 # SECTION 2: Divergence Measures
 # ============================================================
@@ -438,6 +412,31 @@ def compute_kl(stat_values, dist_name, df_args, n_bins=80):
 # SECTION 3: Study 1 - Finite-sample convergence
 # ============================================================
 
+# Module-level helper: total sample size for each test given per-group n
+def get_n_total(test_id, n, k_default=3):
+    if test_id == 'T1_t_test':
+        return n
+    elif test_id == 'T2_anova':
+        return k_default * n
+    elif test_id == 'T3_kruskal_wallis':
+        return k_default * n
+    elif test_id == 'T4_chisq_gof':
+        return max(n * 5, 30)
+    elif test_id == 'T5_bartlett':
+        return k_default * n
+    elif test_id == 'T6_fligner_killeen':
+        return k_default * n
+    elif test_id == 'T7_sign_test':
+        return n
+    elif test_id == 'T8_cochran_q':
+        return n  # n is the number of blocks
+    elif test_id == 'T9_median_test':
+        return k_default * n
+    elif test_id == 'T10_hotelling':
+        return n
+    return n
+
+
 def run_study1(N_mc=10000):
     print("=" * 60)
     print("STUDY 1: Finite-sample convergence")
@@ -460,7 +459,8 @@ def run_study1(N_mc=10000):
     }
 
     for test_id, info in tests.items():
-        results[test_id] = {'ks': [], 'kl': [], 'type1': [], 'ci_lo': [], 'ci_hi': [], 'ns': [], 'N': N_mc}
+        results[test_id] = {'ks': [], 'kl': [], 'type1': [], 'ci_lo': [], 'ci_hi': [],
+                             'ns': [], 'n_total': [], 'N': N_mc}
         print(f"\n  {info['label']}...", end=' ', flush=True)
         t0 = time.time()
 
@@ -546,6 +546,7 @@ def run_study1(N_mc=10000):
                 results[test_id]['ci_lo'].append(float(ci_lo))
                 results[test_id]['ci_hi'].append(float(ci_hi))
                 results[test_id]['ns'].append(n)
+                results[test_id]['n_total'].append(get_n_total(test_id, n))
             except Exception as e:
                 print(f"[ERR n={n}: {e}]", end=' ')
                 results[test_id]['ks'].append(np.nan)
@@ -554,6 +555,7 @@ def run_study1(N_mc=10000):
                 results[test_id]['ci_lo'].append(np.nan)
                 results[test_id]['ci_hi'].append(np.nan)
                 results[test_id]['ns'].append(n)
+                results[test_id]['n_total'].append(get_n_total(test_id, n))
 
         elapsed = time.time() - t0
         print(f"({elapsed:.1f}s)")
@@ -602,34 +604,43 @@ def run_study1(N_mc=10000):
     results['_n_star_ks'] = n_star_ks
 
     if HAS_MPL:
-        fig, axes = plt.subplots(3, 1, figsize=(12, 11), sharex=True)
+        fig, axes = plt.subplots(2, 1, figsize=(12, 8), sharex=True)
         for test_id, info in tests.items():
             ns_arr = np.array(results[test_id]['ns'])
             ks_arr = np.array(results[test_id]['ks'])
-            kl_arr = np.array(results[test_id]['kl'])
             t1_arr = np.array(results[test_id]['type1'])
             mask = ~np.isnan(ks_arr)
             axes[0].plot(ns_arr[mask], ks_arr[mask], 'o-', label=info['label'], markersize=3)
-            mask_kl = ~np.isnan(kl_arr)
-            axes[1].plot(ns_arr[mask_kl], kl_arr[mask_kl], 'o-', label=info['label'], markersize=3)
             mask2 = ~np.isnan(t1_arr)
-            axes[2].plot(ns_arr[mask2], t1_arr[mask2], 'o-', label=info['label'], markersize=3)
+            axes[1].plot(ns_arr[mask2], t1_arr[mask2], 'o-', label=info['label'], markersize=3)
+        # KS threshold line (95% KS critical value at N)
+        axes[0].axhline(y=ks_threshold, color='red', linestyle='--', linewidth=1,
+                        label=f'95% KS threshold (N={N_mc})')
         axes[0].set_ylabel('KS Distance')
         axes[0].set_title('Study 1: Convergence of Empirical Null Distribution')
         axes[0].legend(fontsize=7, ncol=3)
         axes[0].set_xscale('log')
         axes[0].grid(True, alpha=0.3)
-        axes[1].set_ylabel('KL Divergence')
+        # Annotate median test slow convergence
+        for tid in ['T9_median_test']:
+            if tid in results:
+                ns_arr = np.array(results[tid]['ns'])
+                ks_arr = np.array(results[tid]['ks'])
+                mask = ~np.isnan(ks_arr)
+                if mask.any():
+                    last_n = ns_arr[mask][-1]
+                    last_ks = ks_arr[mask][-1]
+                    axes[0].annotate(f'KS={last_ks:.3f} at n={int(last_n)}',
+                                    xy=(last_n, last_ks), xytext=(last_n*0.4, last_ks*1.3),
+                                    arrowprops=dict(arrowstyle='->', color='gray'),
+                                    fontsize=8, color='gray')
+        axes[1].axhline(y=0.05, color='black', linestyle='--', linewidth=1, label='Nominal α=0.05')
+        axes[1].axhspan(0.04, 0.06, alpha=0.1, color='green', label='±0.01 band')
+        axes[1].set_ylabel('Empirical Type I Error')
+        axes[1].set_xlabel('Sample size n')
         axes[1].legend(fontsize=7, ncol=3)
         axes[1].set_xscale('log')
         axes[1].grid(True, alpha=0.3)
-        axes[2].axhline(y=0.05, color='black', linestyle='--', linewidth=1, label='Nominal α=0.05')
-        axes[2].axhspan(0.04, 0.06, alpha=0.1, color='green', label='±0.01 band')
-        axes[2].set_ylabel('Empirical Type I Error')
-        axes[2].set_xlabel('Sample size n')
-        axes[2].legend(fontsize=7, ncol=3)
-        axes[2].set_xscale('log')
-        axes[2].grid(True, alpha=0.3)
         plt.tight_layout()
         plt.savefig(os.path.join(FIG_DIR, 'fig_study1_convergence.png'))
         plt.show()
@@ -796,6 +807,29 @@ def run_study2(N_mc=10000, n_fixed=50):
                 row += f"{v:>12.4f}"
         print(row)
 
+    # Baseline-relative changes
+    print("\n--- Study 2: Baseline-relative deviation (Δ = Type I_violated - Type I_baseline) ---")
+    d_header = f"{'Test':<20}" + "".join(f"{s:>12}" for s in sc_names[1:])
+    print(d_header)
+    print("-" * len(d_header))
+    delta_results = {}
+    for test_id, cfg in test_configs.items():
+        baseline = results[test_id].get('baseline', np.nan)
+        if np.isnan(baseline):
+            continue
+        row = f"{cfg['label']:<20}"
+        delta_results[test_id] = {}
+        for sc_name in sc_names[1:]:
+            v = results[test_id].get(sc_name, np.nan)
+            if np.isnan(v):
+                row += f"{'—':>12}"
+                delta_results[test_id][sc_name] = None
+            else:
+                delta = v - baseline
+                row += f"{delta:>+12.4f}"
+                delta_results[test_id][sc_name] = float(delta)
+        print(row)
+
     if HAS_MPL:
         fig, ax = plt.subplots(figsize=(12, 6))
         sc_names = [s[0] for s in scenarios]
@@ -827,7 +861,7 @@ def run_study2(N_mc=10000, n_fixed=50):
         plt.close()
         print(f"  Saved fig_study2_robustness.png")
 
-    return results, ci_results
+    return results, ci_results, delta_results
 
 # ============================================================
 # SECTION 5: Study 3 - MC precision
@@ -936,7 +970,7 @@ TEST_LABELS = {
 def _fmt(v, nd=3):
     return '—' if (v is None or (isinstance(v, float) and np.isnan(v))) else f'{v:.{nd}f}'
 
-def generate_tables(s1, n_star_alpha, n_star_ks, ks_thr, s2, s2_ci, s3, n_star_mc, out_path):
+def generate_tables(s1, n_star_alpha, n_star_ks, ks_thr, s2, s2_ci, s2_delta, s3, n_star_mc, out_path):
     lines = []
     lines.append('# Auto-generated result tables\n')
     lines.append(f'Generated by experiments.py. Study 1/2 use N=10,000 MC replications (uniform across all tests). '
@@ -945,10 +979,13 @@ def generate_tables(s1, n_star_alpha, n_star_ks, ks_thr, s2, s2_ci, s3, n_star_m
 
     # ---- Table 3: n* ----
     lines.append('\n## Table 3: Minimum adequate sample size\n')
-    lines.append('| Test | $n^*_\\alpha$ ($|\\hat\\alpha-0.05|<0.01$) | $n^*_{KS}$ ($D_{KS}<' + f'{ks_thr:.3f}' + '$) |')
-    lines.append('| --- | --- | --- |')
+    lines.append('| Test | $n^*_\\alpha$ ($|\\hat\\alpha-0.05|<0.01$) | $n^*_{KS}$ ($D_{KS}<' + f'{ks_thr:.3f}' + '$) | $n_T$ at $n=50$ |')
+    lines.append('| --- | --- | --- | --- |')
+    # helper: resolve n_T for each test at n=50
+    def _n_tot_50(tid):
+        return get_n_total(tid, 50)
     for tid in TEST_ORDER:
-        lines.append(f'| {TEST_LABELS[tid]} | {n_star_alpha.get(tid,"—")} | {n_star_ks.get(tid,"—")} |')
+        lines.append(f'| {TEST_LABELS[tid]} | {n_star_alpha.get(tid,"—")} | {n_star_ks.get(tid,"—")} | {_n_tot_50(tid)} |')
 
     # ---- Table 4: robustness ----
     sc_cols = ['baseline', 'skewed', 'heavy_tail', 'hetero_var', 'unbalanced', 'small_freq']
@@ -974,6 +1011,22 @@ def generate_tables(s1, n_star_alpha, n_star_ks, ks_thr, s2, s2_ci, s3, n_star_m
                 row.append('—')
             else:
                 row.append(f'{v:.3f} [{ci[0]:.3f}, {ci[1]:.3f}]')
+        lines.append('| ' + ' | '.join(row) + ' |')
+
+    # Baseline-relative change table
+    sc_delta_cols = [c for c in sc_cols if c != 'baseline']
+    delta_hdr = ['Skewed', 'Heavy-tailed', 'Var. het.', 'Unbalanced', 'Small exp. freq.']
+    lines.append('\n### Table 4b: Baseline-relative change in Type I error ($\\Delta = \\hat\\alpha_{\\text{violated}} - \\hat\\alpha_{\\text{baseline}}$)\n')
+    lines.append('| Test | ' + ' | '.join(delta_hdr) + ' |')
+    lines.append('| --- |' + ' --- |' * len(sc_delta_cols))
+    for tid in TEST_ORDER:
+        row = [TEST_LABELS[tid]]
+        for sc in sc_delta_cols:
+            delta = s2_delta.get(tid, {}).get(sc)
+            if delta is None:
+                row.append('—')
+            else:
+                row.append(f'{delta:+.4f}')
         lines.append('| ' + ' | '.join(row) + ' |')
 
     # ---- Table 5: MC precision ----
@@ -1004,10 +1057,10 @@ if __name__ == '__main__':
     s1_results, n_star = run_study1(N_mc=10000)
     ks_thr = s1_results.pop('_ks_threshold')
     n_star_ks = s1_results.pop('_n_star_ks')
-    s2_results, s2_ci = run_study2(N_mc=10000, n_fixed=50)
+    s2_results, s2_ci, s2_delta = run_study2(N_mc=10000, n_fixed=50)
     s3_results, n_star_mc = run_study3(n_fixed=50, n_repeats=30)
 
-    generate_tables(s1_results, n_star, n_star_ks, ks_thr, s2_results, s2_ci,
+    generate_tables(s1_results, n_star, n_star_ks, ks_thr, s2_results, s2_ci, s2_delta,
                     s3_results, n_star_mc, os.path.join(OUT_DIR, 'generated_tables.md'))
 
     def _clean_list(vv):
@@ -1024,6 +1077,8 @@ if __name__ == '__main__':
                          for kk, vv in s2_results[tid].items()}
                    for tid in s2_results},
         'study2_ci': s2_ci,
+        'study2_delta': {tid: {kk: vv for kk, vv in s2_delta[tid].items()}
+                         for tid in s2_delta},
         'study3': {k: v for k, v in s3_results.items()},
         'study3_nstar_mc': {k: str(v) for k, v in n_star_mc.items()},
     }
@@ -1031,6 +1086,56 @@ if __name__ == '__main__':
     with open(os.path.join(OUT_DIR, 'experiment_results.json'), 'w') as f:
         json.dump(all_results, f, indent=2, default=str)
     print(f"\nResults saved to experiment_results.json")
+
+    # Multi-seed verification for key Study 1 results
+    print("\n" + "=" * 60)
+    print("Multi-seed verification (Study 1 key results)")
+    print("=" * 60)
+    seeds = [2024, 2025, 2026, 2027, 2028]
+    key_tests = ['T9_median_test', 'T8_cochran_q', 'T4_chisq_gof']
+    key_ns = [50, 100, 200, 500]
+    multi_seed_results = {}
+    for tid in key_tests:
+        multi_seed_results[tid] = {str(n): {'ks': [], 't1e': []} for n in key_ns}
+    for seed_val in seeds:
+        np.random.seed(seed_val)
+        print(f"  seed={seed_val}...", end=' ', flush=True)
+        t0 = time.time()
+        for tid in key_tests:
+            for n in key_ns:
+                try:
+                    if tid == 'T9_median_test':
+                        sv = mc_median_test(3, n, 10000)
+                        ks_s, _ = compute_ks(sv, 'chi2', 2)
+                        t1e = compute_type1_error(sv, 'chi2', (2,))
+                    elif tid == 'T8_cochran_q':
+                        sv = mc_cochran_q(3, n, 10000)
+                        ks_s, _ = compute_ks(sv, 'chi2', 2)
+                        t1e = compute_type1_error(sv, 'chi2', (2,))
+                    elif tid == 'T4_chisq_gof':
+                        sv = mc_chisq_gof(6, max(n*5, 30), 10000)
+                        ks_s, _ = compute_ks(sv, 'chi2', 5)
+                        t1e = compute_type1_error(sv, 'chi2', (5,))
+                    multi_seed_results[tid][str(n)]['ks'].append(float(ks_s))
+                    multi_seed_results[tid][str(n)]['t1e'].append(float(t1e))
+                except Exception as e:
+                    multi_seed_results[tid][str(n)]['ks'].append(np.nan)
+                    multi_seed_results[tid][str(n)]['t1e'].append(np.nan)
+                    print(f"[ERR tid={tid} n={n}: {e}]", end=' ')
+        elapsed = time.time() - t0
+        print(f"({elapsed:.1f}s)")
+    print("\n  Multi-seed KS distance summary (mean ± std):")
+    tid_label = {'T9_median_test': 'Median test', 'T8_cochran_q': 'Cochran Q', 'T4_chisq_gof': 'Chi-sq GOF'}
+    for tid in key_tests:
+        for n in key_ns:
+            ks_vals = multi_seed_results[tid][str(n)]['ks']
+            ks_arr = np.array(ks_vals)
+            t1e_vals = multi_seed_results[tid][str(n)]['t1e']
+            t1e_arr = np.array(t1e_vals)
+            mask = ~np.isnan(ks_arr)
+            if mask.sum() >= 2:
+                print(f"  {tid_label[tid]} n={n}: KS={ks_arr[mask].mean():.4f}±{ks_arr[mask].std():.4f}, "
+                      f"T1E={t1e_arr[mask].mean():.4f}±{t1e_arr[mask].std():.4f}")
 
     elapsed_total = time.time() - t_total
     print(f"\nTotal time: {elapsed_total:.1f}s")
