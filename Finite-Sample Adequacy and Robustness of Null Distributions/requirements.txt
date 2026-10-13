@@ -1,0 +1,28 @@
+# Direct dependencies of the mc-tk simulation pipeline for
+#   COST-S-26-00605, "Finite-Sample Adequacy and Robustness of Null Distributions:
+#   A Systematic Monte Carlo Study Across Thirteen Hypothesis Tests"
+#   (Computational Statistics, major revision).
+#
+# Scope: the scripts that produce every number, table and figure in the paper --
+#   experiments.py, core.py, rev_study1_ext.py, rev_alpha_dependence.py,
+#   rev_sensitivity.py, rev_power.py.
+#
+# The lower bounds are the versions actually used to produce the published
+# results (macOS 26.6.2 arm64, CPython 3.13.5, Anaconda).  For a bit-exact
+# environment use the exact pins in requirements-lock.txt:
+#
+#   python3 -m pip install -r requirements-lock.txt
+#
+# Nothing outside this list is imported by the pipeline: the statistics are
+# implemented directly with NumPy/SciPy, and only the interaction test (T13)
+# touches a machine-learning library.
+
+numpy>=2.4.6
+scipy>=1.16.3
+matplotlib>=3.11.0
+lightgbm>=4.6.0          # T13 (interaction test) only; sklearn-free LightGBM API
+
+# Optional -- the mc-tk toolkit itself, whose object-oriented API is illustrated in
+# Section 4 of the manuscript (`pip install mc-tk`).  It is NOT imported by the
+# reproduction pipeline above, so it is not required to regenerate any result.
+# mc-tk>=1.1.0

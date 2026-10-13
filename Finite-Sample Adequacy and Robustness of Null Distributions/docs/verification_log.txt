@@ -1,0 +1,278 @@
+mc-tk verification log (read-only checks)
+date       : 2026-10-13 20:59:17 +0800
+directory  : /Users/zys/论文/进行中/mc-tk/mc/Finite-Sample Adequacy and Robustness of Null Distributions
+interpreter: /opt/anaconda3/bin/python3 3.13.5
+
+$ python3 -V
+Python 3.13.5
+[exit 0]
+
+$ python3 -m pip --version
+pip 26.1.2 from /opt/anaconda3/lib/python3.13/site-packages/pip (python 3.13)
+[exit 0]
+
+$ python3 docs/probe_experiments.py
+numpy 2.4.6   seed 2024   N = 200
+  T1_t_test            shape=(200,)       first=-0.0013069230  last=-0.1074991090
+  T2_anova             shape=(200,)       first= 1.3752457734  last= 3.1317187331
+  T3_kruskal_wallis    shape=(200,)       first= 0.5880370861  last= 2.7780450331
+  T4_chisq_gof         shape=(200,)       first= 5.8400000000  last= 4.0160000000
+  T5_bartlett          shape=(200,)       first= 1.5744458851  last= 0.9260015496
+  T6_fligner_killeen   shape=(200,)       first= 0.6180577893  last= 3.5983735072
+  T7_sign_test         shape=(200,)       first= 25.0000000000  last= 19.0000000000
+  T8_cochran_q         shape=(200,)       first= 2.3243243243  last= 2.0526315789
+  T9_median_test       shape=(200,)       first= 3.3600000000  last= 0.6400000000
+  T10_hotelling        shape=(200,)       first= 0.4867230282  last= 1.0455597945
+
+combined SHA-256 of all ten arrays : 3824e5fe16564e764fec478cac090ffa7d6cd483e555c20c533d813a1ce5a7aa
+sha256(archive_experiments.py)     : 872398f7b8dfdb6ba293182b629d823043a306749dfd69faa8623bf4421013a6
+[exit 0]
+
+$ python3 docs/probe_docstring_pass.py
+{
+ "SEVERITY_HOOKS": [
+  "T11_kpss",
+  "T12_hoeffding_d",
+  "T13_interaction"
+ ],
+ "TESTS": [
+  "T10_hotelling",
+  "T11_kpss",
+  "T12_hoeffding_d",
+  "T13_interaction",
+  "T14_dcor_t",
+  "T1_t_test",
+  "T2_anova",
+  "T3_kruskal_wallis",
+  "T4_chisq_gof",
+  "T5_bartlett",
+  "T6_fligner_killeen",
+  "T7_sign_test",
+  "T8_cochran_q",
+  "T9_median_test"
+ ],
+ "_dist(t_5)": [
+  "t",
+  5
+ ],
+ "_kurt_tick(last_skew_rung)": "110.94",
+ "aggregate_nsweep": {
+  "s": {
+   "T1_t_test": {
+    "by_n": {
+     "20": {
+      "alpha_hat": 0.05
+     }
+    },
+    "label": "Student t"
+   }
+  }
+ },
+ "build_design.head": [
+  [
+   "location3",
+   "normal",
+   20,
+   0.2,
+   "d"
+  ],
+  [
+   "location3",
+   "normal",
+   20,
+   0.5,
+   "d"
+  ]
+ ],
+ "build_design.len": 160,
+ "cell_seed.dist_ladder": 90390,
+ "cell_seed.nsweep_skewed": 19204,
+ "fmt_ci": "[0.123,0.988]",
+ "fmt_rate": "0.067!",
+ "gen_cell.bartlett_skewed_n50_N500": "6964d2bdd882b371c4b447b5",
+ "has_main": {
+  "rev_alpha_dependence": true,
+  "rev_power": true,
+  "rev_sensitivity": true,
+  "rev_study1_ext": true,
+  "verify_manuscript": true,
+  "verify_new_tests_power": true
+ },
+ "hook_hoeffding": "88ce2b21f77d766d1d05d042",
+ "hook_interaction": "5f06585ac1418b23cfe36779",
+ "hook_kpss": "d606ca62c742478bebed2f72",
+ "n_ladder_cells": 156,
+ "n_nsweep_cells": 144,
+ "reject_rate.bartlett_skewed_n50_N500": 0.422,
+ "reject_rate.rules": [
+  0.0,
+  0.0,
+  0.25742574257425743,
+  0.3564356435643564,
+  0.5714285714285714
+ ],
+ "scale_rows.empty": [],
+ "skew_kurt(lognorm,1.0)": [
+  6.184877138632554,
+  110.93639217631153
+ ],
+ "stat_anova": "e2aeecb4a6c5039d28b0f4c2",
+ "stat_bartlett": "0a0cb414000af99382b384af",
+ "stat_fligner": "6a7b88565ec742d576eefecc",
+ "stat_gof": "6c3c396ed6b5c36dcae17227",
+ "stat_kruskal": "73ba3903acb8d0c00856bf65",
+ "stat_media
+
+fingerprint SHA-256: be938e5526a9981d7bf0f29ac638f06906466759102a1be9044fad42701025d6
+[exit 0]
+
+$ python3 docs/verify_bartlett.py
+==========================================================================
+Worked example: Bartlett Type I error under the skewed parent Exp(1)-1
+==========================================================================
+python 3.13.5   numpy 2.4.6   scipy 1.16.3
+core.py seed=2024  N_MC=10000  alpha=0.05
+
+[1] Exact reproduction through rev_sensitivity.py (committed seed)
+    spec        : {'dist': ('exp', None), 'ns': [50, 50, 50], 'sd': [1.0, 1.0, 1.0]}
+    cell seed   : 19204   (rev_sensitivity.cell_seed('nsweep', 'skewed'))
+    N           : 10000
+    alpha_hat   : 0.4267
+    95% Wilson  : [0.417036, 0.436420]
+  [PASS] rev_results.json  study2_nsweep ... by_n['50'].alpha_hat == printed value -- 0.4267 == 0.4267  (exact float equality)
+  [PASS] ...ci_lo matches the stored Wilson interval -- 0.417036026367
+  [PASS] ...ci_hi matches the stored Wilson interval -- 0.436420267794
+  [PASS] ...stored seed matches the seed used here -- 19204 == 19204
+
+[2] Independent route through the shared kernel core.py (fresh seed)
+    np.random.seed(7); core.mc_bartlett(3, 50, 10000, dist='expon'); core._evaluate(..., 'T5_bartlett', 0.05)
+    type1       : 0.4342   95% Wilson: [0.424513, 0.443938]
+    KS distance : 0.4414   critical value chi2_0.95(2) = 5.991465
+  [PASS] kernel run agrees with rev_results.json within 3 Monte Carlo sd -- z = +1.071
+    archive generator alone: np.random.seed(2024); core.mc_bartlett(3, 50, 10000, dist='expon')
+    type1       : 0.4328   -- NOT the archived 0.4288, because the archive stream is consumed by Study 1 first
+  [PASS] standalone archive call is within 3 Monte Carlo sd of the archived value -- z = +0.571
+
+[3] Independent Monte Carlo realisations of the same scenario
+    archive  experiment_results.json : study2.T5_bartlett.skewed                 = 0.4288
+    revision rev_results.json        : study2_nsweep ... by_n['50']          = 0.4267
+    power    rev_results_power.json  : verification.calibration.rows       = 0.4329
+    kernel   this script (seed 7)                                    = 0.4342
+    archive vs power  : z = -0.585   (stored by rev_power.py: +0.585)
+    archive vs n-sweep: z = +0.300
+  [PASS] archive realisation agrees with the power study's calibration check within 3 sd -- z = -0.585
+  [PASS] archive realisation agrees with the revision n-sweep within 3 sd -- z = +0.300
+  [PASS] rev_power.json stores the archive value and its difference correctly -- archive_alpha_hat=0.4288, difference=0.0041
+  [PASS] the manuscript's rounded value 0.429 equals round(0.4288, 3) -- round(0.4288, 3) = 0.429
+
+[4] Closed-form constants used throughout the paper
+    core.wilson_ci(0.05, 10000)      = (0.0458984827, 0.0544471158)
+    half-width at alpha = 0.05       = 0.004274
+    core.KS_THRESHOLD                = 0.0135800000
+    1.358 / sqrt(10000)              = 0.0135800000
+  [PASS] Wilson interval is centred on 0.05 and contains it -- [0.045898, 0.054447]
+  [PASS] Wilson half-width is about 0.004 (manuscript says approx. 0.004) -- half-width = 0.004274
+  [PASS] KS threshold equals 1.358/sqrt(N) to machine precision -- np.float64(0.013580000000000002)
+
+==========================================================================
+13/13 checks passed
+Worked example reproduced: Bartlett alpha-hat = 0.4267 (rev_results.json, n = 50, N = 10,000, skewed parent),
+consistent with the 0.4288 archive value reported as 0.429 in the paper.
+==========================================================================
+[exit 0]
+
+$ python3 code/verify_manuscript.py
+[1] Archived Study 2 cells (experiment_results.json -> Table 5)
+[2] Archived Study 1 / Study 3 (Table 4, Table 7)
+[3] Severity ladders (rev_results.json -> Section 5.4)
+[4] Sample-size sweep (rev_results.json -> Table 10)
+[5] Alpha sweep (rev_results.json -> Section 5.4 S1)
+[6] Power study (rev_results_power.json -> Tables 11-12)
+[7] Source hygiene
+[exit 0]
+
+$ python3 code/verify_dcor_against_R.py
+    n    d       recorded R           live R        this port     |diff|
+   10    2    -0.4012000516    -0.4012000516    -0.4012000516   2.73e-11
+   20   10    -0.3681007493    -0.3681007493    -0.3681007493   1.18e-11
+   50   50    -0.9324689040    -0.9324689040    -0.9324689040   5.69e-12
+  100   10     0.2988127812     0.2988127812     0.2988127812   8.55e-12
+  200    3    -0.3067613573    -0.3067613573    -0.3067613573   1.92e-11
+
+max |port - recorded R| = 2.73e-11; max |port - live R| = 4.53e-13
+VERIFIED: port reproduces the reference implementation
+[exit 0]
+
+$ python3 code/verify_letter_claims.py
+letter-claim audit SKIPPED: response_letter.md is not part of this package (submission material). Run it from the submission directory instead.
+[exit 0]
+
+$ python3 code/verify_crossrefs.py
+cross-reference audit SKIPPED: draft.md is not part of this package (submission material). Run it from the submission directory instead.
+[exit 0]
+
+$ python3 code/rev_study1_ext.py --validate
+========================================================================
+rev_study1_ext.py -- 13-test panel, multi-alpha, null calibration
+N = 10000, ns = [5, 10, 20, 30, 50, 100, 200, 500], alphas = (0.01, 0.05, 0.1), quick = False
+========================================================================
+
+[1/6] verification suite
+  [validate] selftest: 20 checks passed
+  [validate] CvM limit CDF vs goftest: max |diff| = 4.43e-09
+  [validate] Hoeffding D port vs canonical algorithm: max |diff| = 0.00e+00
+
+--validate: verification suite complete; no results file written.
+{
+  "reference": "Hmisc 5.3-0 src/ratfor/hoeffd.r (Hoeffding 1948), transcribed literally",
+  "max_abs_diff": 0.0,
+  "trials": [
+    {
+      "n": 5,
+      "ties": false,
+      "vectorised": 0.0,
+      "canonical_algorithm": 0.0
+    },
+    {
+      "n": 6,
+      "ties": false,
+      "vectorised": 0.005555555555555556,
+      "canonical_algorithm": 0.005555555555555556
+    },
+    {
+      "n": 8,
+      "ties": false,
+      "vectorised": 0.0,
+      "canonical_algorithm": 0.0
+    },
+    {
+      "n": 15,
+      "ties": false,
+      "vectorised": 0.0017427017427017427,
+      "canonical_algorithm": 0.0017427017427017427
+    },
+    {
+      "n": 40,
+      "ties": false,
+      "vectorised": 0.00014949159686001792,
+      "canonical_algorithm": 0.00014949159686001792
+    },
+    {
+      "n": 12,
+      "tie
+[exit 0]
+
+$ python3 docs/make_manifest.py --check
+manifest entries : 65
+missing          : none
+changed          : none
+unlisted new     : none
+MANIFEST OK
+[exit 0]
+
+$ python3 -c import sys; sys.path.insert(0, 'code'); import rev_power; print('rev_power imports cleanly')
+rev_power imports cleanly
+[exit 0]
+
+===============================================================
+ALL COMMANDS EXITED 0 -- log written to docs/verification_log.txt

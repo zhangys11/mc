@@ -1,0 +1,138 @@
+{
+ "meta": {
+  "seed": 2024,
+  "N": 10000,
+  "amplitude": 1.0,
+  "wall_clock_s": 213.9,
+  "script": "code/gen_dcor_local.py",
+  "note": "local power of T14 against a quadratic signal confined to k_signal of the d coordinates, at amplitude a = 1.0 so that the signal variance 2a^2 = 2 is twice the noise variance; sparse k_signal=1 is a hard alternative and is reported as such"
+ },
+ "rows": [
+  {
+   "d": 2,
+   "k_signal": 1,
+   "n": 20,
+   "power": 0.243,
+   "critical_value": 1.6539199418806008
+  },
+  {
+   "d": 2,
+   "k_signal": 1,
+   "n": 100,
+   "power": 0.9741,
+   "critical_value": 1.6451679313596252
+  },
+  {
+   "d": 2,
+   "k_signal": 1,
+   "n": 200,
+   "power": 1.0,
+   "critical_value": 1.644930983225664
+  },
+  {
+   "d": 2,
+   "k_signal": 2,
+   "n": 20,
+   "power": 0.3902,
+   "critical_value": 1.6539199418806008
+  },
+  {
+   "d": 2,
+   "k_signal": 2,
+   "n": 100,
+   "power": 1.0,
+   "critical_value": 1.6451679313596252
+  },
+  {
+   "d": 2,
+   "k_signal": 2,
+   "n": 200,
+   "power": 1.0,
+   "critical_value": 1.644930983225664
+  },
+  {
+   "d": 10,
+   "k_signal": 1,
+   "n": 20,
+   "power": 0.0808,
+   "critical_value": 1.6539199418806008
+  },
+  {
+   "d": 10,
+   "k_signal": 1,
+   "n": 100,
+   "power": 0.1542,
+   "critical_value": 1.6451679313596252
+  },
+  {
+   "d": 10,
+   "k_signal": 1,
+   "n": 200,
+   "power": 0.281,
+   "critical_value": 1.644930983225664
+  },
+  {
+   "d": 10,
+   "k_signal": 10,
+   "n": 20,
+   "power": 0.1936,
+   "critical_value": 1.6539199418806008
+  },
+  {
+   "d": 10,
+   "k_signal": 10,
+   "n": 100,
+   "power": 0.8858,
+   "critical_value": 1.6451679313596252
+  },
+  {
+   "d": 10,
+   "k_signal": 10,
+   "n": 200,
+   "power": 1.0,
+   "critical_value": 1.644930983225664
+  },
+  {
+   "d": 50,
+   "k_signal": 1,
+   "n": 20,
+   "power": 0.0545,
+   "critical_value": 1.6539199418806008
+  },
+  {
+   "d": 50,
+   "k_signal": 1,
+   "n": 100,
+   "power": 0.0586,
+   "critical_value": 1.6451679313596252
+  },
+  {
+   "d": 50,
+   "k_signal": 1,
+   "n": 200,
+   "power": 0.0603,
+   "critical_value": 1.644930983225664
+  },
+  {
+   "d": 50,
+   "k_signal": 50,
+   "n": 20,
+   "power": 0.0848,
+   "critical_value": 1.6539199418806008
+  },
+  {
+   "d": 50,
+   "k_signal": 50,
+   "n": 100,
+   "power": 0.2201,
+   "critical_value": 1.6451679313596252
+  },
+  {
+   "d": 50,
+   "k_signal": 50,
+   "n": 200,
+   "power": 0.4709,
+   "critical_value": 1.644930983225664
+  }
+ ]
+}

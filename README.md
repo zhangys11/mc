@@ -243,7 +243,14 @@ All classes inherit from a common `McBase` base class, providing a consistent `r
 
 # documentation
 
-See the demo notebooks (`demo.ipynb`, `demo_CO.ipynb`) for quick-start examples. The `null/` directory contains a fully reproducible ten-test comparison study (`experiments.py` + `experiments.ipynb`) that can be used as a vignette.
+See the demo notebooks (`demo.ipynb`, `demo_CO.ipynb`) for quick-start examples.
+
+The directory [`Finite-Sample Adequacy and Robustness of Null Distributions`](Finite-Sample%20Adequacy%20and%20Robustness%20of%20Null%20Distributions/) contains the
+reproduction package for a comparative simulation study of fourteen hypothesis tests: the
+analysis scripts, every results file, the published figures, the verification tooling and
+a user guide (`vignette.md`, also as `vignette.pdf`). It is self-contained and independent
+of the package API; start from its own `README.md`, which states exactly which analyses
+re-run from a clone and which long runs are committed as artefacts.
 
 # future plan
 

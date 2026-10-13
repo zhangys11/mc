@@ -1,0 +1,40 @@
+% Preamble for pandoc + xelatex rendering of the revised manuscript.
+% Needed because the sources contain a few literal Unicode characters
+% (Greek letters, en/em dashes, minus signs) inside Markdown prose.
+%
+% Font choice is deliberately delegated to pandoc/xelatex defaults; only the
+% Unicode/maths support and table appearance are configured here, so the build
+% does not depend on a particular font being installed.
+\usepackage{unicode-math}
+\usepackage{longtable,booktabs,array}
+\usepackage{lscape}          % landscape page for the wide test-panel table
+\usepackage{ragged2e}         % \RaggedRight: word-boundary wrapping in narrow columns
+\AtBeginEnvironment{longtable}{\small\RaggedRight}
+
+\usepackage{graphicx}
+\usepackage{float}
+\AtBeginEnvironment{longtable}{\small}
+
+% The paper's title is an H1 and "Abstract" is a second H1; suppress numbering
+% for both so the output reads like a journal manuscript rather than a report.
+\setcounter{secnumdepth}{0}
+\usepackage{titlesec}
+\titleformat{\section}{\normalfont\large\bfseries}{}{0em}{}
+\titlespacing*{\section}{0pt}{1.6ex plus .2ex}{0.9ex plus .2ex}
+\titleformat{\subsection}{\normalfont\normalsize\bfseries}{}{0em}{}
+
+% --- Column widths for the wide test-panel table (Table 2) -------------------
+% Pandoc emits plain longtable columns, which LaTeX sizes to the natural width of the
+% content; for the eight-column panel table that squeezes the narrow columns until they
+% hyphenate mid-word ("sta-tion-arity").  Proportional widths keep every column readable.
+\usepackage{longtable}
+\setlength{\LTcapwidth}{\textwidth}
+\renewcommand{\arraystretch}{1.15}
+
+% --- Table 2 column widths --------------------------------------------------
+% The test-name column is empty by default in pandoc's longtable output; give it an
+% explicit share of the text block so short compound words ("Kruskal-Wallis",
+% "Fligner-Killeen") are not broken at their hyphen.
+\newlength{\TestColumnWidth}
+\setlength{\TestColumnWidth}{0.17\textwidth}
+\AtBeginEnvironment{longtable}{\small\RaggedRight}

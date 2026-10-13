@@ -1,0 +1,221 @@
+{
+ "meta": {
+  "seed": 2024,
+  "N": 10000,
+  "alpha": 0.05,
+  "ns": [
+   20,
+   50,
+   100,
+   200
+  ],
+  "numpy": "2.4.6",
+  "python": "3.13.5",
+  "command": "python3 verify_new_tests_power.py",
+  "wall_clock_s": 37.3
+ },
+ "T11_kpss": {
+  "n=20": {
+   "critical_theoretical": 0.46136129360587824,
+   "tail_spec": "upper_tail",
+   "alpha_hat_H0": 0.031,
+   "alpha_hat_H0_ci": [
+    0.027779012856555523,
+    0.03458117761513912
+   ],
+   "critical_size_adjusted": 0.4166160559537926,
+   "power_nominal": 0.5136,
+   "power_nominal_ci": [
+    0.5038004631691846,
+    0.523389092075133
+   ],
+   "power_size_adjusted": 0.5648,
+   "power_size_adjusted_ci": [
+    0.5550597791698588,
+    0.5744904546413014
+   ]
+  },
+  "n=50": {
+   "critical_theoretical": 0.46136129360587824,
+   "tail_spec": "upper_tail",
+   "alpha_hat_H0": 0.0397,
+   "alpha_hat_H0_ci": [
+    0.03604651144736269,
+    0.04370699745268217
+   ],
+   "critical_size_adjusted": 0.43920911908896726,
+   "power_nominal": 0.7131,
+   "power_nominal_ci": [
+    0.7041542935617391,
+    0.7218820463326785
+   ],
+   "power_size_adjusted": 0.7273,
+   "power_size_adjusted_ci": [
+    0.7184852992371322,
+    0.7359401351035582
+   ]
+  },
+  "n=100": {
+   "critical_theoretical": 0.46136129360587824,
+   "tail_spec": "upper_tail",
+   "alpha_hat_H0": 0.0402,
+   "alpha_hat_H0_ci": [
+    0.03652333626057827,
+    0.04422978864109592
+   ],
+   "critical_size_adjusted": 0.4283656306231405,
+   "power_nominal": 0.831,
+   "power_nominal_ci": [
+    0.8235282044103485,
+    0.8382175886682635
+   ],
+   "power_size_adjusted": 0.8541,
+   "power_size_adjusted_ci": [
+    0.8470452292580152,
+    0.8608828230958715
+   ]
+  },
+  "n=200": {
+   "critical_theoretical": 0.46136129360587824,
+   "tail_spec": "upper_tail",
+   "alpha_hat_H0": 0.0472,
+   "alpha_hat_H0_ci": [
+    0.04321461148733595,
+    0.051533137437148754
+   ],
+   "critical_size_adjusted": 0.45392598019819125,
+   "power_nominal": 0.9501,
+   "power_nominal_ci": [
+    0.9456568893007756,
+    0.9541974353659411
+   ],
+   "power_size_adjusted": 0.9513,
+   "power_size_adjusted_ci": [
+    0.9469053240451971,
+    0.9553480790254302
+   ]
+  }
+ },
+ "T12_hoeffding_d": {
+  "n=20": {
+   "critical_theoretical": 2.8435483870967757,
+   "tail_spec": "upper_tail",
+   "alpha_hat_H0": 0.0814,
+   "alpha_hat_H0_ci": [
+    0.07619986982723691,
+    0.08692161360869353
+   ],
+   "critical_size_adjusted": 3.430533229451487,
+   "power_linear": 0.5547,
+   "power_linear_ci": [
+    0.5449398435713352,
+    0.5644181470069128
+   ],
+   "power_size_adjusted_linear": 0.4603,
+   "power_size_adjusted_linear_ci": [
+    0.4505482283495886,
+    0.47008226112104307
+   ],
+   "power_quadratic": 0.6648,
+   "power_quadratic_ci": [
+    0.6554860646434439,
+    0.673987369493581
+   ],
+   "power_size_adjusted_quadratic": 0.5248,
+   "power_size_adjusted_quadratic_ci": [
+    0.515004593691615,
+    0.5345763599891995
+   ]
+  },
+  "n=50": {
+   "critical_theoretical": 2.8435483870967757,
+   "tail_spec": "upper_tail",
+   "alpha_hat_H0": 0.0601,
+   "alpha_hat_H0_ci": [
+    0.05560846700111595,
+    0.0649293747654053
+   ],
+   "critical_size_adjusted": 3.0303400567489382,
+   "power_linear": 0.9246,
+   "power_linear_ci": [
+    0.9192603754143146,
+    0.9296135331693068
+   ],
+   "power_size_adjusted_linear": 0.9101,
+   "power_size_adjusted_linear_ci": [
+    0.9043351365949817,
+    0.9155499079413894
+   ],
+   "power_quadratic": 0.9964,
+   "power_quadratic_ci": [
+    0.9950203700563706,
+    0.9973983963612215
+   ],
+   "power_size_adjusted_quadratic": 0.9942,
+   "power_size_adjusted_quadratic_ci": [
+    0.9925101325899993,
+    0.9955103234204238
+   ]
+  },
+  "n=100": {
+   "critical_theoretical": 2.8435483870967757,
+   "tail_spec": "upper_tail",
+   "alpha_hat_H0": 0.0591,
+   "alpha_hat_H0_ci": [
+    0.05464526611656369,
+    0.06389334364669892
+   ],
+   "critical_size_adjusted": 2.98754880492898,
+   "power_linear": 0.9973,
+   "power_linear_ci": [
+    0.9960744058463006,
+    0.9981436693742244
+   ],
+   "power_size_adjusted_linear": 0.9967,
+   "power_size_adjusted_linear_ci": [
+    0.9953693594281882,
+    0.9976491765903818
+   ],
+   "power_quadratic": 1.0,
+   "power_quadratic_ci": [
+    0.9996160016293234,
+    1.0
+   ],
+   "power_size_adjusted_quadratic": 1.0,
+   "power_size_adjusted_quadratic_ci": [
+    0.9996160016293234,
+    1.0
+   ]
+  },
+  "n=200": {
+   "critical_theoretical": 2.8435483870967757,
+   "tail_spec": "upper_tail",
+   "alpha_hat_H0": 0.0552,
+   "alpha_hat_H0_ci": [
+    0.050892429427894396,
+    0.05984917552265948
+   ],
+   "critical_size_adjusted": 2.9422769644584026,
+   "power_linear": 1.0,
+   "power_linear_ci": [
+    0.9996160016293234,
+    1.0
+   ],
+   "power_size_adjusted_linear": 1.0,
+   "power_size_adjusted_linear_ci": [
+    0.9996160016293234,
+    1.0
+   ],
+   "power_quadratic": 1.0,
+   "power_quadratic_ci": [
+    0.9996160016293234,
+    1.0
+   ],
+   "power_size_adjusted_quadratic": 1.0,
+   "power_size_adjusted_quadratic_ci": [
+    0.9996160016293234,
+    1.0
+   ]
+  }
+ }
+}

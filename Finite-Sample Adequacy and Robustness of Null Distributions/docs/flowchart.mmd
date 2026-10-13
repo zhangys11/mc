@@ -1,0 +1,48 @@
+%% Execution flowchart of the mc-tk reproducibility package (COST-S-26-00605).
+%% Mermaid source of docs/fig_execution_flow.png / .pdf (rendered by
+%% docs/make_flowchart.py, which is the version included in vignette.pdf).
+%% Paste into any Mermaid renderer (GitHub renders it in Markdown automatically).
+%%
+%% Run order: core._selftest runs inside every script; rev_study1_ext.py must run
+%% before rev_alpha_dependence.py (they share rev_results_t1.json); everything else
+%% is order-independent.
+
+flowchart TD
+    ENV["<b>Step 0 · environment</b><br/>Install Anaconda / Miniconda<br/><code>pip install -r requirements-lock.txt</code><br/>Python 3.13.5 · numpy 2.4.6 · scipy 1.16.3 · matplotlib 3.11.0 · lightgbm 4.6.0"]
+
+    EXP["<b>experiments.py</b><br/>T1–T10 statistic generators<br/>Study 1 convergence · Study 2 robustness · Study 3 MC precision<br/><code>python3 experiments.py</code> (≈3.3 min)"]
+    CORE["<b>core.py</b><br/>shared kernel: registry TESTS (T1–T13), <code>_evaluate()</code> → D_KS, α̂, Wilson CI<br/>T11 KPSS · T12 Hoeffding D · T13 interaction · <code>_selftest()</code><br/><code>import core</code> (library only)"]
+
+    S1["<code>python3 rev_study1_ext.py</code><br/>13-test Study 1, n* table,<br/>null calibration + diagnostics (≈38 min)"]
+    S2["<code>python3 rev_alpha_dependence.py</code><br/>multi-α sweep + serial /<br/>clustered dependence (≈5 min)"]
+    S3["<code>python3 rev_sensitivity.py</code><br/>severity ladders +<br/>sample-size sweep (≈1 min)"]
+    S4["<code>python3 rev_power.py</code><br/>Study 4 power<br/>nominal vs. size-adjusted (≈1 min)"]
+    S5["<code>python3 verify_new_tests_power.py</code><br/>independent power for<br/>T11 KPSS and T12 Hoeffding D (37 s)"]
+
+    O0["experiment_results.json<br/>fig_study1_convergence.png<br/>fig_study2_robustness.png<br/>fig_study3_precision.png<br/>generated_tables.md"]
+    O1["rev_results_t1.json<br/>fig_rev_alpha.png"]
+    O2["fig_rev_dependence.png<br/>(merged into rev_results_t1.json)"]
+    O3["rev_results.json<br/>fig_rev_severity.png<br/>fig_rev_study2_n.png"]
+    O4["rev_results_power.json<br/>fig_rev_power.png"]
+    O5["rev_results_newtests_power.json"]
+
+    MAN["Manuscript artefacts — Tables 3–13 and Figures 1–8 — rendered by <code>./build.sh</code><br/>every table and figure is regenerated from the JSON files; α̂/α flags, Wilson intervals and the robustness rating rule are computed in <code>core.py</code>"]
+    VER["<b>Verification layer</b><br/><code>python3 verify_manuscript.py</code> → 213 checks, all passing (every number in draft.md vs. the JSON files)<br/><code>python3 docs/verify_bartlett.py</code> → 13/13 · <code>python3 rev_study1_ext.py --validate</code> → core._selftest 18/18<br/><code>python3 docs/make_manifest.py --check / --lock</code> · every results JSON carries a meta block"]
+
+    ENV --> EXP
+    ENV --> CORE
+    EXP -->|imports T1–T10 unchanged| CORE
+    EXP --> O0
+    CORE --> S1 --> O1
+    CORE --> S2 --> O2
+    CORE --> S3 --> O3
+    CORE --> S4 --> O4
+    CORE --> S5 --> O5
+    S1 -.->|rev_alpha_dependence.py merges into the same file| S2
+    O0 --> MAN
+    O1 --> MAN
+    O2 --> MAN
+    O3 --> MAN
+    O4 --> MAN
+    O5 --> MAN
+    MAN --> VER
