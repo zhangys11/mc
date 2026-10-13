@@ -9,7 +9,7 @@ The archive script draws every statistic from one global ``numpy.random`` stream
 that is seeded once at import (``np.random.seed(2024)``).  This probe replays a
 fixed prefix of that stream through all ten archived generators and prints a
 SHA-256 over the resulting float64 bytes, so that a change to the file can be
-shown to be behaviour-neutral (identical digest) or not.
+shown to be behavior-neutral (identical digest) or not.
 
 Used by t4-docs to verify that adding docstrings to ``experiments.py`` does not
 alter a single drawn number.

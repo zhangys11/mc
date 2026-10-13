@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Behavioural fingerprint of the pipeline, used to prove that a documentation-only
+"""Behavioral fingerprint of the pipeline, used to prove that a documentation-only
 edit changed nothing that the scripts compute.
 
 Run from the repository root::
@@ -9,7 +9,7 @@ Run from the repository root::
 It imports every study and verification script, calls a fixed set of functions with
 fixed inputs and seeds, and prints one SHA-256 over all results. The digest is
 identical before and after a docstring pass (the AST digest proves the *code* is
-unchanged; this probe additionally proves the *behaviour* is unchanged, including
+unchanged; this probe additionally proves the *behavior* is unchanged, including
 the RNG conventions).
 
 Nothing is written to disk.
@@ -41,7 +41,7 @@ import verify_new_tests_power as vnp  # noqa: E402
 
 
 def digest_array(a) -> str:
-    """Short SHA-256 of an array's float64 bytes, used as a behavioural fingerprint.
+    """Short SHA-256 of an array's float64 bytes, used as a behavioral fingerprint.
 
     Args:
         a: array-like of numbers.

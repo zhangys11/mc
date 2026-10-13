@@ -68,7 +68,7 @@ def draft():
 
 
 class Checker:
-    """Collect pass/fail results of the manuscript cross-check and summarise them.
+    """Collect pass/fail results of the manuscript cross-check and summarize them.
 
     Methods:
         eq(label, got, want, tol): compare two numbers within a tolerance.
@@ -435,10 +435,10 @@ def main():
         c.text("Figure 3 caption no longer wrong",
                "All tests achieve CV < 0.10 by N = 3,000 at the latest", present=False)
         c.text("Figure 2 legend note", "Figure 2: Empirical Type I error rates")
-        # The sign test IS correctly centred in the archive and in the ladders, so the
+        # The sign test IS correctly centered in the archive and in the ladders, so the
         # manuscript must assert that rather than disclaim it.
         c.text("sign test documented as genuine Type I error",
-               "the sign test is centred at the population median of each parent")
+               "the sign test is centered at the population median of each parent")
         c.text("no false-null claim for the sign test",
                "measures size under a false null", present=False)
         c.text("Wilson endpoints pointed at the supplement",

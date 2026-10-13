@@ -22,7 +22,7 @@ Design rules (see docs/DESIGN_CONTRACT.md, Sections 1-3):
       ci_lo/hi= Wilson 95% score interval for type1
 
 * New statistics (T11--T13) use *sample-size independent* reference distributions.
-  Where a statistic must be standardised first, the standardisation is documented in the
+  Where a statistic must be standardized first, the standardization is documented in the
   generator docstring and in :data:`TESTS`.
 
 Conventions inherited from ``experiments.py`` (do not change silently)
@@ -286,7 +286,7 @@ def hoeffding_z_cdf(x):
     interpolates the monotone quantile grid of that realisation (stored in
     ``rev_results_t12_law.json``, ``n_law = 2000``, ``N = 200,000``, seed independent of
     the studies) and is the reference used for the KS distance of T12.  Unlike the
-    published p-value table it is monotone, normalised and defined on the whole real
+    published p-value table it is monotone, normalized and defined on the whole real
     line, and its own Monte Carlo error is reported in the manuscript.
 
     Args:
@@ -473,7 +473,7 @@ def _selftest(quick=True, seed=SEED):
     # And the limit-law CDF must be a valid distribution function: monotone on [0, 1].
     _z = np.linspace(0.0, 9.0, 2001)
     _c = hoeffding_z_cdf(_z)
-    chk("hoeffding_z_cdf is monotone and normalised",
+    chk("hoeffding_z_cdf is monotone and normalized",
         float(np.all(np.diff(_c) >= -1e-12) and _c.min() >= -1e-12 and _c.max() <= 1 + 1e-12), 1.0, 0.0)
 
     # --- D_KS convention must match scipy.stats.kstest (archive convention) ----
@@ -787,7 +787,7 @@ def mc_kpss(n, N, kind="iid", rho=0.0, delta=1.0, rng=None, lags=None, **kwargs)
     Null configuration (``kind='iid'``): ``y_t ~ N(0, 1)`` i.i.d., which is level
     stationary, so nominal rejection rates are Type I error rates.  The theoretical
     reference is the n-independent Cramer-von Mises limit law (see
-    :func:`cvm_limit_cdf`); **no standardisation of the statistic is applied**, because
+    :func:`cvm_limit_cdf`); **no standardization of the statistic is applied**, because
     the LM statistic already converges to that law without rescaling.
 
     Scenario variants (violations of the null *or* of the i.i.d. assumption):
@@ -914,7 +914,7 @@ def hoeffding_z(d, n):
     ``z = 0.5 * pi^4 * (n d + 1/36)``, i.e. exactly Hmisc's
     ``z = 0.5 pi^4 n (d + 1/(36 n))`` applied to the *raw* statistic ``d`` returned by
     :func:`hoeffding_d` (note: ``Hmisc::hoeffd`` reports ``30 d``, so its printed ``D``
-    must be divided by 30 before applying this scaling).  The ``+1/(36n)`` centring
+    must be divided by 30 before applying this scaling).  The ``+1/(36n)`` centering
     correction is part of the published Hmisc/Hollander-Wolfe scaling, not an ad-hoc
     adjustment; the resulting ``z`` has a fixed asymptotic law
     (:func:`hoeffding_z_sf`) for every ``n``.
@@ -940,7 +940,7 @@ def mc_hoeffding_d(n, N, dep="indep", rho=0.5, rng=None, **kwargs):
 
     Null configuration (``dep='indep'``): ``X ~ N(0,1)`` and ``Y ~ N(0,1)`` independent,
     so the nominal rejection rate is a Type I error rate.  The statistic is *raw*
-    Hoeffding ``d`` (:func:`hoeffding_d`); the standardisation
+    Hoeffding ``d`` (:func:`hoeffding_d`); the standardization
 
         z = 0.5 * pi^4 * (n d + 1/36)
 
@@ -1022,9 +1022,9 @@ def _interaction_core(Xtr, ytr, Xte, params, grid_m, seed, pd_method="mc", pd_m=
       the interaction difference ``IAD = Cov(z1, z2)`` with
       ``z1 = f_hat + g_hat``, ``z2 = f_hat - g_hat`` and
       ``g_hat(x) = PD(x1) + PD(x2)`` (the model restricted to the no-interaction null;
-      the empty-set PD is a constant and cancels in the centring);
+      the empty-set PD is a constant and cancels in the centering);
     * ``h2_fp`` is the Friedman & Popescu (2008) H^2 statistic
-      ``sum_i (f_i - g_i)^2 / sum_i f_i^2`` on centred predictions, reported as a
+      ``sum_i (f_i - g_i)^2 / sum_i f_i^2`` on centered predictions, reported as a
       secondary diagnostic because H^2 has no model-agnostic asymptotic null.
 
     Partial dependence is estimated with ``pd_method``:
@@ -1146,7 +1146,7 @@ def mc_interaction_h(n, N, kind="additive", rho=0.0, rng=None, n_jobs=1,
       ``z2 = f_hat - g_hat`` and ``g_hat = PD(x1) + PD(x2)`` is the fitted model
       restricted to the no-interaction null.
     * reference distribution: standard normal, two-sided.  The scale is therefore
-      sample-size independent by construction (the ``sqrt(n)`` and the self-normalising
+      sample-size independent by construction (the ``sqrt(n)`` and the self-normalizing
       denominator carry the scaling).
 
     Null configuration (``kind='additive'``): ``y = sin(pi x1) + 1.5 x2 + N(0, 0.5^2)``
@@ -1386,7 +1386,7 @@ def _pairwise_dist(A):
 
 
 def _astar(d):
-    """Corrected doubly centred distance matrix A* of Szekely & Rizzo (2013).
+    """Corrected doubly centered distance matrix A* of Szekely & Rizzo (2013).
 
     Port of ``energy::Astar`` (R package ``energy`` 1.7-12), the ``A*`` matrix of
     the JMVA 2013 paper::
@@ -1398,7 +1398,7 @@ def _astar(d):
         d: ``(n, n)`` distance matrix.
 
     Returns:
-        numpy.ndarray: the ``(n, n)`` corrected doubly centred matrix.
+        numpy.ndarray: the ``(n, n)`` corrected doubly centered matrix.
     """
     n = d.shape[0]
     m = d.mean(axis=1)
@@ -1577,12 +1577,12 @@ TESTS = {
         label="KPSS", family="CvM limit", null="cvm_limit", null_args=(),
         type1="upper_tail", n_independent_ref=True,
         note="LM statistic vs Cramer-von Mises limit law; Bartlett/Newey-West HAC with "
-             "Schwert bandwidth l = floor(4 (n/100)^(1/4)); no standardisation needed"),
+             "Schwert bandwidth l = floor(4 (n/100)^(1/4)); no standardization needed"),
     "T12_hoeffding_d": dict(
         label="Hoeffding D", family="Hmisc/BKR asymptotic", null="hoeffding_law", null_args=(),
         crit_null="hoeffding_z", crit_null_args=(),
         type1="upper_tail", n_independent_ref=False,
-        note="statistic standardised as z = 0.5 pi^4 (n d + 1/36). The KS distance uses "
+        note="statistic standardized as z = 0.5 pi^4 (n d + 1/36). The KS distance uses "
              "an independently estimated limit law; the decision level uses the published "
              "Hollander-Wolfe/Hmisc tail table, whose own extrapolation branch is not "
              "continuous with the table and is therefore not a valid CDF."),
@@ -1594,16 +1594,16 @@ TESTS = {
               "reference is Student t with n(n-3)/2-1 df, so it depends on n "
               "through the degrees of freedom only.")),
     "T13_interaction": dict(
-        label="Interaction IAD", family="normal (self-normalised)", null="norm", null_args=(0.0, 1.0),
+        label="Interaction IAD", family="normal (self-normalized)", null="norm", null_args=(0.0, 1.0),
         type1="two_sided", n_independent_ref=True,
         note="Pitman z of the interaction difference (Welchowski & Edelmann 2024) with a "
-             "fixed LightGBM learner; standardised by construction, reference N(0,1)"),
+             "fixed LightGBM learner; standardized by construction, reference N(0,1)"),
 }
 
 # --- adapter for t2-sensitivity: run T11-T13 inside the severity ladders ---
 
 def _parent_draw(n, dist, rng):
-    """Draw n i.i.d. draws from a standardised parent family (mean 0, variance 1)."""
+    """Draw n i.i.d. draws from a standardized parent family (mean 0, variance 1)."""
     name, par = dist
     if name == "norm":
         return rng.standard_normal(n)
@@ -1632,7 +1632,7 @@ def _hook_kpss(spec, N, rng):
 
     Returns:
         np.ndarray of shape (N,) of KPSS LM statistics, already on the scale of
-        the Cramer-von Mises limit law (no standardisation needed).
+        the Cramer-von Mises limit law (no standardization needed).
     """
     dist = spec.get("dist", ("norm", None))
     n = int(spec["ns"][0])
@@ -1651,7 +1651,7 @@ def _hook_hoeffding(spec, N, rng):
         rng: ``numpy.random.Generator`` used for the draws.
 
     Returns:
-        np.ndarray of shape (N,) of the standardised statistic
+        np.ndarray of shape (N,) of the standardized statistic
         z = 0.5 pi^4 (n d + 1/36), whose reference law is the scaled Hoeffding
         asymptotic law.
     """
@@ -1676,7 +1676,7 @@ def _hook_interaction(spec, N, rng):
             the LightGBM-based generator so that the cell stays reproducible.
 
     Returns:
-        np.ndarray of shape (N,) of the self-normalised Pitman z statistic, to be
+        np.ndarray of shape (N,) of the self-normalized Pitman z statistic, to be
         compared with a two-sided N(0,1) reference.
     """
     dist = spec.get("dist", ("norm", None))

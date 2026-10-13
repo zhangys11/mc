@@ -10,7 +10,7 @@ N = 10,000, a null-calibration diagnostic, and a power measurement, all at alpha
 for this test:
 
 * **dimension.** The published asymptotic theory is a high-dimensional limit, so we
-  report d = 2, 10 and 50 separately instead of pooling them; d = 2 is labelled a
+  report d = 2, 10 and 50 separately instead of pooling them; d = 2 is labeled a
   stress case rather than assumed to satisfy the approximation.
 * **within-vector correlation.** Correlated coordinates inside one vector are a
   nuisance configuration, not a violation of independence between the two vectors.

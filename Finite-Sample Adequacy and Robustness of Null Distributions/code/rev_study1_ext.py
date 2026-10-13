@@ -421,7 +421,7 @@ def null_calibration(ns=(50, 200, 500), N=10_000, seed=777, verbose=True):
         rows.append(_calib_row(n, sv, ev, ref_mean=ref_mean, ref_sd=None))
     out["T11_kpss"] = {
         "reference": "Cramer-von Mises limit law W^2 = int_0^1 V(r)^2 dr (Brownian bridge)",
-        "standardisation": ("none needed: the LM statistic already converges to the limit "
+        "standardization": ("none needed: the LM statistic already converges to the limit "
                             "law; HAC long-run variance with Bartlett kernel and Schwert "
                             "bandwidth l = floor(4 (n/100)^(1/4))"),
         "analytic_reference_mean": ref_mean,
@@ -449,7 +449,7 @@ def null_calibration(ns=(50, 200, 500), N=10_000, seed=777, verbose=True):
         "reference": ("Hollander-Wolfe / Hmisc asymptotic law of the scaled statistic "
                       "z = 0.5 pi^4 (n d + 1/36), tabulated in Hmisc::hoeffd (table "
                       "reproduced verbatim from Hmisc 5.3-0)"),
-        "standardisation": ("raw Hoeffding d is scaled by 0.5 pi^4 (n d + 1/36); the "
+        "standardization": ("raw Hoeffding d is scaled by 0.5 pi^4 (n d + 1/36); the "
                             "reference is a fixed (n-free) law of z"),
         "statistic_verification": ("numpy port equals the canonical Hmisc Fortran to 0.0 "
                                    "(23 data sets, with and without ties)"),
@@ -474,7 +474,7 @@ def null_calibration(ns=(50, 200, 500), N=10_000, seed=777, verbose=True):
         rows.append(row)
     out["T13_interaction"] = {
         "reference": "standard normal, two-sided (Pitman statistic of the interaction difference)",
-        "standardisation": ("self-normalising: z = sqrt(n_test) * mean(z3) / sqrt(mean((z3-mean(z3))^2)), "
+        "standardization": ("self-normalizing: z = sqrt(n_test) * mean(z3) / sqrt(mean((z3-mean(z3))^2)), "
                             "z3 = (z1-mean z1)(z2-mean z2); reference N(0,1) is n-free by construction"),
         "learner": "LightGBM 4.6.0, fixed hyperparameters (see core.LGBM_PARAMS)",
         "partial_dependence": "unbiased MC estimator over 100 training reference rows",
@@ -493,7 +493,7 @@ def null_calibration(ns=(50, 200, 500), N=10_000, seed=777, verbose=True):
 
 
 def _calib_row(n, sv, ev, ref_mean=None, ref_sd=None, ks_override=None, N_used=None):
-    """Summarise one calibration sample (moments + KS + alpha-hat with Wilson CIs)."""
+    """Summarize one calibration sample (moments + KS + alpha-hat with Wilson CIs)."""
     sv = np.asarray(sv, float)
     sv = sv[np.isfinite(sv)]
     row = {"n": int(n), "N": int(N_used if N_used is not None else sv.size),
@@ -680,12 +680,12 @@ def make_alpha_figure(study1, out_path=FIG_ALPHA, alphas=ALPHAS):
     plt.rcParams.update({"font.size": 9, "figure.dpi": 150, "savefig.dpi": 150})
 
     fig, axes = plt.subplots(1, 3, figsize=(11.5, 5.2), sharey=False)
-    colours = plt.cm.tab20(np.linspace(0, 1, len(core.PANEL_13)))
+    colors = plt.cm.tab20(np.linspace(0, 1, len(core.PANEL_13)))
     highlight = {"T11_kpss", "T12_hoeffding_d", "T13_interaction"}
     handles = []
     for ax, a in zip(axes, alphas):
         key = f"{a:.2f}"
-        for col, tid in zip(colours, core.PANEL_13):
+        for col, tid in zip(colors, core.PANEL_13):
             e = study1[tid]
             lw = 2.2 if tid in highlight else 1.2
             ls = "-" if tid in highlight else "--"

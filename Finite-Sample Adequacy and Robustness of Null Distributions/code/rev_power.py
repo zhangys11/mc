@@ -297,7 +297,7 @@ def cell_rng(*keys):
 def parent_sample(rng, dist, shape):
     """Draw from a parent distribution with mean 0 and variance 1.
 
-    Standardisation makes Cohen's d = shift/sigma comparable across parents:
+    Standardization makes Cohen's d = shift/sigma comparable across parents:
     t(5) has variance 5/3 and the 10%-contaminated normal has variance
     0.9*1 + 0.1*25 = 3.4, so both are rescaled; Exp(1)-1 already has mean 0 and
     variance 1.
@@ -435,7 +435,7 @@ def mc_bartlett_fast(X):
 
 def mc_fligner_killeen_fast(X, rank_convention='ordinal'):
     """Fligner-Killeen statistic: ANOVA on van der Waerden scores of the
-    group-median-centred absolute deviations.  X: (N, k, n).
+    group-median-centered absolute deviations.  X: (N, k, n).
 
     Mirrors the balanced branch of experiments.mc_fligner_killeen, which ranks
     with np.argsort (ordinal ranks).  For even n the two central order
@@ -683,7 +683,7 @@ def build_design():
     Returns:
         list of tuples ``(family, dist, n, effect, kind)``, where ``family`` is
         ``'location3'``, ``'location1'`` or ``'scale'``, ``dist`` is a parent-law
-        name, ``n`` the sample size, ``effect`` the standardised effect size
+        name, ``n`` the sample size, ``effect`` the standardized effect size
         (kind ``'d'``) or the standard-deviation ratio (kind ``'rho'``). The grid
         is the cross product of the module constants.
     """
@@ -809,7 +809,7 @@ def run_equivalence_check(N=2000, n=50):
         (same configuration as the published Study 2, n = 50).  Because the
         archive uses the legacy global RNG stream and this script uses
         independent PCG64 streams, the comparison is a two-sample Monte Carlo
-        comparison; the discrepancy is therefore standardised
+        comparison; the discrepancy is therefore standardized
         (z = diff / sqrt(2 p (1-p) / N)), not compared to a fixed tolerance
         that would be inside Monte Carlo noise.
     """
@@ -1062,17 +1062,17 @@ def rank_reversal_summary(cells, contrasts):
             size_adjusted_difference_ci=adj['diff_ci_conservative'],
             size_adjusted_verdict=adj['verdict'],
             verdict_reversal=bool(nom['verdict'] != adj['verdict']),
-            nominal_favours_bartlett=bool(nom['verdict'] == 'T5_bartlett_higher'),
-            adjusted_favours_fligner=bool(adj['verdict'] == 'T6_fligner_killeen_higher'),
+            nominal_favors_bartlett=bool(nom['verdict'] == 'T5_bartlett_higher'),
+            adjusted_favors_fligner=bool(adj['verdict'] == 'T6_fligner_killeen_higher'),
         ))
     summary = dict(
         n_cells=len(rows),
         n_verdict_reversals=sum(r['verdict_reversal'] for r in rows),
         n_bartlett_size_inflated=sum((not r['size_valid_bartlett']) for r in rows),
-        n_nominal_favours_bartlett_but_adjusted_does_not=sum(
-            r['nominal_favours_bartlett'] and not
+        n_nominal_favors_bartlett_but_adjusted_does_not=sum(
+            r['nominal_favors_bartlett'] and not
             (r['size_adjusted_verdict'] == 'T5_bartlett_higher') for r in rows),
-        n_adjusted_favours_fligner=sum(r['adjusted_favours_fligner'] for r in rows),
+        n_adjusted_favors_fligner=sum(r['adjusted_favors_fligner'] for r in rows),
         n_size_valid_bartlett_cells=sum(r['size_valid_bartlett'] for r in rows),
     )
     summary['n_size_valid_bartlett_cells_where_bartlett_wins_adjusted'] = sum(
@@ -1159,8 +1159,8 @@ def make_figure(res, path=FIG_PATH, n=50, N=N_MC):
         # are above 0.9, so the lower-right corner is empty in every panel
         a.legend(fontsize=6.8, loc='lower right', framealpha=0.92, ncol=2,
                  columnspacing=0.7, handlelength=1.8, borderpad=0.3)
-    ax[0].axhline(ALPHA, color='grey', ls=':', lw=1.0)
-    ax[0].text(2.0, ALPHA + 0.04, r'$\alpha=0.05$', fontsize=7, color='grey')
+    ax[0].axhline(ALPHA, color='gray', ls=':', lw=1.0)
+    ax[0].text(2.0, ALPHA + 0.04, r'$\alpha=0.05$', fontsize=7, color='gray')
     ax[0].text(0.02, 0.98, 'shaded = size-adjusted\nfaded = nominal-$\\alpha$',
                transform=ax[0].transAxes, fontsize=6.5, color='0.35', va='top',
                bbox=dict(fc='white', ec='none', alpha=1.0, pad=2.0))
@@ -1187,8 +1187,8 @@ def make_figure(res, path=FIG_PATH, n=50, N=N_MC):
                    yerr=np.maximum(np.array(ye).T, 0.0), fmt=st['marker'],
                    color=st['color'], ms=5, capsize=2.5, elinewidth=0.9, ls='none',
                    label=st['label'])
-    a.axvline(ALPHA, color='grey', ls=':', lw=1.0)
-    a.axhline(ALPHA, color='grey', ls=':', lw=1.0)
+    a.axvline(ALPHA, color='gray', ls=':', lw=1.0)
+    a.axhline(ALPHA, color='gray', ls=':', lw=1.0)
     a.set_xlabel(r'empirical size $\hat{\alpha}$ under $H_0$')
     a.set_ylabel('power at sd ratio 2')
     a.set_title(f'(d) Calibration vs discrimination, scale tests (n = {n})', fontsize=9)
@@ -1490,8 +1490,8 @@ def main():
     print(f'Cells: {len(res["cells"])}, contrasts: {len(res["contrasts"])}')
     print(f'Scale-family verdict reversals (nominal vs size-adjusted): '
           f'{s["n_verdict_reversals"]}/{s["n_cells"]}')
-    print(f'  of which nominal favours Bartlett but size-adjusted does not: '
-          f'{s["n_nominal_favours_bartlett_but_adjusted_does_not"]}')
+    print(f'  of which nominal favors Bartlett but size-adjusted does not: '
+          f'{s["n_nominal_favors_bartlett_but_adjusted_does_not"]}')
     print(f'  cells where Bartlett is size-valid: {s["n_size_valid_bartlett_cells"]} '
           f'(Bartlett wins size-adjusted in '
           f'{s["n_size_valid_bartlett_cells_where_bartlett_wins_adjusted"]}, '

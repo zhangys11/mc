@@ -37,7 +37,7 @@ The archived reproduction script `experiments.py` is imported (when present) and
 used for the R1 Study-2 anchor cells.  All ladder cells are produced by the
 generic, vectorised implementations in this file, which are *validated against
 `experiments.py` and against SciPy/statsmodels in `consistency_checks` and
-`implementation_validation` below* -- they are a documented generalisation (any
+`implementation_validation` below* -- they are a documented generalization (any
 parent distribution, any group-size vector, any variance ratio, any minimum
 expected count), not a silent re-implementation.  The generators follow the
 `experiments.py` conventions: same statistic formulae, same rejection rules,
@@ -169,19 +169,19 @@ if HAS_CORE:
 
 
 # ============================================================================
-# SECTION 1 -- parent distributions, standardised to mean 0 and variance 1
+# SECTION 1 -- parent distributions, standardized to mean 0 and variance 1
 # ============================================================================
-# Every ladder rung is a *shape* manipulation: all parents are centred at 0 and
+# Every ladder rung is a *shape* manipulation: all parents are centered at 0 and
 # scaled to unit variance, so a rung differs from the baseline only in skewness
 # and/or tail weight.  (All tests on the distributional ladders -- t, ANOVA,
 # Bartlett, Fligner-Killeen, Hotelling, Kruskal-Wallis, median -- are
-# scale-invariant, so this standardisation does not move any alpha-hat; the sign
-# test uses the parent median, which the standardisation shifts by a known
+# scale-invariant, so this standardization does not move any alpha-hat; the sign
+# test uses the parent median, which the standardization shifts by a known
 # constant.  The archived anchors are reproduced separately with the archived
-# un-standardised parents in `consistency_checks`.)
+# un-standardized parents in `consistency_checks`.)
 
 def _std_params_lognorm(s):
-    """Mean and standard deviation of lognormal(0, s) before standardisation.
+    """Mean and standard deviation of lognormal(0, s) before standardization.
 
     Args:
         s: shape parameter sigma of the lognormal distribution.
@@ -195,7 +195,7 @@ def _std_params_lognorm(s):
 
 
 def skew_kurt(kind, par=None):
-    """Analytic (skewness, excess kurtosis) of the standardised parent."""
+    """Analytic (skewness, excess kurtosis) of the standardized parent."""
     if kind == "norm":
         return 0.0, 0.0
     if kind == "unif":
@@ -229,7 +229,7 @@ DIST_DESC = {
 
 
 def draw_std(rng, kind, shape, par=None):
-    """Draw standardised (mean 0, variance 1) variates of the given parent."""
+    """Draw standardized (mean 0, variance 1) variates of the given parent."""
     if kind == "norm":
         return rng.standard_normal(shape)
     if kind == "unif":
@@ -247,7 +247,7 @@ def draw_std(rng, kind, shape, par=None):
 
 
 def parent_median(kind, par=None):
-    """Median of the standardised parent (needed by the exact sign-test null)."""
+    """Median of the standardized parent (needed by the exact sign-test null)."""
     if kind == "norm":
         return 0.0
     if kind == "unif":
@@ -917,7 +917,7 @@ def trend_analysis(rung_labels, recs, alpha=NOMINAL_ALPHA):
     pn = all(vals[i] >= vals[i - 1] - 1e-12 for i in range(1, len(vals)))
     max_dec = max([vals[i - 1] - vals[i] for i in range(1, len(vals))] + [0.0])
     # A decrease below half a Wilson half-width (~0.002 at N=10,000) is far below
-    # the resolution of the experiment and is labelled explicitly as a wiggle.
+    # the resolution of the experiment and is labeled explicitly as a wiggle.
     pn_tol = bool(max_dec <= 0.002)
     sep_base = [bool(lo[i] > hi[0] or hi[i] < lo[0]) for i in range(len(vals))]
     adj = [bool(lo[i] > hi[i - 1] or hi[i] < lo[i - 1]) for i in range(1, len(vals))]
@@ -978,7 +978,7 @@ NSWEEP_PLAN = {
                    "T6_fligner_killeen", "T7_sign_test", "T9_median_test",
                    "T10_hotelling"],
     "hetero_var": ["T2_anova", "T3_kruskal_wallis", "T9_median_test"],
-    # T8 is excluded: Cochran's Q is a complete randomised-block design, in which
+    # T8 is excluded: Cochran's Q is a complete randomized-block design, in which
     # unequal group sizes are not defined (see meta.notes).
     "unbalanced": ["T2_anova", "T3_kruskal_wallis", "T5_bartlett",
                    "T6_fligner_killeen", "T9_median_test"],
@@ -1519,7 +1519,7 @@ def median_test_exact_size(ns, alpha):
     (n_T odd); conditional on a, the group-wise counts (O_11..O_1k) are
     multivariate hypergeometric.  Enumerating that distribution gives the exact
     finite-sample size of the rule -- no Monte Carlo, no distributional
-    assumption -- which is why the median test's small-sample behaviour is a
+    assumption -- which is why the median test's small-sample behavior is a
     lattice effect (the chi2 critical value falls in a gap between attainable
     rejection probabilities).
     """
@@ -1783,7 +1783,7 @@ def run_consistency_checks():
         v2 = gen_cell(tid, spec, cell_seed("determinism", sd_))
         checks["determinism"][tid] = bool(np.array_equal(v1[0], v2[0]))
 
-    # ---- standardised parents really have mean 0 / variance 1 ------------
+    # ---- standardized parents really have mean 0 / variance 1 ------------
     for dname in ("norm", "unif", "exp", "chi2_4", "chi2_2", "lognorm_1",
                   "t_30", "t_10", "t_5", "t_3"):
         kind, par = _dist(dname)
@@ -1848,7 +1848,7 @@ def fligner_variant_probe(N=N_MC, seed=None):
             scipy_fligner=("unbalanced path of experiments.py mc_fligner_killeen: "
                            "scipy.stats.fligner, which in scipy 1.16.3 uses the SAME "
                            "normal scores but averages tied ranks via rankdata and "
-                           "centres the group means at the unweighted mean of scores")),
+                           "centers the group means at the unweighted mean of scores")),
         tie_mechanics=("For an even-sized group the two central order statistics are "
                        "exactly equidistant from the sample median, so each even group "
                        "contributes one exact tie pair to the pooled |x - median_j| "
@@ -2394,7 +2394,7 @@ def main():
     }
     severity_sweep["not_applicable"] = {
         "T8_cochran_q_imbalance": (
-            "Cochran's Q is defined on a complete randomised-block design (every "
+            "Cochran's Q is defined on a complete randomized-block design (every "
             "block receives every treatment); unequal group sizes are not defined "
             "for it, so the imbalance ladder has no T8 rung. NOTE: in the archived "
             "experiments.py, mc_cochran_q's `unbalanced` argument is never used and "
@@ -2518,13 +2518,13 @@ def main():
                      "(common random numbers); within a scenario of the n-sweep every n "
                      "uses the same seed. The Normal rung is shared by the skewness and "
                      "kurtosis ladders, so their baselines are numerically identical.",
-            "parents": "Ladder parents are standardised to mean 0 and variance 1; all "
+            "parents": "Ladder parents are standardized to mean 0 and variance 1; all "
                        "tests on the distributional ladders are scale-invariant, so "
-                       "alpha-hat is unaffected by the standardisation.",
+                       "alpha-hat is unaffected by the standardization.",
             "archived_anchors": "Anchor cells (Exp(1)-1 skew, raw t(5) heavy tail, 1:4 "
                                 "variance ratio, 1:2:3 imbalance, np_min = 2) are re-run "
                                 "with experiments.py itself in consistency_checks; the "
-                                "n-sweep uses standardised t(5) instead of raw t(5) "
+                                "n-sweep uses standardized t(5) instead of raw t(5) "
                                 "(equivalent for scale-invariant tests).",
             "code_findings": [
                 "experiments.py mc_cochran_q ignores its `unbalanced` argument and "

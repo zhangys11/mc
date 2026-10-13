@@ -1,5 +1,5 @@
 mc-tk verification log (read-only checks)
-date       : 2026-10-13 21:19:16 +0800
+date       : 2026-10-13 23:09:04 +0800
 directory  : /Users/zys/论文/进行中/mc-tk/mc/Finite-Sample Adequacy and Robustness of Null Distributions
 interpreter: /opt/anaconda3/bin/python3 3.13.5
 
@@ -170,7 +170,7 @@ core.py seed=2024  N_MC=10000  alpha=0.05
     half-width at alpha = 0.05       = 0.004274
     core.KS_THRESHOLD                = 0.0135800000
     1.358 / sqrt(10000)              = 0.0135800000
-  [PASS] Wilson interval is centred on 0.05 and contains it -- [0.045898, 0.054447]
+  [PASS] Wilson interval is centered on 0.05 and contains it -- [0.045898, 0.054447]
   [PASS] Wilson half-width is about 0.004 (manuscript says approx. 0.004) -- half-width = 0.004274
   [PASS] KS threshold equals 1.358/sqrt(N) to machine precision -- np.float64(0.013580000000000002)
 

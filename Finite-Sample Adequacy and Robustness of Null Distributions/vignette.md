@@ -422,7 +422,7 @@ def _evaluate(stat_values, test_id, alpha=0.05, n=None, ref_args=None):
     """
 ```
 
-**Every documentation pass was verified to be behaviour-neutral**, because these
+**Every documentation pass was verified to be behavior-neutral**, because these
 scripts produce the numbers in the paper. Two independent proofs were used, and
 both must hold:
 
@@ -435,15 +435,17 @@ both must hold:
   and for the seven frozen files (`core.py`, the four `rev_*.py`, the two
   `verify_*.py`) the seven digests `8ed4b2b9…`, `6458858b…`, `da82508d…`,
   `27726ed1…`, `f690a8d5…`, `2c81b2ce…`, `377f7219…` are likewise unchanged.
-* *The behaviour is unchanged.* `docs/probe_docstring_pass.py` imports all eight
+* *The behavior is unchanged.* `docs/probe_docstring_pass.py` imports all seven
   scripts, exercises a fixed set of functions with fixed seeds — seeded cells,
   the statistic constructors, the rejection rules, the three `core.py` severity
   hooks, the Wilson helpers, and the two read-only verification scripts as
   subprocesses — and hashes the results. The fingerprint
 
-      31e176014cfb0ad90c8a4b9bd214f5cc4d2a038d7b0b286f3eb12843f653c1db
+      d28d19dd0731caf6a7e344aef56d4679075c628d06e5acef9d4d754a09173f09
 
-  is identical before and after the pass. The earlier `experiments.py` pass is
+  is unchanged by spelling corrections to the prose, because the probe hashes the values
+  its fixed-seed calls return rather than the text of the sources; the digest above is the
+  current one, and it was identical before and after the documentation pass itself. The earlier `experiments.py` pass is
   covered by `docs/probe_experiments.py`, whose RNG digest
   `3824e5fe16564e764fec478cac090ffa7d6cd483e555c20c533d813a1ce5a7aa` is likewise
   unchanged, and by a re-run of the whole archive script.
@@ -506,7 +508,7 @@ core.py seed=2024  N_MC=10000  alpha=0.05
     half-width at alpha = 0.05       = 0.004274
     core.KS_THRESHOLD                = 0.0135800000
     1.358 / sqrt(10000)              = 0.0135800000
-  [PASS] Wilson interval is centred on 0.05 and contains it -- [0.045898, 0.054447]
+  [PASS] Wilson interval is centered on 0.05 and contains it -- [0.045898, 0.054447]
   [PASS] Wilson half-width is about 0.004 (manuscript says approx. 0.004) -- half-width = 0.004274
   [PASS] KS threshold equals 1.358/sqrt(N) to machine precision -- np.float64(0.013580000000000002)
 
@@ -821,7 +823,7 @@ the archived RNG stream inside the revision pipeline and compares them with
 denominator exactly) and `max_abs_diff_ks = 2.5\times10^{-14}`, the same
 floating-point reduction effect, found independently by a different script.
 
-# 11. Repository, licence and data availability
+# 11. Repository, license and data availability
 
 Referee 2 also objected that the GitHub link used in the paper covers unrelated
 work. The revised manuscript answers this with a **dedicated project folder inside
@@ -880,7 +882,7 @@ are not distributed here.
 | `docs/ENVIRONMENT.txt`, `docs/pip_freeze_full.txt` | environment record |
 | `docs/MANIFEST.sha256` | SHA-256 of every script, result and figure |
 | `code/verify_manuscript.py`, `code/verify_crossrefs.py`, `code/verify_letter_claims.py`, `code/verify_new_tests_power.py`, `code/verify_dcor_against_R.py` | verification and independent cross-checks |
-| `docs/verify_bartlett.py`, `docs/probe_experiments.py`, `docs/probe_docstring_pass.py` | worked example, determinism probe and behavioural fingerprint |
+| `docs/verify_bartlett.py`, `docs/probe_experiments.py`, `docs/probe_docstring_pass.py` | worked example, determinism probe and behavioral fingerprint |
 | `docs/make_lock.py`, `docs/make_manifest.py`, `docs/make_flowchart.py`, `docs/make_function_reference.py`, `docs/run_verification.sh`, `docs/regenerate.sh`, `docs/verification_log.txt` | tooling and its log |
 | `docs/flowchart.mmd`, `docs/fig_execution_flow.png`, `docs/fig_execution_flow.pdf` | flowchart source and rendering |
 | `build.sh`, `latex_preamble.tex` | manuscript, response-letter and supplement build (submission copy) |

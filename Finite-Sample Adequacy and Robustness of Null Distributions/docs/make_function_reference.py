@@ -40,7 +40,7 @@ MODULES = [
     ("docs/make_flowchart.py", "Renders the execution flowchart (PNG + PDF)."),
     ("docs/verify_bartlett.py", "Worked example: reproduces one published number."),
     ("docs/probe_experiments.py", "Determinism probe for experiments.py."),
-    ("docs/probe_docstring_pass.py", "Behavioural fingerprint used to prove a documentation-only edit changed nothing."),
+    ("docs/probe_docstring_pass.py", "Behavioral fingerprint used to prove a documentation-only edit changed nothing."),
     ("docs/make_function_reference.py", "Generates this file."),
 ]
 
@@ -81,7 +81,7 @@ def main() -> None:
         "twelve pipeline scripts, plus the `docs/` tooling listed below. The archive script",
         "`experiments.py`, which the referee quoted, went from 1 of 20 documented functions",
         "to 20 of 20; the docstring pass over the frozen revision files was verified to be",
-        "behaviour-neutral (identical code-only AST digest and identical behavioural",
+        "behavior-neutral (identical code-only AST digest and identical behavioral",
         "fingerprint before and after - see docs/probe_docstring_pass.py).",
         "",
         "| Module | Functions | Documented | Documented share |",

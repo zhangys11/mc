@@ -58,7 +58,7 @@ def pip_freeze() -> list[str]:
 
 
 def canonical(name: str) -> str:
-    """Normalise a distribution name for comparison (case, '_' and '.' insensitive)."""
+    """Normalize a distribution name for comparison (case, '_' and '.' insensitive)."""
     return name.lower().replace("_", "-").replace(".", "-")
 
 

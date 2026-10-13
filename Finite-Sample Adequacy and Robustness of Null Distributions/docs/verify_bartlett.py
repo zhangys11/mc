@@ -224,7 +224,7 @@ def main() -> int:
     print(f"    half-width at alpha = 0.05       = {(hi - lo) / 2:.6f}")
     print(f"    core.KS_THRESHOLD                = {core.KS_THRESHOLD:.10f}")
     print(f"    1.358 / sqrt(10000)              = {1.358 / math.sqrt(N_MC):.10f}")
-    check("Wilson interval is centred on 0.05 and contains it",
+    check("Wilson interval is centered on 0.05 and contains it",
           lo < ALPHA < hi, f"[{lo:.6f}, {hi:.6f}]")
     check("Wilson half-width is about 0.004 (manuscript says approx. 0.004)",
           abs((hi - lo) / 2 - 0.004) < 0.0006, f"half-width = {(hi - lo) / 2:.6f}")

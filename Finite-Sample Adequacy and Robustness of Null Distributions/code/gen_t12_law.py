@@ -78,7 +78,7 @@ def build_law():
                     "ks_resolution": round(1.358 / float(np.sqrt(v.size)), 5),
                     "note": ("Independent realisation of the limit law of the scaled "
                              "Hoeffding statistic (T12), used as the full-distribution "
-                             "reference for the KS distance. Monotone and normalised by "
+                             "reference for the KS distance. Monotone and normalized by "
                              "construction; its Monte Carlo error enters the reported "
                              "D_KS and is stated in the manuscript.")},
            "p_grid": p.tolist(), "z_grid": q.tolist()}
