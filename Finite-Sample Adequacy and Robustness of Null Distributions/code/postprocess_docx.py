@@ -23,18 +23,41 @@ from docx.oxml.ns import qn
 from docx.shared import Inches
 
 
+def has_fields(doc):
+    """Report whether the document contains a field (a TOC, in practice).
+
+    Args:
+        doc: the ``python-docx`` document to inspect.
+
+    Returns:
+        bool: True when at least one ``w:instrText`` element is present.
+    """
+    return doc.element.body.findall(".//" + qn("w:instrText")) != []
+
+
 def set_update_fields(doc):
-    """Ask Word to refresh fields (the TOC) when the document is opened.
+    """Ask Word to refresh the table of contents when the document is opened.
+
+    The manuscript and the point-by-point response are built without a table of contents,
+    so they carry no field to refresh; setting ``w:updateFields`` on them would make Word
+    offer to update fields that do not exist.  The flag is therefore written only when the
+    document actually contains one.
 
     Args:
         doc: the ``python-docx`` document to modify in place.
+
+    Returns:
+        bool: True if the flag was written, False if there was no field to refresh.
     """
     settings = doc.settings.element
     for existing in settings.findall(qn("w:updateFields")):
         settings.remove(existing)
+    if not has_fields(doc):
+        return False
     el = OxmlElement("w:updateFields")
     el.set(qn("w:val"), "true")
     settings.append(el)
+    return True
 
 
 def fit_tables(doc, width_in=6.5):
@@ -72,10 +95,11 @@ def main():
         return 1
     path = sys.argv[1]
     doc = Document(path)
-    set_update_fields(doc)
+    toc = set_update_fields(doc)
     n = fit_tables(doc)
     doc.save(path)
-    print(f"post-processed {path}: TOC refresh enabled, {n} tables fitted to the text column")
+    note = "TOC refresh enabled" if toc else "no TOC field (nothing to refresh)"
+    print(f"post-processed {path}: {note}, {n} tables fitted to the text column")
     return 0
 
 

@@ -20,13 +20,17 @@ COMMON=(
   --include-in-header=latex_preamble.tex
   -V geometry:margin=1in
   -V fontsize=10pt
-  --toc
-  --toc-depth=2
   -V colorlinks=true
   -V linkcolor=blue
   -V urlcolor=blue
   --standalone
 )
+
+# A table of contents is a navigation aid, not part of a submitted manuscript, so it is
+# added only to the documents that are read standalone and are not typeset by the journal:
+# the reproduction vignette and the supplementary material.  The manuscript and the
+# point-by-point response are built without one.
+TOC=(--toc --toc-depth=2)
 
 build_draft() {
   echo "==> draft.pdf"
@@ -46,6 +50,27 @@ build_letter() {
   echo "    $(du -h response_letter.pdf | cut -f1)  response_letter.pdf"
 }
 
+build_supp() {
+  echo "==> supplementary_material.pdf"
+  pandoc supplementary_material.md "${COMMON[@]}" "${TOC[@]}" \
+    -V documentclass=article \
+    -V linestretch=1.15 \
+    -o supplementary_material.pdf
+  echo "    $(du -h supplementary_material.pdf | cut -f1)  supplementary_material.pdf"
+}
+
+build_vignette() {
+  echo "==> vignette.pdf"
+  pandoc vignette.md "${COMMON[@]}" "${TOC[@]}" \
+    -V documentclass=article \
+    -V linestretch=1.15 \
+    -V geometry:margin=1.9cm \
+    -V mainfont="Helvetica Neue" -V monofont="Menlo" \
+    --highlight-style=tango \
+    -o vignette.pdf
+  echo "    $(du -h vignette.pdf | cut -f1)  vignette.pdf"
+}
+
 # The editor's decision letter requires an editable manuscript source at this stage and
 # states that a PDF is not acceptable as the manuscript file.  The DOCX build produces
 # exactly the same Markdown through the same pandoc front end, with equations converted
@@ -57,7 +82,6 @@ build_docx() {
   pandoc draft.md \
     --from markdown+tex_math_dollars \
     --to docx \
-    --toc --toc-depth=2 \
     --resource-path=.:figures \
     -o draft.docx
   echo "    $(du -h draft.docx | cut -f1)  draft.docx"
@@ -68,7 +92,6 @@ build_letter_docx() {
   pandoc response_letter.md \
     --from markdown+tex_math_dollars \
     --to docx \
-    --toc --toc-depth=2 \
     -o response_letter.docx
   echo "    $(du -h response_letter.docx | cut -f1)  response_letter.docx"
 }
@@ -78,7 +101,7 @@ build_supp_docx() {
   pandoc supplementary_material.md \
     --from markdown+tex_math_dollars \
     --to docx \
-    --toc --toc-depth=2 \
+    "${TOC[@]}" \
     --resource-path=.:figures \
     -o supplementary_material.docx
   echo "    $(du -h supplementary_material.docx | cut -f1)  supplementary_material.docx"
@@ -88,8 +111,10 @@ case "$TARGET" in
   docx)   build_draft; build_docx; build_letter_docx; build_supp_docx ;;
   draft)  build_draft ;;
   letter) build_letter ;;
-  all)    build_draft; build_letter ;;
-  *) echo "usage: $0 [all|draft|letter]" >&2; exit 2 ;;
+  supp)   build_supp ;;
+  vignette) build_vignette ;;
+  all)    build_draft; build_letter; build_supp; build_vignette ;;
+  *) echo "usage: $0 [all|draft|letter|supp|vignette|docx]" >&2; exit 2 ;;
 esac
 
 echo "done."
