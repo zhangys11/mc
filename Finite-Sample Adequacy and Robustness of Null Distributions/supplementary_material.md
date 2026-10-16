@@ -129,7 +129,7 @@ Wang, Q., Kulkarni, S. R., & Verdú, S. (2009). Divergence estimation for multid
 
 ## S4. Wilson 95% intervals for the Study 2 rejection rates, cell by cell
 
-This section reports cell-specific Wilson score confidence intervals for the empirical rejection rates of Table 6 in the main text. Unlike a single generic half-width, these intervals account for differences in rejection probability across experimental conditions. All intervals are Wilson score intervals; at $N = 10{,}000$ the half-width is $\approx 0.004$ near $\alpha = 0.05$ but reaches $0.005$–$0.007$ for the extreme rates, so the intervals are not interchangeable across the table and two rates should not be compared without them. An em dash marks a scenario that is not defined for that test (see the notes to Table 6 and Section 5.4).
+This section reports cell-specific Wilson score confidence intervals for the empirical rejection rates of Table 6 in the main text. Unlike a single generic half-width, these intervals account for differences in rejection probability across experimental conditions. All intervals are Wilson score intervals; at $N = 10{,}000$ the half-width is $\approx 0.004$ near $\alpha = 0.05$ and grows with the distance of the observed rate from $0.5$, reaching $0.010$ for the largest rates in the table ($\hat{\alpha} = 0.429$ for Bartlett under a skewed parent, interval $[0.419, 0.439]$), so the intervals are not interchangeable across the table and two rates should not be compared without them. An em dash marks a scenario that is not defined for that test (see the notes to Table 6 and Section 5.4).
 
 | Test | Baseline | Skewed | Heavy-tailed | Var. heterog. | Unbalanced | Small exp. freq. |
 |---|---|---|---|---|---|---|
@@ -194,7 +194,7 @@ Rejection rates at three nominal levels, computed from the same replicate sets s
 | T10_hotelling | Normal N(0,1) | 0.011 | 0.054 | 0.100 |
 | T10_hotelling | Exp(1) | 0.027 | 0.074 | 0.127 |
 
-*16 rate cells.*
+*16 configurations and 48 rejection-rate estimates.*
 
 ## S7. Study 2 scenarios across sample sizes, full grid
 
