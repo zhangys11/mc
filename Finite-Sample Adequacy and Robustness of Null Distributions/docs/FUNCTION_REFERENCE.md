@@ -10,7 +10,7 @@ Every top-level function of every module is documented: 188 of 188 across the
 twelve pipeline scripts, plus the `docs/` tooling listed below. The archive script
 `experiments.py`, which the referee quoted, went from 1 of 20 documented functions
 to 20 of 20; the docstring pass over the frozen revision files was verified to be
-behaviour-neutral (identical code-only AST digest and identical behavioural
+behavior-neutral (identical code-only AST digest and identical behavioral
 fingerprint before and after - see docs/probe_docstring_pass.py).
 
 | Module | Functions | Documented | Documented share |
@@ -28,9 +28,9 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 | `code/rev_imbal_hetero.py` | 1 | 1 | 100% |
 | `code/make_fig2.py` | 1 | 1 | 100% |
 | `docs/make_lock.py` | 7 | 7 | 100% |
-| `docs/make_manifest.py` | 5 | 5 | 100% |
+| `docs/make_manifest.py` | 6 | 6 | 100% |
 | `docs/make_flowchart.py` | 3 | 3 | 100% |
-| `docs/verify_bartlett.py` | 3 | 3 | 100% |
+| `docs/verify_bartlett.py` | 4 | 4 | 100% |
 | `docs/probe_experiments.py` | 1 | 1 | 100% |
 | `docs/probe_docstring_pass.py` | 2 | 2 | 100% |
 | `docs/make_function_reference.py` | 4 | 4 | 100% |
@@ -39,7 +39,7 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 
 *Archived Study 1-3 reproduction script (T1-T10 generators).*
 
-> Finite-Sample Adequacy and Robustness of Null Distributions A Systematic Monte Carlo Study Across Ten Hypothesis Tests Archive reproduction script for COST-S-26-00605 (Computational Statistics). Running ``python3 experiments.py`` regenerates the original Study 1-3 results, figures and tables that are reported in the manuscript: experiment_results.json all Study 1/2/3 numbers (KS, KL, alpha-hat, CI...
+> Finite-Sample Adequacy and Robustness of Null Distributions A Systematic Monte Carlo Study Across Ten Hypothesis Tests Archive reproduction script for COST-D-26-00503R1 (Computational Statistics). Running ``python3 experiments.py`` regenerates the original Study 1-3 results, figures and tables that are reported in the manuscript: experiment_results.json all Study 1/2/3 numbers (KS, KL, alpha-hat, ...
 
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
@@ -69,62 +69,62 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 
 *Shared kernel of the revision (T1-T13 registry, evaluation, Wilson CI).*
 
-> core.py -- shared Monte Carlo kernel for the 13-test panel (COST-S-26-00605 revision). This module is the long-lived home of the test panel used by the revision of "Finite-Sample Adequacy and Robustness of Null Distributions". It is imported by ``rev_study1_ext.py`` (t1), ``rev_alpha_dependence.py`` (t1), ``rev_sensitivity.py`` (t2) and ``rev_power.py`` (t3). Design rules (see docs/DESIGN_CONTRACT...
+> core.py -- shared Monte Carlo kernel for the 14-test panel (COST-D-26-00503R1 revision). This module is the long-lived home of the test panel used by the revision of "Finite-Sample Adequacy and Robustness of Null Distributions". It is imported by ``rev_study1_ext.py`` (t1), ``rev_alpha_dependence.py`` (t1), ``rev_sensitivity.py`` (t2) and ``rev_power.py`` (t3). Design rules (see docs/DESIGN_CONTRA...
 
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
-| `cvm_limit_cdf(x)` | 106 | `-` | Exact CDF of the Cramer-von Mises limit law (Brownian-bridge functional). |
-| `cvm_limit_ppf(q)` | 155 | `-` | UPPER-tail quantile of the Cramer-von Mises limit law. |
-| `cvm_limit_quantile(p)` | 183 | `-` | Ordinary (lower-tail) quantile of the Cramer-von Mises limit law. |
-| `hoeffding_z_sf(z)` | 219 | `-` | Upper-tail probability of the scaled Hoeffding statistic. |
-| `hoeffding_z_cdf(x)` | 270 | `-` | Full-distribution reference CDF for T12, from an independent realisation of the law. |
-| `_hoeffding_ref_moments()` | 301 | `-` | Mean and standard deviation of the T12 reference law. |
-| `hoeffding_z_ppf(alpha)` | 331 | `-` | Upper quantile of the published scaled-Hoeffding tail table. |
-| `_load_hoeffding_law()` | 363 | `-` | Load the independent limit-law quantile grid for T12, if it is on disk. |
-| `_selftest(quick=True, seed=SEED)` | 392 | `-` | Guard rails for the bespoke reference distributions. |
-| `reference_cdf(x, name, args=())` | 496 | `-` | CDF of reference ``name`` at ``x`` (scipy name or a key of REFERENCE_DISTS). |
-| `reference_sf(x, name, args=())` | 503 | `-` | Survival function of reference ``name`` at ``x``. |
-| `reference_ppf(q, name, args=())` | 512 | `-` | Quantile function (q = upper-tail probability) of reference ``name``. |
-| `ks_distance(stat_values, null, args=())` | 523 | `-` | Kolmogorov-Smirnov distance between the empirical and reference CDFs. |
-| `critical_value(test_id, alpha=0.05, ref_args=None)` | 562 | `-` | Theoretical critical value(s) of the test's reference distribution at ``alpha``. |
-| `reject_rate(stat_values, test_id, alpha=0.05, ref_args=None)` | 593 | `-` | Empirical rejection rate at nominal level ``alpha`` using the theoretical rule. |
-| `compute_type1_error(stat_values, dist_name, df_args, alpha=0.05, two_sided=False)` | 630 | `-` | Superset of :func:`experiments.compute_type1_error`. |
-| `_evaluate(stat_values, test_id, alpha=0.05, n=None, ref_args=None)` | 651 | `-` | Evaluate one Monte Carlo sample against the theoretical null of ``test_id``. |
-| `evaluate_multi_alpha(stat_values, test_id, alphas=ALPHAS, n=None, ref_args=None)` | 689 | `-` | Evaluate the same Monte Carlo sample at several nominal levels. |
-| `n_star_alpha(type1_by_n, ns=None, alpha=0.05, tol=0.01)` | 695 | `-` | Smallest ``n`` with ``\|alpha_hat - alpha\| < tol`` (archive operational rule). |
-| `n_star_ks(ks_by_n, ns=None, threshold=KS_THRESHOLD)` | 706 | `-` | Smallest ``n`` with ``D_KS < 1.358/sqrt(N)`` (archive operational rule). |
-| `kpss_statistic(y, lags=None)` | 721 | `-` | KPSS (1992) level-stationarity statistic for one series. |
-| `mc_kpss(n, N, kind='iid', rho=0.0, delta=1.0, rng=None, lags=None, **kwargs)` | 772 | `-` | Study-1/Study-2 generator for T11 (KPSS level stationarity). |
-| `_joint_rank(x, y)` | 844 | `-` | Hmisc mid-rank + bivariate (joint) rank, vectorised. |
-| `hoeffding_d(x, y)` | 862 | `-` | Hoeffding's (1948) D statistic, exactly as in ``Hmisc::hoeffd`` (times 1/30). |
-| `hoeffding_z(d, n)` | 899 | `-` | Scale Hoeffding's ``d`` to the n-free reference scale used by Hmisc/Wolfe. |
-| `mc_hoeffding_d(n, N, dep='indep', rho=0.5, rng=None, **kwargs)` | 926 | `-` | Study-1/Study-2 generator for T12 (Hoeffding's D independence test). |
-| `_interaction_core(Xtr, ytr, Xte, params, grid_m, seed, pd_method='mc', pd_m=PD_M_T13)` | 1004 | `-` | One replication of the interaction test: fit LightGBM, build PD functions, return z. |
-| `_t13_chunk(args)` | 1074 | `-` | Worker for parallel T13 replication chunks (module level: picklable). |
-| `mc_interaction_h(n, N, kind='additive', rho=0.0, rng=None, n_jobs=1, n_train=N_TRAIN_T13, params=None, grid_m=PD_GRID_M_T13, return_h2=False, seed=None, pd_method='mc', pd_m=PD_M_T13, **kwargs)` | 1112 | `-` | Generator for T13, the interaction-effect test of a prediction model. |
-| `mc_t_test_ar1(n, N, rho=0.0, rng=None, **kwargs)` | 1206 | `-` | One-sample t statistic for stationary AR(1) data (mean 0). |
-| `mc_sign_test_ar1(n, N, rho=0.0, rng=None, **kwargs)` | 1230 | `-` | Sign-test count ``N+`` for stationary AR(1) data with median 0. |
-| `_make_clusters(k, c, m, N, icc, dist='normal', rng=None)` | 1253 | `-` | Clustered data: k groups x c clusters x m observations, ICC(1) = icc. |
-| `mc_anova_clustered(k, c, m, N, icc=0.0, dist='normal', rng=None, **kwargs)` | 1269 | `-` | One-way ANOVA F statistic for group-clustered data (T2 dependence scenario). |
-| `mc_kruskal_wallis_clustered(k, c, m, N, icc=0.0, dist='normal', rng=None, **kwargs)` | 1295 | `-` | Kruskal-Wallis H for group-clustered data (T3 dependence scenario). |
-| `mc_cochran_q_corr(k, n, N, icc=0.0, rng=None, **kwargs)` | 1315 | `-` | Cochran's Q for block-correlated dichotomous data (T8 dependence scenario). |
-| `_n_total_13(test_id, n, k_default=3)` | 1355 | `-` | Total sample size entering each test at per-group size ``n`` (13-test panel). |
-| `_pairwise_dist(A)` | 1370 | `-` | Euclidean distance matrix of the rows of ``A``. |
-| `_astar(d)` | 1376 | `-` | Corrected doubly centred distance matrix A* of Szekely & Rizzo (2013). |
-| `_bcdcor(A, B)` | 1400 | `-` | Bias-corrected distance correlation of two distance matrices. |
-| `dcor_t(X, Y)` | 1425 | `-` | Distance-correlation t statistic of Szekely & Rizzo (2013). |
-| `dcor_t_ref_args(n)` | 1451 | `-` | Reference parameters of T14 at sample size ``n``: the t degrees of freedom. |
-| `mc_dcor_t(n, N, d=10, dep='indep', rho=0.5, rng=None, **kwargs)` | 1463 | `-` | Study-1/Study-2 generator for T14 (distance-correlation t-test). |
-| `_parent_draw(n, dist, rng)` | 1593 | `-` | Draw n i.i.d. |
-| `_hook_kpss(spec, N, rng)` | 1612 | `-` | Severity-ladder adapter for T11 (KPSS). |
-| `_hook_hoeffding(spec, N, rng)` | 1633 | `-` | Severity-ladder adapter for T12 (Hoeffding's D). |
-| `_hook_interaction(spec, N, rng)` | 1656 | `-` | Severity-ladder adapter for T13 (interaction / IAD). |
-| `make_meta(seed=SEED, extra=None)` | 1703 | `-` | Reproducibility block attached to every results file. |
-| `save_results(obj, path)` | 1733 | `-` | Write a results dict to JSON (NaN preserved, as in the archive results file). |
-| `update_results(path, **keys)` | 1740 | `-` | Merge ``keys`` into an existing results file (or create it), atomically. |
-| `run_convergence(test_id, ns, N=N_MC, alphas=ALPHAS, gen=None, ref_args_fn=None, seed=None, verbose=False)` | 1780 | `-` | Sweep ``n`` for one test and evaluate the MC null sample at every ``alpha``. |
-| `ks_distance_p(stat_values, test_id, ref_args=None)` | 1852 | `-` | p-value of the one-sample KS test against the theoretical null (diagnostic only). |
-| `default_generator(test_id)` | 1866 | `-` | Default null-configuration generator, mirroring ``experiments.run_study1``. |
+| `cvm_limit_cdf(x)` | 117 | `-` | Exact CDF of the Cramer-von Mises limit law (Brownian-bridge functional). |
+| `cvm_limit_ppf(q)` | 166 | `-` | UPPER-tail quantile of the Cramer-von Mises limit law. |
+| `cvm_limit_quantile(p)` | 194 | `-` | Ordinary (lower-tail) quantile of the Cramer-von Mises limit law. |
+| `hoeffding_z_sf(z)` | 230 | `-` | Upper-tail probability of the scaled Hoeffding statistic. |
+| `hoeffding_z_cdf(x)` | 281 | `-` | Full-distribution reference CDF for T12, from an independent realisation of the law. |
+| `_hoeffding_ref_moments()` | 312 | `-` | Mean and standard deviation of the T12 reference law. |
+| `hoeffding_z_ppf(alpha)` | 342 | `-` | Upper quantile of the published scaled-Hoeffding tail table. |
+| `_load_hoeffding_law()` | 374 | `-` | Load the independent limit-law quantile grid for T12, if it is on disk. |
+| `_selftest(quick=True, seed=SEED)` | 404 | `-` | Guard rails for the bespoke reference distributions. |
+| `reference_cdf(x, name, args=())` | 508 | `-` | CDF of reference ``name`` at ``x`` (scipy name or a key of REFERENCE_DISTS). |
+| `reference_sf(x, name, args=())` | 515 | `-` | Survival function of reference ``name`` at ``x``. |
+| `reference_ppf(q, name, args=())` | 524 | `-` | Quantile function (q = upper-tail probability) of reference ``name``. |
+| `ks_distance(stat_values, null, args=())` | 535 | `-` | Kolmogorov-Smirnov distance between the empirical and reference CDFs. |
+| `critical_value(test_id, alpha=0.05, ref_args=None)` | 574 | `-` | Theoretical critical value(s) of the test's reference distribution at ``alpha``. |
+| `reject_rate(stat_values, test_id, alpha=0.05, ref_args=None)` | 605 | `-` | Empirical rejection rate at nominal level ``alpha`` using the theoretical rule. |
+| `compute_type1_error(stat_values, dist_name, df_args, alpha=0.05, two_sided=False)` | 642 | `-` | Superset of :func:`experiments.compute_type1_error`. |
+| `_evaluate(stat_values, test_id, alpha=0.05, n=None, ref_args=None)` | 663 | `-` | Evaluate one Monte Carlo sample against the theoretical null of ``test_id``. |
+| `evaluate_multi_alpha(stat_values, test_id, alphas=ALPHAS, n=None, ref_args=None)` | 701 | `-` | Evaluate the same Monte Carlo sample at several nominal levels. |
+| `n_star_alpha(type1_by_n, ns=None, alpha=0.05, tol=0.01)` | 707 | `-` | Smallest ``n`` with ``\|alpha_hat - alpha\| < tol`` (archive operational rule). |
+| `n_star_ks(ks_by_n, ns=None, threshold=KS_THRESHOLD)` | 718 | `-` | Smallest ``n`` with ``D_KS < 1.358/sqrt(N)`` (archive operational rule). |
+| `kpss_statistic(y, lags=None)` | 733 | `-` | KPSS (1992) level-stationarity statistic for one series. |
+| `mc_kpss(n, N, kind='iid', rho=0.0, delta=1.0, rng=None, lags=None, **kwargs)` | 784 | `-` | Study-1/Study-2 generator for T11 (KPSS level stationarity). |
+| `_joint_rank(x, y)` | 856 | `-` | Hmisc mid-rank + bivariate (joint) rank, vectorised. |
+| `hoeffding_d(x, y)` | 874 | `-` | Hoeffding's (1948) D statistic, exactly as in ``Hmisc::hoeffd`` (times 1/30). |
+| `hoeffding_z(d, n)` | 911 | `-` | Scale Hoeffding's ``d`` to the n-free reference scale used by Hmisc/Wolfe. |
+| `mc_hoeffding_d(n, N, dep='indep', rho=0.5, rng=None, **kwargs)` | 938 | `-` | Study-1/Study-2 generator for T12 (Hoeffding's D independence test). |
+| `_interaction_core(Xtr, ytr, Xte, params, grid_m, seed, pd_method='mc', pd_m=PD_M_T13)` | 1016 | `-` | One replication of the interaction test: fit LightGBM, build PD functions, return z. |
+| `_t13_chunk(args)` | 1086 | `-` | Worker for parallel T13 replication chunks (module level: picklable). |
+| `mc_interaction_h(n, N, kind='additive', rho=0.0, rng=None, n_jobs=1, n_train=N_TRAIN_T13, params=None, grid_m=PD_GRID_M_T13, return_h2=False, seed=None, pd_method='mc', pd_m=PD_M_T13, **kwargs)` | 1124 | `-` | Generator for T13, the interaction-effect test of a prediction model. |
+| `mc_t_test_ar1(n, N, rho=0.0, rng=None, **kwargs)` | 1218 | `-` | One-sample t statistic for stationary AR(1) data (mean 0). |
+| `mc_sign_test_ar1(n, N, rho=0.0, rng=None, **kwargs)` | 1242 | `-` | Sign-test count ``N+`` for stationary AR(1) data with median 0. |
+| `_make_clusters(k, c, m, N, icc, dist='normal', rng=None)` | 1265 | `-` | Clustered data: k groups x c clusters x m observations, ICC(1) = icc. |
+| `mc_anova_clustered(k, c, m, N, icc=0.0, dist='normal', rng=None, **kwargs)` | 1281 | `-` | One-way ANOVA F statistic for group-clustered data (T2 dependence scenario). |
+| `mc_kruskal_wallis_clustered(k, c, m, N, icc=0.0, dist='normal', rng=None, **kwargs)` | 1307 | `-` | Kruskal-Wallis H for group-clustered data (T3 dependence scenario). |
+| `mc_cochran_q_corr(k, n, N, icc=0.0, rng=None, **kwargs)` | 1327 | `-` | Cochran's Q for block-correlated dichotomous data (T8 dependence scenario). |
+| `_n_total_13(test_id, n, k_default=3)` | 1367 | `-` | Total sample size entering each test at per-group size ``n`` (14-test panel). |
+| `_pairwise_dist(A)` | 1382 | `-` | Euclidean distance matrix of the rows of ``A``. |
+| `_astar(d)` | 1388 | `-` | Corrected doubly centered distance matrix A* of Szekely & Rizzo (2013). |
+| `_bcdcor(A, B)` | 1412 | `-` | Bias-corrected distance correlation of two distance matrices. |
+| `dcor_t(X, Y)` | 1437 | `-` | Distance-correlation t statistic of Szekely & Rizzo (2013). |
+| `dcor_t_ref_args(n)` | 1463 | `-` | Reference parameters of T14 at sample size ``n``: the t degrees of freedom. |
+| `mc_dcor_t(n, N, d=10, dep='indep', rho=0.5, rng=None, **kwargs)` | 1475 | `-` | Study-1/Study-2 generator for T14 (distance-correlation t-test). |
+| `_parent_draw(n, dist, rng)` | 1605 | `-` | Draw n i.i.d. |
+| `_hook_kpss(spec, N, rng)` | 1624 | `-` | Severity-ladder adapter for T11 (KPSS). |
+| `_hook_hoeffding(spec, N, rng)` | 1645 | `-` | Severity-ladder adapter for T12 (Hoeffding's D). |
+| `_hook_interaction(spec, N, rng)` | 1668 | `-` | Severity-ladder adapter for T13 (interaction / IAD). |
+| `make_meta(seed=SEED, extra=None)` | 1715 | `-` | Reproducibility block attached to every results file. |
+| `save_results(obj, path)` | 1745 | `-` | Write a results dict to JSON (NaN preserved, as in the archive results file). |
+| `update_results(path, **keys)` | 1752 | `-` | Merge ``keys`` into an existing results file (or create it), atomically. |
+| `run_convergence(test_id, ns, N=N_MC, alphas=ALPHAS, gen=None, ref_args_fn=None, seed=None, verbose=False)` | 1792 | `-` | Sweep ``n`` for one test and evaluate the MC null sample at every ``alpha``. |
+| `ks_distance_p(stat_values, test_id, ref_args=None)` | 1864 | `-` | p-value of the one-sample KS test against the theoretical null (diagnostic only). |
+| `default_generator(test_id)` | 1878 | `-` | Default null-configuration generator, mirroring ``experiments.run_study1``. |
 
 ## `code/rev_study1_ext.py`
 
@@ -141,7 +141,7 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 | `nstar_table(study1, ns=NS, alphas=ALPHAS)` | 273 | `-` | n*_alpha (per nominal level) and n*_KS for every test, from a Study 1 result dict. |
 | `archive_check(study1, N=N_MC, ns=NS)` | 292 | `-` | Assert that the T1-T10 rows reproduce the archived Study 1 numbers exactly. |
 | `null_calibration(ns=(50, 200, 500), N=10000, seed=777, verbose=True)` | 395 | `-` | Monte-Carlo verification that each new statistic's reference law is correct. |
-| `_calib_row(n, sv, ev, ref_mean=None, ref_sd=None, ks_override=None, N_used=None)` | 495 | `-` | Summarise one calibration sample (moments + KS + alpha-hat with Wilson CIs). |
+| `_calib_row(n, sv, ev, ref_mean=None, ref_sd=None, ks_override=None, N_used=None)` | 495 | `-` | Summarize one calibration sample (moments + KS + alpha-hat with Wilson CIs). |
 | `t12_reference_diagnostic(n_law=1000, N_law=10000, N_compare=10000, seed=99, verbose=True)` | 514 | `-` | Is the large KS of T12 due to the *table* or to a non-converged statistic? The published Hollander-Wolfe/Hmisc reference is a coarse table for the tail of the asymptotically equivalent Blum-Kiefer-Rosenblatt statistic, not an exact CDF. |
 | `t13_split_diagnostic(ns=(100, 200, 500), N=2000, N_exact=200, seed=555, jobs=10, verbose=True)` | 577 | `-` | Is T13's liberal drift caused by learner overfitting or by the PD approximation? Three blocks: * ``pd_estimator_comparison``: alpha-hat at n_test in {100, 200, 500} for four partial dependence estimators -- deterministic 50x50 grid, deterministic 200x200 grid, unbiased MC subsample (m = 50 and 100) and the exact sample average. |
 | `make_alpha_figure(study1, out_path=FIG_ALPHA, alphas=ALPHAS)` | 675 | `-` | fig_rev_alpha.png: alpha-hat vs n for all 13 tests at the three nominal levels. |
@@ -168,110 +168,110 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 
 *Severity ladders and the Study 2 sample-size sweep.*
 
-> rev_sensitivity.py -- Study 2 sensitivity analyses for the COST-S-26-00605 major revision (Computational Statistics). Responds to Referee 1: * comment 3 (R1-3): Study 2 used a single violation severity (Exp(1)-1 skew, 1:4 variance ratio, 1:2:3 imbalance, n = 50). We replace each single point by a *graded severity ladder* and report Wilson 95% CIs for every cell. * comment 5 (R1-5): Study 2 evaluat...
+> rev_sensitivity.py -- Study 2 sensitivity analyses for the COST-D-26-00503R1 major revision (Computational Statistics). Responds to Referee 1: * comment 3 (R1-3): Study 2 used a single violation severity (Exp(1)-1 skew, 1:4 variance ratio, 1:2:3 imbalance, n = 50). We replace each single point by a *graded severity ladder* and report Wilson 95% CIs for every cell. * comment 5 (R1-5): Study 2 evalu...
 
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
-| `_std_params_lognorm(s)` | 179 | `-` | Mean and standard deviation of lognormal(0, s) before standardisation. |
-| `skew_kurt(kind, par=None)` | 193 | `-` | Analytic (skewness, excess kurtosis) of the standardised parent. |
-| `draw_std(rng, kind, shape, par=None)` | 227 | `-` | Draw standardised (mean 0, variance 1) variates of the given parent. |
-| `parent_median(kind, par=None)` | 245 | `-` | Median of the standardised parent (needed by the exact sign-test null). |
-| `_ranks(A)` | 270 | `-` | Ranks along axis 1 (as experiments.py: plain ranks, no tie averaging). |
-| `stat_t(groups)` | 279 | `-` | One-sample Student t statistic for a Monte Carlo cell. |
-| `stat_anova(groups)` | 297 | `-` | One-way ANOVA F statistic for k groups. |
-| `stat_kruskal(groups)` | 320 | `-` | Kruskal-Wallis H statistic from pooled mid-ranks. |
-| `stat_bartlett(groups)` | 343 | `-` | Bartlett test statistic with the Bartlett correction. |
-| `_fligner_stat_from_scores(scores, ns)` | 367 | `-` | Fligner-Killeen chi-square from pooled normal scores (weights n_j). |
-| `stat_fligner(groups)` | 380 | `-` | Fligner-Killeen normal-scores statistic for equality of variances. |
-| `stat_median(groups)` | 402 | `-` | Mood's median test statistic for k groups. |
-| `stat_sign(groups, med0)` | 431 | `-` | Sign-test statistic: number of observations above the null median. |
-| `stat_cochran(X)` | 446 | `-` | X: (N, n_blocks, k) binary. |
-| `stat_gof(counts, expected)` | 457 | `-` | Pearson chi-square goodness-of-fit statistic. |
-| `stat_hotelling(X)` | 470 | `-` | X: (N, n, p) -> F-transformed Hotelling T^2, exactly as experiments.py. |
-| `reject_rate(stat_values, rule, alpha)` | 489 | `-` | Empirical rejection rate of a batch of statistics under a rejection rule. |
-| `wilson_ci(phat, N, z=Z95)` | 529 | `-` | 95% Wilson score interval; identical to experiments.py wilson_ci apart from a machine-precision guard keeping lo <= phat <= hi (at phat = 1 the closed form lands ~2e-16 below 1, which would give a negative error bar). |
-| `spec_for(test_id, dist=('norm', None), n=N_FIXED, k=None, p_dim=P_DIM, ns=None, sd=None, n_T=None, min_np=None, p=0.5)` | 549 | `-` | Build the data-generating spec for one cell of the 10-test panel. |
-| `_spec_key(test_id, spec, seed)` | 574 | `-` | Hashable cache key that identifies one Monte Carlo cell exactly. |
-| `gen_cell(test_id, spec, seed, N=N_MC)` | 593 | `-` | Return (stat_values, rejection_rule) for one Monte Carlo cell. |
-| `evaluate_cell(test_id, spec, seed, N=N_MC)` | 665 | `-` | Run one cell and return its record with Wilson CIs at every alpha. |
-| `cell_seed(*parts)` | 686 | `-` | Deterministic seed for a cell. |
-| `_dist(name)` | 696 | `-` | Map a parent-law name to the ``(kind, parameter)`` pair of the generators. |
-| `_rung(label, dname, severity, note='')` | 721 | `-` | Build one severity-ladder rung record. |
-| `_kurt_tick(rung)` | 747 | `-` | Axis-tick label for the excess kurtosis of a ladder rung. |
-| `build_ladder_cells()` | 815 | `-` | Return the flat list of cell requests for all five severity ladders. |
-| `aggregate_ladder(cells, records)` | 888 | `-` | Aggregate flat cell records into per-test, per-rung structures. |
-| `trend_analysis(rung_labels, recs, alpha=NOMINAL_ALPHA)` | 899 | `-` | Mechanical, pre-declared rules for what may be claimed from a ladder. |
-| `_archived_dist(test_id)` | 987 | `-` | Archived parent of a test as a (kind, par) tuple (distribution-free tests such as T4/T8 fall back to Normal, which their generators ignore). |
-| `nsweep_spec(test_id, scenario, n)` | 994 | `-` | Spec of one (test, scenario, n) cell of the sample-size sweep. |
-| `build_nsweep_cells()` | 1019 | `-` | List the cells of the Study 2 sample-size sweep. |
-| `aggregate_nsweep(cells, records)` | 1040 | `-` | Reshape the flat n-sweep results into the JSON layout. |
-| `ordering_analysis(nsweep_agg, scenario)` | 1059 | `-` | Is the robustness ordering stable across n? Delta_test(n) = alpha_hat_test,scenario(n) - alpha_hat_test,baseline(n) uses the *matched-n* baseline. |
-| `first_n_recovery(nsweep_agg, scenario)` | 1107 | `-` | Smallest n at which each test is no longer liberal (and CI-based). |
-| `_core_rate(tid, sv, alpha, n_eff)` | 1158 | `-` | Canonical rate via core.reject_rate (handles cvm_limit / hoeffding_z rules that this script's reject_rate does not implement). |
-| `_cvm_upper_crit(alpha)` | 1179 | `-` | Upper-tail CvM quantile, obtained by INVERSING core's own CDF. |
-| `_extras_rate(tid, sv, alpha, n_eff)` | 1209 | `-` | Rate for an extra test plus an audit record of the rule and critical value used. |
-| `probe_core_extras()` | 1256 | `-` | Return (hooks, message, skipped_reasons) after the cost/degeneracy pilot. |
-| `run_core_ladders(hooks)` | 1311 | `-` | Distributional ladders for the accepted extra tests. |
-| `run_core_nsweep(hooks)` | 1360 | `-` | Baseline calibration vs n for the extra hooks (comment 5 for the new tests). |
-| `_archive_call(test_id, scenario, N)` | 1446 | `-` | Reproduce the ARCHIVED experiments.py cell exactly (same config). |
-| `_generic_archive_spec(test_id, scenario)` | 1489 | `-` | Generic spec reproducing the archived anchor configuration. |
-| `median_test_exact_size(ns, alpha)` | 1510 | `-` | Exact null rejection probability of the median-test chi2_{k-1} rule. |
-| `run_consistency_checks()` | 1553 | `-` | 1) generic implementation vs archived experiments.py at the anchor cells; 2) generic implementation vs SciPy/statsmodels on random data; 3) determinism and variance self-checks. |
-| `_scipy_fligner_stats(groups)` | 1801 | `-` | scipy.stats.fligner statistic per replication (the archived UNBALANCED path). |
-| `fligner_variant_probe(N=N_MC, seed=None)` | 1810 | `-` | Quantify the difference between the two Fligner-Killeen code paths in the archive. |
-| `consistency_check_summary(checks, fligner_probe=None)` | 1905 | `-` | Quotable summary of the archived-vs-generic anchor comparison. |
-| `make_figures(ladders, nsweep_agg, extra_ladders, path_sev, path_n)` | 1957 | `-` | Render the two severity / sample-size figures. |
-| `fmt_rate(rec, nd=3)` | 2220 | `-` | Format one alpha-hat record together with its calibration flag. |
-| `print_ladder_table(name, block, rung_labels)` | 2242 | `-` | Print one severity ladder as a fixed-width console table. |
-| `main()` | 2279 | `-` | Entry point: run the severity ladders and the sample-size sweep. |
+| `_std_params_lognorm(s)` | 183 | `-` | Mean and standard deviation of lognormal(0, s) before standardization. |
+| `skew_kurt(kind, par=None)` | 197 | `-` | Analytic (skewness, excess kurtosis) of the standardized parent. |
+| `draw_std(rng, kind, shape, par=None)` | 231 | `-` | Draw standardized (mean 0, variance 1) variates of the given parent. |
+| `parent_median(kind, par=None)` | 249 | `-` | Median of the standardized parent (needed by the exact sign-test null). |
+| `_ranks(A)` | 274 | `-` | Ranks along axis 1 (as experiments.py: plain ranks, no tie averaging). |
+| `stat_t(groups)` | 283 | `-` | One-sample Student t statistic for a Monte Carlo cell. |
+| `stat_anova(groups)` | 301 | `-` | One-way ANOVA F statistic for k groups. |
+| `stat_kruskal(groups)` | 324 | `-` | Kruskal-Wallis H statistic from pooled mid-ranks. |
+| `stat_bartlett(groups)` | 347 | `-` | Bartlett test statistic with the Bartlett correction. |
+| `_fligner_stat_from_scores(scores, ns)` | 371 | `-` | Fligner-Killeen chi-square from pooled normal scores (weights n_j). |
+| `stat_fligner(groups)` | 384 | `-` | Fligner-Killeen normal-scores statistic for equality of variances. |
+| `stat_median(groups)` | 406 | `-` | Mood's median test statistic for k groups. |
+| `stat_sign(groups, med0)` | 435 | `-` | Sign-test statistic: number of observations above the null median. |
+| `stat_cochran(X)` | 450 | `-` | X: (N, n_blocks, k) binary. |
+| `stat_gof(counts, expected)` | 461 | `-` | Pearson chi-square goodness-of-fit statistic. |
+| `stat_hotelling(X)` | 474 | `-` | X: (N, n, p) -> F-transformed Hotelling T^2, exactly as experiments.py. |
+| `reject_rate(stat_values, rule, alpha)` | 493 | `-` | Empirical rejection rate of a batch of statistics under a rejection rule. |
+| `wilson_ci(phat, N, z=Z95)` | 533 | `-` | 95% Wilson score interval; identical to experiments.py wilson_ci apart from a machine-precision guard keeping lo <= phat <= hi (at phat = 1 the closed form lands ~2e-16 below 1, which would give a negative error bar). |
+| `spec_for(test_id, dist=('norm', None), n=N_FIXED, k=None, p_dim=P_DIM, ns=None, sd=None, n_T=None, min_np=None, p=0.5)` | 553 | `-` | Build the data-generating spec for one cell of the 10-test panel. |
+| `_spec_key(test_id, spec, seed)` | 578 | `-` | Hashable cache key that identifies one Monte Carlo cell exactly. |
+| `gen_cell(test_id, spec, seed, N=N_MC)` | 597 | `-` | Return (stat_values, rejection_rule) for one Monte Carlo cell. |
+| `evaluate_cell(test_id, spec, seed, N=N_MC)` | 669 | `-` | Run one cell and return its record with Wilson CIs at every alpha. |
+| `cell_seed(*parts)` | 690 | `-` | Deterministic seed for a cell. |
+| `_dist(name)` | 700 | `-` | Map a parent-law name to the ``(kind, parameter)`` pair of the generators. |
+| `_rung(label, dname, severity, note='')` | 725 | `-` | Build one severity-ladder rung record. |
+| `_kurt_tick(rung)` | 751 | `-` | Axis-tick label for the excess kurtosis of a ladder rung. |
+| `build_ladder_cells()` | 819 | `-` | Return the flat list of cell requests for all five severity ladders. |
+| `aggregate_ladder(cells, records)` | 892 | `-` | Aggregate flat cell records into per-test, per-rung structures. |
+| `trend_analysis(rung_labels, recs, alpha=NOMINAL_ALPHA)` | 903 | `-` | Mechanical, pre-declared rules for what may be claimed from a ladder. |
+| `_archived_dist(test_id)` | 991 | `-` | Archived parent of a test as a (kind, par) tuple (distribution-free tests such as T4/T8 fall back to Normal, which their generators ignore). |
+| `nsweep_spec(test_id, scenario, n)` | 998 | `-` | Spec of one (test, scenario, n) cell of the sample-size sweep. |
+| `build_nsweep_cells()` | 1023 | `-` | List the cells of the Study 2 sample-size sweep. |
+| `aggregate_nsweep(cells, records)` | 1044 | `-` | Reshape the flat n-sweep results into the JSON layout. |
+| `ordering_analysis(nsweep_agg, scenario)` | 1063 | `-` | Is the robustness ordering stable across n? Delta_test(n) = alpha_hat_test,scenario(n) - alpha_hat_test,baseline(n) uses the *matched-n* baseline. |
+| `first_n_recovery(nsweep_agg, scenario)` | 1111 | `-` | Smallest n at which each test is no longer liberal (and CI-based). |
+| `_core_rate(tid, sv, alpha, n_eff)` | 1162 | `-` | Canonical rate via core.reject_rate (handles cvm_limit / hoeffding_z rules that this script's reject_rate does not implement). |
+| `_cvm_upper_crit(alpha)` | 1183 | `-` | Upper-tail CvM quantile, obtained by INVERSING core's own CDF. |
+| `_extras_rate(tid, sv, alpha, n_eff)` | 1213 | `-` | Rate for an extra test plus an audit record of the rule and critical value used. |
+| `probe_core_extras()` | 1260 | `-` | Return (hooks, message, skipped_reasons) after the cost/degeneracy pilot. |
+| `run_core_ladders(hooks)` | 1315 | `-` | Distributional ladders for the accepted extra tests. |
+| `run_core_nsweep(hooks)` | 1364 | `-` | Baseline calibration vs n for the extra hooks (comment 5 for the new tests). |
+| `_archive_call(test_id, scenario, N)` | 1450 | `-` | Reproduce the ARCHIVED experiments.py cell exactly (same config). |
+| `_generic_archive_spec(test_id, scenario)` | 1493 | `-` | Generic spec reproducing the archived anchor configuration. |
+| `median_test_exact_size(ns, alpha)` | 1514 | `-` | Exact null rejection probability of the median-test chi2_{k-1} rule. |
+| `run_consistency_checks()` | 1557 | `-` | 1) generic implementation vs archived experiments.py at the anchor cells; 2) generic implementation vs SciPy/statsmodels on random data; 3) determinism and variance self-checks. |
+| `_scipy_fligner_stats(groups)` | 1805 | `-` | scipy.stats.fligner statistic per replication (the archived UNBALANCED path). |
+| `fligner_variant_probe(N=N_MC, seed=None)` | 1814 | `-` | Quantify the difference between the two Fligner-Killeen code paths in the archive. |
+| `consistency_check_summary(checks, fligner_probe=None)` | 1909 | `-` | Quotable summary of the archived-vs-generic anchor comparison. |
+| `make_figures(ladders, nsweep_agg, extra_ladders, path_sev, path_n)` | 1961 | `-` | Render the two severity / sample-size figures. |
+| `fmt_rate(rec, nd=3)` | 2224 | `-` | Format one alpha-hat record together with its calibration flag. |
+| `print_ladder_table(name, block, rung_labels)` | 2246 | `-` | Print one severity ladder as a fixed-width console table. |
+| `main()` | 2283 | `-` | Entry point: run the severity ladders and the sample-size sweep. |
 
 ## `code/rev_power.py`
 
 *Study 4, the power companion study.*
 
-> rev_power.py -- Study 4: power companion study for COST-S-26-00605 (major revision). Referee 1, comment 2: the practical guidelines must distinguish Type I error robustness (calibration) from overall test performance (discrimination), because Studies 1-3 evaluate only D_KS and alpha-hat under H0. This script supplies the missing power analysis and, crucially, separates two quantities: * NOMINAL-al...
+> rev_power.py -- Study 4: power companion study for COST-D-26-00503R1 (major revision). Referee 1, comment 2: the practical guidelines must distinguish Type I error robustness (calibration) from overall test performance (discrimination), because Studies 1-3 evaluate only D_KS and alpha-hat under H0. This script supplies the missing power analysis and, crucially, separates two quantities: * NOMINAL-...
 
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
 | `_apply_outdir(path)` | 87 | `-` | Redirect the results directory, creating it if necessary. |
-| `wilson_ci_from_rate(phat, N, z=Z95)` | 155 | `-` | 95% Wilson score interval for an empirical rate phat from N trials. |
-| `wilson_ci_from_counts(k, N, z=Z95)` | 173 | `-` | 95% Wilson interval from a rejection count k out of N. |
-| `newcombe_diff_ci(k1, n1, k2, n2, z=Z95)` | 178 | `-` | Newcombe's hybrid score interval (method 10) for p1 - p2, unpaired. |
-| `paired_diff_ci(b01, b10, N, z=Z95)` | 189 | `-` | Continuity-corrected Wald interval for a difference of two proportions estimated on the *same* N replications (McNemar layout). |
-| `order_stat_quantile_ci(sorted_vals, p, alpha=ALPHA)` | 203 | `-` | Distribution-free 95% CI for the p-quantile from order statistics: P(X_(lo) <= q_p <= X_(hi)) >= 1 - alpha, ranks from the binomial. |
-| `empirical_critical_value(null_stats, alpha=ALPHA)` | 212 | `-` | Critical value whose H0 exceedance rate is (as close as possible to) alpha: the ceil((1-alpha) N)-th order statistic. |
-| `empirical_quantile(vals, p)` | 218 | `-` | The ceil(p N)-th order statistic of `vals` (an empirical p-quantile). |
-| `calibration_transform(tid, stat, n)` | 226 | `-` | Map a test statistic to the quantity whose upper tail the nominal rule actually tests, so that the calibrated rule is the SAME procedure with a recalibrated critical value. |
-| `calibrate_rule(calib_stat, alpha=ALPHA)` | 250 | `-` | Upper-tail calibration of the transformed statistic: the threshold is the empirical (1-alpha) quantile of `calib_stat` under H0. |
-| `calibrated_rejection(calib_stat, calib)` | 258 | `-` | Rejection indicator for a calibrated rule, plus the power range induced by the 95% CI of the calibrated threshold. |
-| `_entropy(*keys)` | 271 | `-` | Deterministic integer entropy for SeedSequence from arbitrary labels. |
-| `cell_rng(*keys)` | 284 | `-` | Order-independent deterministic RNG for one simulation cell. |
-| `parent_sample(rng, dist, shape)` | 292 | `-` | Draw from a parent distribution with mean 0 and variance 1. |
-| `draw_batch(family, dist, n, N, kind, effect, stream)` | 316 | `-` | Vectorised draw of N replicated data sets for one cell. |
-| `_ordinal_ranks_along_last(a)` | 354 | `-` | Ranks 1..m along the last axis. |
-| `mc_t_test_fast(X)` | 369 | `-` | One-sample t statistic. |
-| `mc_sign_test_fast(X)` | 376 | `-` | Number of observations above the null median 0. |
-| `mc_anova_fast(X)` | 386 | `-` | One-way ANOVA F statistic (balanced). |
-| `mc_kruskal_wallis_fast(X)` | 397 | `-` | Kruskal-Wallis H statistic (balanced). |
-| `mc_median_test_fast(X)` | 406 | `-` | Mood's median test statistic. |
-| `mc_bartlett_fast(X)` | 420 | `-` | Bartlett statistic with the standard Bartlett correction. |
-| `mc_fligner_killeen_fast(X, rank_convention='ordinal')` | 431 | `-` | Fligner-Killeen statistic: ANOVA on van der Waerden scores of the group-median-centred absolute deviations. |
-| `fk_tie_ranks_sensitivity(N=N_MC, n=50)` | 459 | `-` | Practical impact of the ordinal versus mid-rank tie convention in the Fligner-Killeen statistic (exact ties arise for even n). |
-| `critical_value_theoretical(tid, n, alpha=ALPHA)` | 552 | `-` | The theoretical alpha-level critical value (the archive's rule). |
-| `reject_nominal(stat, rule, df, alpha=ALPHA)` | 568 | `-` | Rejection indicator using the theoretical critical value. |
-| `null_cell(family, dist, n, N)` | 587 | `-` | Calibrate every test of `family` on one shared H0 sample. |
-| `alt_cell(family, dist, n, N, effect, nulls)` | 609 | `-` | Power of every test of `family` under one alternative. |
-| `contrast_row(family, parent, scenario, n, N, test_a, test_b, nom_flags, adj_flags, alpha_nom, alpha_adj)` | 636 | `-` | Difference of two rejection rates in one scenario, nominal and adjusted. |
-| `build_design()` | 675 | `-` | List the alternative-data cells of Study 4. |
-| `run_study4(N=N_MC, verbose=True)` | 698 | `-` | Run the whole Study 4 grid: null calibration first, then the alternatives. |
-| `run_equivalence_check(N=2000, n=50)` | 797 | `-` | Two checks, both requested by t1-new-tests: (a) SAME-DATA equivalence: for each test and parent, draw one batch and compare the vectorised statistic against an independent implementation (scipy.stats) on identical data. |
-| `run_calibration_check(N=N_MC, n=50)` | 896 | `-` | Reproduce the manuscript's Study 2 null alpha-hat values (n = 50) with the vectorised generators, using the same parent distributions the archive used for each scenario. |
-| `fmt_ci(ci)` | 949 | `-` | Format a confidence interval as ``[lo,hi]`` with three decimals. |
-| `scale_rows(cells, n, N)` | 961 | `-` | Bartlett vs Fligner-Killeen at one sample size, all parents and sd ratios. |
-| `print_headline(cells, contrasts, n=50, N=N_MC)` | 991 | `-` | Print the headline Bartlett-versus-Fligner-Killeen table. |
-| `rank_reversal_summary(cells, contrasts)` | 1034 | `-` | Does the Type I error ranking (and the nominal-alpha power ranking) agree with the size-adjusted power ranking? Computed, never asserted. |
-| `make_figure(res, path=FIG_PATH, n=50, N=N_MC)` | 1085 | `-` | Render the six-panel power figure. |
-| `main()` | 1270 | `-` | Command-line entry point of the power study. |
+| `wilson_ci_from_rate(phat, N, z=Z95)` | 160 | `-` | 95% Wilson score interval for an empirical rate phat from N trials. |
+| `wilson_ci_from_counts(k, N, z=Z95)` | 178 | `-` | 95% Wilson interval from a rejection count k out of N. |
+| `newcombe_diff_ci(k1, n1, k2, n2, z=Z95)` | 183 | `-` | Newcombe's hybrid score interval (method 10) for p1 - p2, unpaired. |
+| `paired_diff_ci(b01, b10, N, z=Z95)` | 194 | `-` | Continuity-corrected Wald interval for a difference of two proportions estimated on the *same* N replications (McNemar layout). |
+| `order_stat_quantile_ci(sorted_vals, p, alpha=ALPHA)` | 208 | `-` | Distribution-free 95% CI for the p-quantile from order statistics: P(X_(lo) <= q_p <= X_(hi)) >= 1 - alpha, ranks from the binomial. |
+| `empirical_critical_value(null_stats, alpha=ALPHA)` | 217 | `-` | Critical value whose H0 exceedance rate is (as close as possible to) alpha: the ceil((1-alpha) N)-th order statistic. |
+| `empirical_quantile(vals, p)` | 223 | `-` | The ceil(p N)-th order statistic of `vals` (an empirical p-quantile). |
+| `calibration_transform(tid, stat, n)` | 231 | `-` | Map a test statistic to the quantity whose upper tail the nominal rule actually tests, so that the calibrated rule is the SAME procedure with a recalibrated critical value. |
+| `calibrate_rule(calib_stat, alpha=ALPHA)` | 255 | `-` | Upper-tail calibration of the transformed statistic: the threshold is the empirical (1-alpha) quantile of `calib_stat` under H0. |
+| `calibrated_rejection(calib_stat, calib)` | 263 | `-` | Rejection indicator for a calibrated rule, plus the power range induced by the 95% CI of the calibrated threshold. |
+| `_entropy(*keys)` | 276 | `-` | Deterministic integer entropy for SeedSequence from arbitrary labels. |
+| `cell_rng(*keys)` | 289 | `-` | Order-independent deterministic RNG for one simulation cell. |
+| `parent_sample(rng, dist, shape)` | 297 | `-` | Draw from a parent distribution with mean 0 and variance 1. |
+| `draw_batch(family, dist, n, N, kind, effect, stream)` | 321 | `-` | Vectorised draw of N replicated data sets for one cell. |
+| `_ordinal_ranks_along_last(a)` | 359 | `-` | Ranks 1..m along the last axis. |
+| `mc_t_test_fast(X)` | 374 | `-` | One-sample t statistic. |
+| `mc_sign_test_fast(X)` | 381 | `-` | Number of observations above the null median 0. |
+| `mc_anova_fast(X)` | 391 | `-` | One-way ANOVA F statistic (balanced). |
+| `mc_kruskal_wallis_fast(X)` | 402 | `-` | Kruskal-Wallis H statistic (balanced). |
+| `mc_median_test_fast(X)` | 411 | `-` | Mood's median test statistic. |
+| `mc_bartlett_fast(X)` | 425 | `-` | Bartlett statistic with the standard Bartlett correction. |
+| `mc_fligner_killeen_fast(X, rank_convention='ordinal')` | 436 | `-` | Fligner-Killeen statistic: ANOVA on van der Waerden scores of the group-median-centered absolute deviations. |
+| `fk_tie_ranks_sensitivity(N=N_MC, n=50)` | 464 | `-` | Practical impact of the ordinal versus mid-rank tie convention in the Fligner-Killeen statistic (exact ties arise for even n). |
+| `critical_value_theoretical(tid, n, alpha=ALPHA)` | 557 | `-` | The theoretical alpha-level critical value (the archive's rule). |
+| `reject_nominal(stat, rule, df, alpha=ALPHA)` | 573 | `-` | Rejection indicator using the theoretical critical value. |
+| `null_cell(family, dist, n, N)` | 592 | `-` | Calibrate every test of `family` on one shared H0 sample. |
+| `alt_cell(family, dist, n, N, effect, nulls)` | 614 | `-` | Power of every test of `family` under one alternative. |
+| `contrast_row(family, parent, scenario, n, N, test_a, test_b, nom_flags, adj_flags, alpha_nom, alpha_adj)` | 641 | `-` | Difference of two rejection rates in one scenario, nominal and adjusted. |
+| `build_design()` | 680 | `-` | List the alternative-data cells of Study 4. |
+| `run_study4(N=N_MC, verbose=True)` | 703 | `-` | Run the whole Study 4 grid: null calibration first, then the alternatives. |
+| `run_equivalence_check(N=2000, n=50)` | 802 | `-` | Two checks, both requested by t1-new-tests: (a) SAME-DATA equivalence: for each test and parent, draw one batch and compare the vectorised statistic against an independent implementation (scipy.stats) on identical data. |
+| `run_calibration_check(N=N_MC, n=50)` | 901 | `-` | Reproduce the manuscript's Study 2 null alpha-hat values (n = 50) with the vectorised generators, using the same parent distributions the archive used for each scenario. |
+| `fmt_ci(ci)` | 954 | `-` | Format a confidence interval as ``[lo,hi]`` with three decimals. |
+| `scale_rows(cells, n, N)` | 966 | `-` | Bartlett vs Fligner-Killeen at one sample size, all parents and sd ratios. |
+| `print_headline(cells, contrasts, n=50, N=N_MC)` | 996 | `-` | Print the headline Bartlett-versus-Fligner-Killeen table. |
+| `rank_reversal_summary(cells, contrasts)` | 1039 | `-` | Does the Type I error ranking (and the nominal-alpha power ranking) agree with the size-adjusted power ranking? Computed, never asserted. |
+| `make_figure(res, path=FIG_PATH, n=50, N=N_MC)` | 1090 | `-` | Render the six-panel power figure. |
+| `main()` | 1275 | `-` | Command-line entry point of the power study. |
 
 ## `code/verify_new_tests_power.py`
 
@@ -293,9 +293,9 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
-| `load(name)` | 29 | `-` | Load one of the results files from the repository root. |
-| `draft()` | 42 | `-` | Read the manuscript source. |
-| `main()` | 91 | `-` | Run every check group and print the summary. |
+| `load(name)` | 29 | `-` | Load one of the results files. |
+| `draft()` | 53 | `-` | Read the manuscript text, or return an empty string when it is not shipped. |
+| `main()` | 115 | `-` | Run every check group and print the summary. |
 
 ## `code/rev_dcor.py`
 
@@ -346,7 +346,7 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
 | `pip_freeze()` | 53 | `list[str]` | Return ``python3 -m pip freeze`` output as clean ``name==version`` lines. |
-| `canonical(name: str)` | 60 | `str` | Normalise a distribution name for comparison (case, '_' and '.' insensitive). |
+| `canonical(name: str)` | 60 | `str` | Normalize a distribution name for comparison (case, '_' and '.' insensitive). |
 | `_requirement_name(req: str)` | 65 | `str | None` | Extract the distribution name from a ``Requires-Dist`` entry. |
 | `closure(roots: list[str])` | 89 | `set[str]` | Transitive runtime ``Requires-Dist`` closure of ``roots`` over installed dists. |
 | `version(name: str)` | 109 | `str` | Installed version of a distribution, or '-' when it is not installed. |
@@ -363,9 +363,10 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 | --- | ---: | --- | --- |
 | `sha256(path: str)` | 44 | `str` | SHA-256 of a file, read in 1 MiB chunks (works for large PNGs too). |
 | `targets()` | 53 | `list[str]` | Repository files to hash: pipeline sources, results, figures and docs tools. |
-| `write_manifest()` | 97 | `int` | Hash every pipeline source, result and figure; write docs/MANIFEST.sha256. |
-| `check_manifest()` | 123 | `int` | Compare the working tree with docs/MANIFEST.sha256; return 0 when identical. |
-| `check_lock()` | 149 | `int` | Confirm that the installed environment matches requirements-lock.txt. |
+| `write_manifest()` | 107 | `int` | Hash every pipeline source, result and figure; write docs/MANIFEST.sha256. |
+| `layout()` | 133 | `str` | Detect which of the two supported layouts this package copy uses. |
+| `check_manifest()` | 143 | `int` | Compare the working tree with docs/MANIFEST.sha256; return 0 when identical. |
+| `check_lock()` | 169 | `int` | Confirm that the installed environment matches requirements-lock.txt. |
 
 ## `docs/make_flowchart.py`
 
@@ -387,9 +388,10 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
-| `check(name: str, ok: bool, detail: str='')` | 63 | `None` | Record and print one PASS/FAIL check; the exit status depends on these. |
-| `z_two_proportions(p1: float, n1: int, p2: float, n2: int)` | 69 | `float` | Two-sample z statistic for the difference of two independent proportions. |
-| `main()` | 75 | `int` | Run the four verification blocks and return the process exit status. |
+| `results_path(name)` | 49 | `-` | Locate a results file in either supported layout. |
+| `check(name: str, ok: bool, detail: str='')` | 94 | `None` | Record and print one PASS/FAIL check; the exit status depends on these. |
+| `z_two_proportions(p1: float, n1: int, p2: float, n2: int)` | 100 | `float` | Two-sample z statistic for the difference of two independent proportions. |
+| `main()` | 106 | `int` | Run the four verification blocks and return the process exit status. |
 
 ## `docs/probe_experiments.py`
 
@@ -399,17 +401,17 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
-| `main()` | 37 | `int` | Draw one fixed batch from each archived generator and hash the result. |
+| `main()` | 40 | `int` | Draw one fixed batch from each archived generator and hash the result. |
 
 ## `docs/probe_docstring_pass.py`
 
-*Behavioural fingerprint used to prove a documentation-only edit changed nothing.*
+*Behavioral fingerprint used to prove a documentation-only edit changed nothing.*
 
-> Behavioural fingerprint of the pipeline, used to prove that a documentation-only edit changed nothing that the scripts compute. Run from the repository root:: python3 docs/probe_docstring_pass.py It imports every study and verification script, calls a fixed set of functions with fixed inputs and seeds, and prints one SHA-256 over all results. The digest is identical before and after a docstring pa...
+> Behavioral fingerprint of the pipeline, used to prove that a documentation-only edit changed nothing that the scripts compute. Run from the repository root:: python3 docs/probe_docstring_pass.py It imports every study and verification script, calls a fixed set of functions with fixed inputs and seeds, and prints one SHA-256 over all results. The digest is identical before and after a docstring pas...
 
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
-| `digest_array(a)` | 43 | `str` | Short SHA-256 of an array's float64 bytes, used as a behavioural fingerprint. |
+| `digest_array(a)` | 43 | `str` | Short SHA-256 of an array's float64 bytes, used as a behavioral fingerprint. |
 | `main()` | 56 | `int` | Collect the fingerprint of every script and print its SHA-256. |
 
 ## `docs/make_function_reference.py`

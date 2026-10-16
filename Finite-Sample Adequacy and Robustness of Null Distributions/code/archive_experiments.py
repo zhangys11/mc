@@ -2,7 +2,7 @@
 Finite-Sample Adequacy and Robustness of Null Distributions
 A Systematic Monte Carlo Study Across Ten Hypothesis Tests
 
-Archive reproduction script for COST-S-26-00605 (Computational Statistics).
+Archive reproduction script for COST-D-26-00503R1 (Computational Statistics).
 Running ``python3 experiments.py`` regenerates the original Study 1-3 results,
 figures and tables that are reported in the manuscript:
 

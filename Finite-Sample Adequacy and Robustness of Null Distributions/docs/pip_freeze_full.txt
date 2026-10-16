@@ -1,5 +1,5 @@
 # Complete python3 -m pip freeze of the machine that produced the
-# results of COST-S-26-00605 (Anaconda base environment).
+# results of COST-D-26-00503R1 (Anaconda base environment).
 #
 # Captured with : python3 -m pip freeze
 # Platform      : macOS-26.6.2-arm64-arm-64bit-Mach-O

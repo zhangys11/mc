@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-rev_sensitivity.py -- Study 2 sensitivity analyses for the COST-S-26-00605 major
+rev_sensitivity.py -- Study 2 sensitivity analyses for the COST-D-26-00503R1 major
 revision (Computational Statistics).
 
 Responds to Referee 1:

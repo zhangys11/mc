@@ -176,7 +176,7 @@ def main() -> None:
     arrow(ax, (0.29, 0.9075), (0.245, 0.8625), rad=-0.15, lw=1.0)
     arrow(ax, (0.71, 0.9075), (0.735, 0.8625), rad=0.15, lw=1.0)
 
-    ax.set_title("mc-tk execution flowchart \u2014 COST-S-26-00605 reproducibility package",
+    ax.set_title("mc-tk execution flowchart \u2014 COST-D-26-00503R1 reproducibility package",
                  fontsize=12.5, fontweight="bold", pad=6)
 
     fig.tight_layout()

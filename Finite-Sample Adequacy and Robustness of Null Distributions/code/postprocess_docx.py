@@ -60,6 +60,37 @@ def set_update_fields(doc):
     return True
 
 
+def drop_duplicate_figure_labels(doc):
+    """Remove the figure labels pandoc copies from image alternative text.
+
+    Pandoc writes a Markdown image's alternative text into a paragraph styled
+    ``ImageCaption`` placed directly above the image. Every figure in this manuscript
+    already carries its own numbered caption below it, so the result is a duplicated and
+    sometimes inconsistent label ("Study 3: Monte Carlo precision" above "Figure 3:
+    ..."). The alternative text is retained in the drawing description for screen
+    readers, so nothing is lost by dropping the visible copy.
+
+    The paragraphs are removed at the XML level because their style name is exposed by
+    python-docx as ``Image Caption`` while the stored style id is ``ImageCaption``, and
+    matching on the id is the reliable test.
+
+    Args:
+        doc: the ``python-docx`` document to modify in place.
+
+    Returns:
+        int: the number of label paragraphs removed.
+    """
+    w = "{http://schemas.openxmlformats.org/wordprocessingml/2006/main}"
+    removed = 0
+    for para in list(doc.element.body.iter(w + "p")):
+        style = para.find(w + "pPr/" + w + "pStyle")
+        if style is None or style.get(w + "val") != "ImageCaption":
+            continue
+        para.getparent().remove(para)
+        removed += 1
+    return removed
+
+
 def fit_tables(doc, width_in=6.5):
     """Give every table autofit layout and full text-column width.
 
@@ -96,10 +127,12 @@ def main():
     path = sys.argv[1]
     doc = Document(path)
     toc = set_update_fields(doc)
+    dup = drop_duplicate_figure_labels(doc)
     n = fit_tables(doc)
     doc.save(path)
     note = "TOC refresh enabled" if toc else "no TOC field (nothing to refresh)"
-    print(f"post-processed {path}: {note}, {n} tables fitted to the text column")
+    print(f"post-processed {path}: {note}, {dup} duplicate figure labels removed, "
+          f"{n} tables fitted to the text column")
     return 0
 
 

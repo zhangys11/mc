@@ -55,7 +55,7 @@ def main() -> int:
         ("power study in §5.6", "### 5.6 Study 4" in draft),
         ("T12 reference diagnostic (Table 5)", "Hoeffding's $D$ (T12) against an independently simulated reference" in draft),
         ("T13 split diagnostic (Supplementary Material §S9)", "## S9." in supp and "§S9" in draft),
-        ("T14 dimension finding (§5.1.1b)", "5.1.1b" in draft),
+        ("T14 dimension finding (§5.1.2)", "5.1.2 The distance-correlation test" in draft),
         ("Wilson endpoints in supplement §S4", "§S4" in draft and "## S4." in supp),
         ("crossed grid in supplement §S5", "## S5." in supp),
         ("alpha grid in supplement §S6", "## S6." in supp),

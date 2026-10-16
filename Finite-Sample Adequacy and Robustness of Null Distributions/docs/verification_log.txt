@@ -1,5 +1,5 @@
 mc-tk verification log (read-only checks)
-date       : 2026-10-13 23:09:04 +0800
+date       : 2026-10-16 17:56:44 +0800
 directory  : /Users/zys/论文/进行中/mc-tk/mc/Finite-Sample Adequacy and Robustness of Null Distributions
 interpreter: /opt/anaconda3/bin/python3 3.13.5
 
@@ -25,7 +25,7 @@ numpy 2.4.6   seed 2024   N = 200
   T10_hotelling        shape=(200,)       first= 0.4867230282  last= 1.0455597945
 
 combined SHA-256 of all ten arrays : 3824e5fe16564e764fec478cac090ffa7d6cd483e555c20c533d813a1ce5a7aa
-sha256(archive_experiments.py)     : 872398f7b8dfdb6ba293182b629d823043a306749dfd69faa8623bf4421013a6
+sha256(archive_experiments.py)     : 92cfd68cbedf3c5d61e3894021c73628f4776e16dd162c248201bef1a415f98b
 [exit 0]
 
 $ python3 docs/probe_docstring_pass.py
@@ -211,6 +211,10 @@ $ python3 code/verify_crossrefs.py
 cross-reference audit SKIPPED: draft.md is not part of this package (submission material). Run it from the submission directory instead.
 [exit 0]
 
+$ python3 code/verify_references.py
+reference check SKIPPED: draft.md is submission material and is not distributed with this package
+[exit 0]
+
 $ python3 code/rev_study1_ext.py --validate
 ========================================================================
 rev_study1_ext.py -- 13-test panel, multi-alpha, null calibration
@@ -263,7 +267,7 @@ N = 10000, ns = [5, 10, 20, 30, 50, 100, 200, 500], alphas = (0.01, 0.05, 0.1), 
 [exit 0]
 
 $ python3 docs/make_manifest.py --check
-manifest entries : 65
+manifest entries : 66
 missing          : none
 changed          : none
 unlisted new     : none

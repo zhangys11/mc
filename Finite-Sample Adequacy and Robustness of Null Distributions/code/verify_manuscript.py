@@ -438,7 +438,7 @@ def main():
         # The sign test IS correctly centered in the archive and in the ladders, so the
         # manuscript must assert that rather than disclaim it.
         c.text("sign test documented as genuine Type I error",
-               "the sign test is centered at the population median of each parent")
+               "The sign test is centered at the population median of each parent")
         c.text("no false-null claim for the sign test",
                "measures size under a false null", present=False)
         c.text("Wilson endpoints pointed at the supplement",

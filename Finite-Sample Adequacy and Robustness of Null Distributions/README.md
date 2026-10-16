@@ -2,7 +2,7 @@
 
 Reproduction package for the manuscript *Finite-Sample Adequacy and Robustness of Null
 Distributions: A Systematic Monte Carlo Study Across Fourteen Hypothesis Tests*
-(COST-S-26-00605, *Computational Statistics*, major revision).
+(COST-D-26-00503R1, *Computational Statistics*, major revision).
 
 The package accompanies the `mc-tk` toolkit in this repository (see the
 [repository README](../../README.md)). The toolkit provides the Monte Carlo primitives;

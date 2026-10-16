@@ -49,6 +49,7 @@ run "$PY" code/verify_manuscript.py || fail=1
 run "$PY" code/verify_dcor_against_R.py || fail=1
 run "$PY" code/verify_letter_claims.py || fail=1
 run "$PY" code/verify_crossrefs.py || fail=1
+run "$PY" code/verify_references.py || fail=1
 run "$PY" code/rev_study1_ext.py --validate || fail=1
 run "$PY" docs/make_manifest.py --check || fail=1
 run "$PY" -c "import sys; sys.path.insert(0, 'code'); import rev_power; print('rev_power imports cleanly')" || fail=1

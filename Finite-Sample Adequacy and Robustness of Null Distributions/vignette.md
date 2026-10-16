@@ -1,6 +1,6 @@
 ---
 title: "Reproducing *Finite-Sample Adequacy and Robustness of Null Distributions*"
-subtitle: "A vignette for the mc-tk simulation package (COST-S-26-00605, *Computational Statistics*, major revision)"
+subtitle: "A vignette for the mc-tk simulation package (COST-D-26-00503R1, *Computational Statistics*, major revision)"
 author: "The authors"
 date: "Revision prepared 12 October 2026"
 ---
@@ -395,7 +395,7 @@ $ python3 -m pydoc core | head -10
 Help on module core:
 
 NAME
-    core - core.py -- shared Monte Carlo kernel for the 14-test panel (COST-S-26-00605 revision).
+    core - core.py -- shared Monte Carlo kernel for the 14-test panel (COST-D-26-00503R1 revision).
 
 DESCRIPTION
     This module is the long-lived home of the test panel used by the revision of

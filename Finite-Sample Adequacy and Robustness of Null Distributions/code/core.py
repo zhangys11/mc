@@ -1,5 +1,5 @@
 """
-core.py -- shared Monte Carlo kernel for the 13-test panel (COST-S-26-00605 revision).
+core.py -- shared Monte Carlo kernel for the 14-test panel (COST-D-26-00503R1 revision).
 
 This module is the long-lived home of the test panel used by the revision of
 "Finite-Sample Adequacy and Robustness of Null Distributions".  It is imported by
@@ -1365,7 +1365,7 @@ def mc_cochran_q_corr(k, n, N, icc=0.0, rng=None, **kwargs):
 # ---------------------------------------------------------------------------
 
 def _n_total_13(test_id, n, k_default=3):
-    """Total sample size entering each test at per-group size ``n`` (13-test panel)."""
+    """Total sample size entering each test at per-group size ``n`` (14-test panel)."""
     if test_id == "T11_kpss":
         return n                      # series length
     if test_id == "T12_hoeffding_d":

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-rev_power.py -- Study 4: power companion study for COST-S-26-00605 (major revision).
+rev_power.py -- Study 4: power companion study for COST-D-26-00503R1 (major revision).
 
 Referee 1, comment 2: the practical guidelines must distinguish Type I error
 robustness (calibration) from overall test performance (discrimination), because

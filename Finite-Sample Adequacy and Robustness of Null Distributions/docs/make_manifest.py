@@ -108,7 +108,7 @@ def write_manifest() -> int:
     """Hash every pipeline source, result and figure; write docs/MANIFEST.sha256."""
     lines = [
         "# SHA-256 manifest of the mc-tk reproducibility package",
-        "# COST-S-26-00605 (Computational Statistics, major revision).",
+        "# COST-D-26-00503R1 (Computational Statistics, major revision).",
         "#",
         "# Regenerate with : python3 docs/make_manifest.py",
         "# Verify with     : python3 docs/make_manifest.py --check",

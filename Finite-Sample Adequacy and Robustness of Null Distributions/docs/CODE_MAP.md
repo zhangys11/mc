@@ -1,6 +1,6 @@
 # Code map — the mc-tk reproducibility package
 
-Manuscript: **COST-S-26-00605**, *Finite-Sample Adequacy and Robustness of Null
+Manuscript: **COST-D-26-00503R1**, *Finite-Sample Adequacy and Robustness of Null
 Distributions: A Systematic Monte Carlo Study Across Thirteen Hypothesis Tests*
 (*Computational Statistics*, major revision).
 
