@@ -2,7 +2,7 @@
 
 ## S1. Overview
 
-This supplement collects the material that the main text refers to but does not carry in full. It has two parts. Sections S2 and S3 report the Kullback-Leibler divergence results, which are a secondary convergence measure and are not the basis of any conclusion in the paper. Sections S4 to S10 hold the expanded tables and diagnostics that the revision moved out of the main text to keep it readable: the cell-by-cell Wilson intervals behind the Study 2 table (S4), the full crossed allocation $\times$ variance grid (S5), the nominal-level grid in full (S6), the Study 2 sample-size sweep in full (S7), the complete positioning table against prior comparative studies (S8), and the two diagnostics for the tests added in this revision (S9, S10). Every section is generated from the results files named in `docs/CODE_MAP.md`, and no conclusion depends on a number that appears only here without also appearing in the main text.
+This supplement collects the material that the main text refers to but does not carry in full. It has two parts. Sections S2 and S3 report the Kullback-Leibler divergence results, which are a secondary convergence measure and are not the basis of any conclusion in the paper. Sections S4 to S10 hold the expanded tables and diagnostics behind the main text: the cell-by-cell Wilson intervals behind the Study 2 table (S4), the full crossed allocation $\times$ variance grid (S5), the nominal-level grid in full (S6), the Study 2 sample-size sweep in full (S7), the complete positioning table against prior comparative studies (S8), and the two diagnostics for the interaction-difference and distance-correlation tests (S9, S10). Every section is generated from the results files named in `docs/CODE_MAP.md`, and no conclusion depends on a number that appears only here without also appearing in the main text.
 
 The rest of this section describes the KL material. The KL divergence measures the information loss when the theoretical density $f_0$ approximates the empirical density $\hat{f}$:
 
@@ -12,7 +12,7 @@ KL divergence requires estimating $\hat{f}$ from the Monte Carlo sample. We used
 
 $$h = 1.06 \cdot \min(\hat{\sigma}, \text{IQR}/1.34) \cdot N^{-1/5}$$
 
-This rule-of-thumb bandwidth is asymptotically optimal — minimising the integrated mean squared error — under the assumption that the underlying density is approximately normal. Its practical advantages are that it requires no tuning and is universally applicable. Its disadvantage, which is consequential here, is that it over-smooths for non-normal or bounded-support distributions: the bandwidth is wider than optimal, flattening features near the boundary. Because the leakage fraction $\Phi(-X_i/h)$ depends inversely on $h$, a wider bandwidth means more kernel mass from near-boundary observations spills into the negative half-line, amplifying the boundary bias. For $\chi^2(2)$ at $N=10{,}000$, Silverman's rule yields $h \approx 0.336$; a boundary-aware bandwidth selector would produce a substantially smaller value near $x=0$, but at the cost of introducing test-specific tuning parameters that compromise the cross-test comparability we require. However, this estimator suffers from a fundamental boundary bias: six of the ten tests (T3–T6, T8, T9) have $\chi^2$ null distributions and two (T2, T10) have $F$ null distributions, both supported only on $[0,\infty)$. The Gaussian kernel places symmetric probability mass around each observation; for observations near $x=0$, up to half of each kernel's mass spills into the negative half-line where the true density is exactly zero. This systematic leakage underestimates the density near the boundary and biases the KL integral precisely in the low-degrees-of-freedom regime of greatest substantive interest. Given that the Kolmogorov-Smirnov distance already provides a non-parametric, distribution-free CDF-level comparison that is unaffected by boundary issues, we elected not to pursue a repaired KL estimator and instead base all quantitative conclusions in the main text on $D_{KS}$ and the empirical Type I error rate. The KL values reported here (§S2) are computed with the standard Gaussian KDE without correction; a full technical discussion of the boundary bias is provided in §S3.
+This rule-of-thumb bandwidth is asymptotically optimal — minimizing the integrated mean squared error — under the assumption that the underlying density is approximately normal. Its practical advantages are that it requires no tuning and is universally applicable. Its disadvantage, which is consequential here, is that it over-smooths for non-normal or bounded-support distributions: the bandwidth is wider than optimal, flattening features near the boundary. Because the leakage fraction $\Phi(-X_i/h)$ depends inversely on $h$, a wider bandwidth means more kernel mass from near-boundary observations spills into the negative half-line, amplifying the boundary bias. For $\chi^2(2)$ at $N=10{,}000$, Silverman's rule yields $h \approx 0.336$; a boundary-aware bandwidth selector would produce a substantially smaller value near $x=0$, but at the cost of introducing test-specific tuning parameters that compromise the cross-test comparability we require. However, this estimator suffers from a fundamental boundary bias: six of the ten tests (T3–T6, T8, T9) have $\chi^2$ null distributions and two (T2, T10) have $F$ null distributions, both supported only on $[0,\infty)$. The Gaussian kernel places symmetric probability mass around each observation; for observations near $x=0$, up to half of each kernel's mass spills into the negative half-line where the true density is exactly zero. This systematic leakage underestimates the density near the boundary and biases the KL integral precisely in the low-degrees-of-freedom regime of greatest substantive interest. Given that the Kolmogorov-Smirnov distance already provides a non-parametric, distribution-free CDF-level comparison that is unaffected by boundary issues, we elected not to pursue a repaired KL estimator and instead base all quantitative conclusions in the main text on $D_{KS}$ and the empirical Type I error rate. The KL values reported here (§S2) are computed with the standard Gaussian KDE without correction; a full technical discussion of the boundary bias is provided in §S3.
 
 ## S2. KL Divergence Values (Study 1)
 
@@ -43,7 +43,7 @@ Table S1 reports $D_{KL}(\hat{f} \parallel f_0)$ computed via Gaussian KDE with 
 
 - The sign test's KL values actually *increase* with $n$ (0.0003 at $n=5$ to 0.0046 at $n=500$), despite the fact that the binomial PMF is exact and the distributional fit is perfect (KS = 0.005–0.008 across all $n$). This artefact arises because the sign test statistic $N^+ \sim \text{Binomial}(n, 0.5)$ is discrete, taking values in $\{0, 1, \ldots, n\}$, but KL divergence is defined for continuous densities and requires estimating a smooth $\hat{f}(x)$ via KDE from a discrete sample. At $n=5$, the binomial has only 6 support points; the KDE smears these into a crude continuous approximation, and the KL integral over a coarse grid registers negligible discrepancy. As $n$ grows, the number of support points increases to $n+1$, and the KDE resolves finer detail across more integer gaps. Each gap between consecutive integers is a region where the true PMF has zero probability mass, but the KDE places a smooth continuous bump there — creating a small but accumulating mismatch between $\hat{f}$ (continuous, smooth) and $f_0$ (discrete, atomic). The total KL sums these per-gap contributions, growing with the number of gaps. This is a discretization artefact, not a genuine distributional discrepancy: the binomial null is exact regardless of $n$, and the KS distance — which operates on discrete CDFs directly — confirms this. The sign test's KL values therefore illustrate a fundamental limitation of applying a continuous-density divergence to a discrete-statistic test.
 
-**Conclusion:** The KL divergence values in Table S1 are not interpretable as genuine measures of distributional discrepancy. The systematic boundary bias for $\chi^2$ and $F$ distributions renders the KL estimates unreliable for cross-test comparisons, and the metric's rapid collapse to zero fails to capture the slow convergence behaviour — particular for the median test and Cochran's Q — that the KS distance reveals convincingly.
+**Conclusion:** The KL divergence values in Table S1 are not interpretable as genuine measures of distributional discrepancy. The systematic boundary bias for $\chi^2$ and $F$ distributions renders the KL estimates unreliable for cross-test comparisons, and the metric's rapid collapse to zero fails to capture the slow convergence behavior — particular for the median test and Cochran's Q — that the KS distance reveals convincingly.
 
 ## S3. Boundary Bias in Gaussian KDE for KL Estimation
 
@@ -91,8 +91,8 @@ The pattern is clear: observations near the boundary ($X_i \lesssim h$) leak a s
 | ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------- |
 | KDE produces $\hat{f}(x) > 0$ for some $x < 0$   | Kernels of observations near zero extend into the negative half-line                                                                            |
 | $f_0(x) = 0$ for all $x < 0$                     | $\chi^2$ and $F$ have support $[0, \infty)$; density is analytically zero on the negative half-line                                             |
-| Density near $x = 0$ is underestimated           | Probability mass leaked to $x < 0$ must come from somewhere; the normalisation constraint depresses the estimate on $[0, \infty)$               |
-| Bias is most severe for small degrees of freedom | For $\chi^2(2)$, $f_0(0) = 0.5$ is the density maximum; observations pile densely near the boundary, maximising total leakage. The symmetric Gaussian kernel cannot reproduce a density that peaks at a hard boundary, biasing the estimate low at $x=0$. |
+| Density near $x = 0$ is underestimated           | Probability mass leaked to $x < 0$ must come from somewhere; the normalization constraint depresses the estimate on $[0, \infty)$               |
+| Bias is most severe for small degrees of freedom | For $\chi^2(2)$, $f_0(0) = 0.5$ is the density maximum; observations pile densely near the boundary, maximizing total leakage. The symmetric Gaussian kernel cannot reproduce a density that peaks at a hard boundary, biasing the estimate low at $x=0$. |
 
 ### S3.4 Possible Remedies
 
@@ -129,14 +129,7 @@ Wang, Q., Kulkarni, S. R., & Verdú, S. (2009). Divergence estimation for multid
 
 ## S4. Wilson 95% intervals for the Study 2 rejection rates, cell by cell
 
-Referee 1 (comment 6) noted that the original manuscript reported a single generic
-interval half-width rather than the interval for each rate. This section gives the
-endpoints for every cell of Table 6 of the main text. All intervals are Wilson score
-intervals; at $N = 10{,}000$ the half-width is $\approx 0.004$ near $\alpha = 0.05$
-but reaches $0.005$–$0.007$ for the extreme rates, so the intervals are not
-interchangeable across the table and two rates should not be compared without them.
-An em dash marks a scenario that is not defined for that test (see the notes to
-Table 6 and Section 5.4).
+This section reports cell-specific Wilson score confidence intervals for the empirical rejection rates of Table 6 in the main text. Unlike a single generic half-width, these intervals account for differences in rejection probability across experimental conditions. All intervals are Wilson score intervals; at $N = 10{,}000$ the half-width is $\approx 0.004$ near $\alpha = 0.05$ but reaches $0.005$–$0.007$ for the extreme rates, so the intervals are not interchangeable across the table and two rates should not be compared without them. An em dash marks a scenario that is not defined for that test (see the notes to Table 6 and Section 5.4).
 
 | Test | Baseline | Skewed | Heavy-tailed | Var. heterog. | Unbalanced | Small exp. freq. |
 |---|---|---|---|---|---|---|
@@ -153,7 +146,7 @@ Table 6 and Section 5.4).
 
 ## S5. Imbalance crossed with heteroscedasticity, full grid
 
-Fixed total $n_T = 150$, normal parents with equal means, $N = 10{,}000$ per cell, $\alpha = 0.05$. All entries are Type I error rates under a true null of equal means. Columns are the variance vector $(\sigma_1^2,\sigma_2^2,\sigma_3^2)$; rows are the allocation of the 150 observations. The main text reports the reading of this table in Section 5.4; the balanced first row conceals both directions.
+Fixed total $n_T = 150$, normal parents with equal means, $N = 10{,}000$ per cell, $\alpha = 0.05$. All entries are empirical rejection rates from equal-mean normal populations. They measure Type I error for ANOVA, whose equal-mean null remains true, but scale sensitivity for Kruskal-Wallis, whose identical-distribution null is violated. Columns are the variance vector $(\sigma_1^2,\sigma_2^2,\sigma_3^2)$; rows are the allocation of the 150 observations. The main text reports the reading of this table in Section 5.4; the balanced first row conceals both directions.
 
 **ANOVA $F$**
 
@@ -205,7 +198,7 @@ Rejection rates at three nominal levels, computed from the same replicate sets s
 
 ## S7. Study 2 scenarios across sample sizes, full grid
 
-Per-group $n$ for the multi-group tests, number of blocks for Cochran's $Q$, total $n_T$ for the $\chi^2$ GOF test as noted in the main text. $N = 10{,}000$ in every cell. The main text summarises the three patterns (recovering, worsening, persistent) that this grid supports.
+Per-group $n$ for the multi-group tests, number of blocks for Cochran's $Q$, total $n_T$ for the $\chi^2$ GOF test as noted in the main text. $N = 10{,}000$ in every cell. The main text summarizes the three patterns (recovering, worsening, persistent) that this grid supports.
 
 | Test | Scenario | $n=20$ | $n=50$ | $n=100$ | $n=200$ |
 |---|---|---|---|---|---|
@@ -250,9 +243,7 @@ Per-group $n$ for the multi-group tests, number of blocks for Cochran's $Q$, tot
 
 ## S8. Full positioning table (prior comparative simulation studies)
 
-Referee 1 asked for a systematic comparison against previous comparative simulation
-studies. The main text carries a condensed version (Table 1); the complete table is
-reproduced here with the data-generating settings of each study.
+This section gives the complete comparison against previous comparative simulation studies; the main text carries a condensed version as Table 1. The table records the data-generating settings and evaluation criteria of each study.
 
 | Study | Tests compared | Simulation settings | Evaluation criteria | Relation to this study |
 |---|---|---|---|---|
@@ -308,10 +299,10 @@ Verdict recorded with the diagnostic: grid inflation at the largest analysis siz
 
 ## S10. Distance-correlation test (T14): local power against a concentrated signal
 
-Generated by `code/gen_dcor_local.py`. The alternative places a quadratic signal in `k_signal` of the `d`
-coordinates, `Y_j = a (X_j^2 - 1) + noise`, at amplitude `a = 1` so that the signal variance is 2 against unit
+Generated by `code/gen_dcor_local.py`. The alternative places a quadratic signal in $k_{\mathrm{signal}}$ of the $d$
+coordinates, $Y_j = a\,(X_j^2 - 1) + \varepsilon_j$, at amplitude `a = 1` so that the signal variance is 2 against unit
 noise. Every cell uses `N = 10,000` replications and the exact finite-sample critical value of T14 at the stated
-`n`. `k_signal = 1` is the spatially concentrated alternative and `k_signal = d` the dense one.
+`n`. $k_{\mathrm{signal}} = 1$ is the spatially concentrated alternative and $k_{\mathrm{signal}} = d$ the dense one.
 
 | `d` | `k_signal` | `n = 20` | `n = 100` | `n = 200` |
 |---|---|---|---|---|

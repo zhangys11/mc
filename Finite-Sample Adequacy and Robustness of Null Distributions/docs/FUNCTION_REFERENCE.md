@@ -69,62 +69,62 @@ fingerprint before and after - see docs/probe_docstring_pass.py).
 
 *Shared kernel of the revision (T1-T13 registry, evaluation, Wilson CI).*
 
-> core.py -- shared Monte Carlo kernel for the 14-test panel (COST-D-26-00503R1 revision). This module is the long-lived home of the test panel used by the revision of "Finite-Sample Adequacy and Robustness of Null Distributions". It is imported by ``rev_study1_ext.py`` (t1), ``rev_alpha_dependence.py`` (t1), ``rev_sensitivity.py`` (t2) and ``rev_power.py`` (t3). Design rules (see docs/DESIGN_CONTRA...
+> core.py -- shared Monte Carlo kernel for the 14-test panel (COST-D-26-00503R1). This module is the long-lived home of the test panel used by "Finite-Sample Adequacy and Robustness of Null Distributions". It is imported by ``rev_study1_ext.py`` (t1), ``rev_alpha_dependence.py`` (t1), ``rev_sensitivity.py`` (t2) and ``rev_power.py`` (t3). Design rules (see docs/DESIGN_CONTRACT.md, Sections 1-3): * T...
 
 | Function | Line | Returns | First sentence of docstring |
 | --- | ---: | --- | --- |
-| `cvm_limit_cdf(x)` | 117 | `-` | Exact CDF of the Cramer-von Mises limit law (Brownian-bridge functional). |
-| `cvm_limit_ppf(q)` | 166 | `-` | UPPER-tail quantile of the Cramer-von Mises limit law. |
-| `cvm_limit_quantile(p)` | 194 | `-` | Ordinary (lower-tail) quantile of the Cramer-von Mises limit law. |
-| `hoeffding_z_sf(z)` | 230 | `-` | Upper-tail probability of the scaled Hoeffding statistic. |
-| `hoeffding_z_cdf(x)` | 281 | `-` | Full-distribution reference CDF for T12, from an independent realisation of the law. |
-| `_hoeffding_ref_moments()` | 312 | `-` | Mean and standard deviation of the T12 reference law. |
-| `hoeffding_z_ppf(alpha)` | 342 | `-` | Upper quantile of the published scaled-Hoeffding tail table. |
-| `_load_hoeffding_law()` | 374 | `-` | Load the independent limit-law quantile grid for T12, if it is on disk. |
-| `_selftest(quick=True, seed=SEED)` | 404 | `-` | Guard rails for the bespoke reference distributions. |
-| `reference_cdf(x, name, args=())` | 508 | `-` | CDF of reference ``name`` at ``x`` (scipy name or a key of REFERENCE_DISTS). |
-| `reference_sf(x, name, args=())` | 515 | `-` | Survival function of reference ``name`` at ``x``. |
-| `reference_ppf(q, name, args=())` | 524 | `-` | Quantile function (q = upper-tail probability) of reference ``name``. |
-| `ks_distance(stat_values, null, args=())` | 535 | `-` | Kolmogorov-Smirnov distance between the empirical and reference CDFs. |
-| `critical_value(test_id, alpha=0.05, ref_args=None)` | 574 | `-` | Theoretical critical value(s) of the test's reference distribution at ``alpha``. |
-| `reject_rate(stat_values, test_id, alpha=0.05, ref_args=None)` | 605 | `-` | Empirical rejection rate at nominal level ``alpha`` using the theoretical rule. |
-| `compute_type1_error(stat_values, dist_name, df_args, alpha=0.05, two_sided=False)` | 642 | `-` | Superset of :func:`experiments.compute_type1_error`. |
-| `_evaluate(stat_values, test_id, alpha=0.05, n=None, ref_args=None)` | 663 | `-` | Evaluate one Monte Carlo sample against the theoretical null of ``test_id``. |
-| `evaluate_multi_alpha(stat_values, test_id, alphas=ALPHAS, n=None, ref_args=None)` | 701 | `-` | Evaluate the same Monte Carlo sample at several nominal levels. |
-| `n_star_alpha(type1_by_n, ns=None, alpha=0.05, tol=0.01)` | 707 | `-` | Smallest ``n`` with ``\|alpha_hat - alpha\| < tol`` (archive operational rule). |
-| `n_star_ks(ks_by_n, ns=None, threshold=KS_THRESHOLD)` | 718 | `-` | Smallest ``n`` with ``D_KS < 1.358/sqrt(N)`` (archive operational rule). |
-| `kpss_statistic(y, lags=None)` | 733 | `-` | KPSS (1992) level-stationarity statistic for one series. |
-| `mc_kpss(n, N, kind='iid', rho=0.0, delta=1.0, rng=None, lags=None, **kwargs)` | 784 | `-` | Study-1/Study-2 generator for T11 (KPSS level stationarity). |
-| `_joint_rank(x, y)` | 856 | `-` | Hmisc mid-rank + bivariate (joint) rank, vectorised. |
-| `hoeffding_d(x, y)` | 874 | `-` | Hoeffding's (1948) D statistic, exactly as in ``Hmisc::hoeffd`` (times 1/30). |
-| `hoeffding_z(d, n)` | 911 | `-` | Scale Hoeffding's ``d`` to the n-free reference scale used by Hmisc/Wolfe. |
-| `mc_hoeffding_d(n, N, dep='indep', rho=0.5, rng=None, **kwargs)` | 938 | `-` | Study-1/Study-2 generator for T12 (Hoeffding's D independence test). |
-| `_interaction_core(Xtr, ytr, Xte, params, grid_m, seed, pd_method='mc', pd_m=PD_M_T13)` | 1016 | `-` | One replication of the interaction test: fit LightGBM, build PD functions, return z. |
-| `_t13_chunk(args)` | 1086 | `-` | Worker for parallel T13 replication chunks (module level: picklable). |
-| `mc_interaction_h(n, N, kind='additive', rho=0.0, rng=None, n_jobs=1, n_train=N_TRAIN_T13, params=None, grid_m=PD_GRID_M_T13, return_h2=False, seed=None, pd_method='mc', pd_m=PD_M_T13, **kwargs)` | 1124 | `-` | Generator for T13, the interaction-effect test of a prediction model. |
-| `mc_t_test_ar1(n, N, rho=0.0, rng=None, **kwargs)` | 1218 | `-` | One-sample t statistic for stationary AR(1) data (mean 0). |
-| `mc_sign_test_ar1(n, N, rho=0.0, rng=None, **kwargs)` | 1242 | `-` | Sign-test count ``N+`` for stationary AR(1) data with median 0. |
-| `_make_clusters(k, c, m, N, icc, dist='normal', rng=None)` | 1265 | `-` | Clustered data: k groups x c clusters x m observations, ICC(1) = icc. |
-| `mc_anova_clustered(k, c, m, N, icc=0.0, dist='normal', rng=None, **kwargs)` | 1281 | `-` | One-way ANOVA F statistic for group-clustered data (T2 dependence scenario). |
-| `mc_kruskal_wallis_clustered(k, c, m, N, icc=0.0, dist='normal', rng=None, **kwargs)` | 1307 | `-` | Kruskal-Wallis H for group-clustered data (T3 dependence scenario). |
-| `mc_cochran_q_corr(k, n, N, icc=0.0, rng=None, **kwargs)` | 1327 | `-` | Cochran's Q for block-correlated dichotomous data (T8 dependence scenario). |
-| `_n_total_13(test_id, n, k_default=3)` | 1367 | `-` | Total sample size entering each test at per-group size ``n`` (14-test panel). |
-| `_pairwise_dist(A)` | 1382 | `-` | Euclidean distance matrix of the rows of ``A``. |
-| `_astar(d)` | 1388 | `-` | Corrected doubly centered distance matrix A* of Szekely & Rizzo (2013). |
-| `_bcdcor(A, B)` | 1412 | `-` | Bias-corrected distance correlation of two distance matrices. |
-| `dcor_t(X, Y)` | 1437 | `-` | Distance-correlation t statistic of Szekely & Rizzo (2013). |
-| `dcor_t_ref_args(n)` | 1463 | `-` | Reference parameters of T14 at sample size ``n``: the t degrees of freedom. |
-| `mc_dcor_t(n, N, d=10, dep='indep', rho=0.5, rng=None, **kwargs)` | 1475 | `-` | Study-1/Study-2 generator for T14 (distance-correlation t-test). |
-| `_parent_draw(n, dist, rng)` | 1605 | `-` | Draw n i.i.d. |
-| `_hook_kpss(spec, N, rng)` | 1624 | `-` | Severity-ladder adapter for T11 (KPSS). |
-| `_hook_hoeffding(spec, N, rng)` | 1645 | `-` | Severity-ladder adapter for T12 (Hoeffding's D). |
-| `_hook_interaction(spec, N, rng)` | 1668 | `-` | Severity-ladder adapter for T13 (interaction / IAD). |
-| `make_meta(seed=SEED, extra=None)` | 1715 | `-` | Reproducibility block attached to every results file. |
-| `save_results(obj, path)` | 1745 | `-` | Write a results dict to JSON (NaN preserved, as in the archive results file). |
-| `update_results(path, **keys)` | 1752 | `-` | Merge ``keys`` into an existing results file (or create it), atomically. |
-| `run_convergence(test_id, ns, N=N_MC, alphas=ALPHAS, gen=None, ref_args_fn=None, seed=None, verbose=False)` | 1792 | `-` | Sweep ``n`` for one test and evaluate the MC null sample at every ``alpha``. |
-| `ks_distance_p(stat_values, test_id, ref_args=None)` | 1864 | `-` | p-value of the one-sample KS test against the theoretical null (diagnostic only). |
-| `default_generator(test_id)` | 1878 | `-` | Default null-configuration generator, mirroring ``experiments.run_study1``. |
+| `cvm_limit_cdf(x)` | 116 | `-` | Exact CDF of the Cramer-von Mises limit law (Brownian-bridge functional). |
+| `cvm_limit_ppf(q)` | 165 | `-` | UPPER-tail quantile of the Cramer-von Mises limit law. |
+| `cvm_limit_quantile(p)` | 193 | `-` | Ordinary (lower-tail) quantile of the Cramer-von Mises limit law. |
+| `hoeffding_z_sf(z)` | 229 | `-` | Upper-tail probability of the scaled Hoeffding statistic. |
+| `hoeffding_z_cdf(x)` | 280 | `-` | Full-distribution reference CDF for T12, from an independent realisation of the law. |
+| `_hoeffding_ref_moments()` | 311 | `-` | Mean and standard deviation of the T12 reference law. |
+| `hoeffding_z_ppf(alpha)` | 341 | `-` | Upper quantile of the published scaled-Hoeffding tail table. |
+| `_load_hoeffding_law()` | 373 | `-` | Load the independent limit-law quantile grid for T12, if it is on disk. |
+| `_selftest(quick=True, seed=SEED)` | 403 | `-` | Guard rails for the bespoke reference distributions. |
+| `reference_cdf(x, name, args=())` | 507 | `-` | CDF of reference ``name`` at ``x`` (scipy name or a key of REFERENCE_DISTS). |
+| `reference_sf(x, name, args=())` | 514 | `-` | Survival function of reference ``name`` at ``x``. |
+| `reference_ppf(q, name, args=())` | 523 | `-` | Quantile function (q = upper-tail probability) of reference ``name``. |
+| `ks_distance(stat_values, null, args=())` | 534 | `-` | Kolmogorov-Smirnov distance between the empirical and reference CDFs. |
+| `critical_value(test_id, alpha=0.05, ref_args=None)` | 573 | `-` | Theoretical critical value(s) of the test's reference distribution at ``alpha``. |
+| `reject_rate(stat_values, test_id, alpha=0.05, ref_args=None)` | 604 | `-` | Empirical rejection rate at nominal level ``alpha`` using the theoretical rule. |
+| `compute_type1_error(stat_values, dist_name, df_args, alpha=0.05, two_sided=False)` | 641 | `-` | Superset of :func:`experiments.compute_type1_error`. |
+| `_evaluate(stat_values, test_id, alpha=0.05, n=None, ref_args=None)` | 662 | `-` | Evaluate one Monte Carlo sample against the theoretical null of ``test_id``. |
+| `evaluate_multi_alpha(stat_values, test_id, alphas=ALPHAS, n=None, ref_args=None)` | 700 | `-` | Evaluate the same Monte Carlo sample at several nominal levels. |
+| `n_star_alpha(type1_by_n, ns=None, alpha=0.05, tol=0.01)` | 706 | `-` | Smallest ``n`` with ``\|alpha_hat - alpha\| < tol`` (archive operational rule). |
+| `n_star_ks(ks_by_n, ns=None, threshold=KS_THRESHOLD)` | 717 | `-` | Smallest ``n`` with ``D_KS < 1.358/sqrt(N)`` (archive operational rule). |
+| `kpss_statistic(y, lags=None)` | 732 | `-` | KPSS (1992) level-stationarity statistic for one series. |
+| `mc_kpss(n, N, kind='iid', rho=0.0, delta=1.0, rng=None, lags=None, **kwargs)` | 783 | `-` | Study-1/Study-2 generator for T11 (KPSS level stationarity). |
+| `_joint_rank(x, y)` | 855 | `-` | Hmisc mid-rank + bivariate (joint) rank, vectorised. |
+| `hoeffding_d(x, y)` | 873 | `-` | Hoeffding's (1948) D statistic, exactly as in ``Hmisc::hoeffd`` (times 1/30). |
+| `hoeffding_z(d, n)` | 910 | `-` | Scale Hoeffding's ``d`` to the n-free reference scale used by Hmisc/Wolfe. |
+| `mc_hoeffding_d(n, N, dep='indep', rho=0.5, rng=None, **kwargs)` | 937 | `-` | Study-1/Study-2 generator for T12 (Hoeffding's D independence test). |
+| `_interaction_core(Xtr, ytr, Xte, params, grid_m, seed, pd_method='mc', pd_m=PD_M_T13)` | 1015 | `-` | One replication of the interaction test: fit LightGBM, build PD functions, return z. |
+| `_t13_chunk(args)` | 1085 | `-` | Worker for parallel T13 replication chunks (module level: picklable). |
+| `mc_interaction_h(n, N, kind='additive', rho=0.0, rng=None, n_jobs=1, n_train=N_TRAIN_T13, params=None, grid_m=PD_GRID_M_T13, return_h2=False, seed=None, pd_method='mc', pd_m=PD_M_T13, **kwargs)` | 1123 | `-` | Generator for T13, the interaction-effect test of a prediction model. |
+| `mc_t_test_ar1(n, N, rho=0.0, rng=None, **kwargs)` | 1217 | `-` | One-sample t statistic for stationary AR(1) data (mean 0). |
+| `mc_sign_test_ar1(n, N, rho=0.0, rng=None, **kwargs)` | 1241 | `-` | Sign-test count ``N+`` for stationary AR(1) data with median 0. |
+| `_make_clusters(k, c, m, N, icc, dist='normal', rng=None)` | 1264 | `-` | Clustered data: k groups x c clusters x m observations, ICC(1) = icc. |
+| `mc_anova_clustered(k, c, m, N, icc=0.0, dist='normal', rng=None, **kwargs)` | 1280 | `-` | One-way ANOVA F statistic for group-clustered data (T2 dependence scenario). |
+| `mc_kruskal_wallis_clustered(k, c, m, N, icc=0.0, dist='normal', rng=None, **kwargs)` | 1306 | `-` | Kruskal-Wallis H for group-clustered data (T3 dependence scenario). |
+| `mc_cochran_q_corr(k, n, N, icc=0.0, rng=None, **kwargs)` | 1326 | `-` | Cochran's Q for block-correlated dichotomous data (T8 dependence scenario). |
+| `_n_total_13(test_id, n, k_default=3)` | 1366 | `-` | Total sample size entering each test at per-group size ``n`` (14-test panel). |
+| `_pairwise_dist(A)` | 1381 | `-` | Euclidean distance matrix of the rows of ``A``. |
+| `_astar(d)` | 1387 | `-` | Corrected doubly centered distance matrix A* of Szekely & Rizzo (2013). |
+| `_bcdcor(A, B)` | 1411 | `-` | Bias-corrected distance correlation of two distance matrices. |
+| `dcor_t(X, Y)` | 1436 | `-` | Distance-correlation t statistic of Szekely & Rizzo (2013). |
+| `dcor_t_ref_args(n)` | 1462 | `-` | Reference parameters of T14 at sample size ``n``: the t degrees of freedom. |
+| `mc_dcor_t(n, N, d=10, dep='indep', rho=0.5, rng=None, **kwargs)` | 1474 | `-` | Study-1/Study-2 generator for T14 (distance-correlation t-test). |
+| `_parent_draw(n, dist, rng)` | 1604 | `-` | Draw n i.i.d. |
+| `_hook_kpss(spec, N, rng)` | 1623 | `-` | Severity-ladder adapter for T11 (KPSS). |
+| `_hook_hoeffding(spec, N, rng)` | 1644 | `-` | Severity-ladder adapter for T12 (Hoeffding's D). |
+| `_hook_interaction(spec, N, rng)` | 1667 | `-` | Severity-ladder adapter for T13 (interaction / IAD). |
+| `make_meta(seed=SEED, extra=None)` | 1714 | `-` | Reproducibility block attached to every results file. |
+| `save_results(obj, path)` | 1744 | `-` | Write a results dict to JSON (NaN preserved, as in the archive results file). |
+| `update_results(path, **keys)` | 1751 | `-` | Merge ``keys`` into an existing results file (or create it), atomically. |
+| `run_convergence(test_id, ns, N=N_MC, alphas=ALPHAS, gen=None, ref_args_fn=None, seed=None, verbose=False)` | 1791 | `-` | Sweep ``n`` for one test and evaluate the MC null sample at every ``alpha``. |
+| `ks_distance_p(stat_values, test_id, ref_args=None)` | 1863 | `-` | p-value of the one-sample KS test against the theoretical null (diagnostic only). |
+| `default_generator(test_id)` | 1877 | `-` | Default null-configuration generator, mirroring ``experiments.run_study1``. |
 
 ## `code/rev_study1_ext.py`
 

@@ -1,8 +1,7 @@
 """
-core.py -- shared Monte Carlo kernel for the 14-test panel (COST-D-26-00503R1 revision).
+core.py -- shared Monte Carlo kernel for the 14-test panel (COST-D-26-00503R1).
 
-This module is the long-lived home of the test panel used by the revision of
-"Finite-Sample Adequacy and Robustness of Null Distributions".  It is imported by
+This module is the long-lived home of the test panel used by "Finite-Sample Adequacy and Robustness of Null Distributions".  It is imported by
 ``rev_study1_ext.py`` (t1), ``rev_alpha_dependence.py`` (t1), ``rev_sensitivity.py``
 (t2) and ``rev_power.py`` (t3).
 
@@ -1247,7 +1246,7 @@ def mc_sign_test_ar1(n, N, rho=0.0, rng=None, **kwargs):
     the time lag, the signs are therefore not exchangeable in the sense the binomial null
     requires, and equal signs cluster in runs.  ``N+`` is consequently over-dispersed
     relative to ``Bin(n, 1/2)`` and the test is badly liberal at large ``rho`` -- measured,
-    not assumed (see the dependence results of the revision).
+    not assumed (see the dependence results of Section 5.5).
 
     Returns
     -------

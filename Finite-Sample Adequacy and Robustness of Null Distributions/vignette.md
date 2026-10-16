@@ -1,17 +1,16 @@
 ---
 title: "Reproducing *Finite-Sample Adequacy and Robustness of Null Distributions*"
-subtitle: "A vignette for the mc-tk simulation package (COST-D-26-00503R1, *Computational Statistics*, major revision)"
+subtitle: "A vignette for the mc-tk simulation package (COST-D-26-00503R1, *Computational Statistics*)"
 author: "The authors"
-date: "Revision prepared 12 October 2026"
+date: "12 October 2026"
 ---
 
 # 1. Purpose and scope
 
-This vignette is the reproducibility document requested by Referee 2 (major
-comment 3). It explains what the code of this study does, in which order to run
-it, which software versions were used, and how a reader can confirm in about one
-second that a downloaded copy behaves exactly as the copy that produced the
-manuscript. Every command whose output is shown below was executed on the machine
+This vignette is the reproducibility document for the study. It explains what the
+code does, in which order to run it, which software versions were used, and how a
+reader can confirm in about one second that a downloaded copy behaves exactly as
+the copy that produced the manuscript. Every command whose output is shown below was executed on the machine
 described in Section 3, and the output is the output that command produced; the
 only unexecuted line in the document is the `cd` into the repository folder in
 Section 2, whose name depends on where the package is downloaded.
@@ -21,10 +20,10 @@ of each of fourteen tests becomes adequate (RQ1), how the null distribution
 degrades when assumptions are violated (RQ2), and how many Monte Carlo
 replications are needed to verify either claim reliably (RQ3); a fourth,
 companion study measures power so that calibration is not confused with
-performance. The table below maps each referee sub-request to the artefact that
+performance. The table below maps each reproducibility requirement to the artefact that
 answers it.
 
-| Referee 2, major comment 3 asks for | Where it is answered |
+| Requirement | Where it is answered |
 |---|---|
 | "an additional vignette … in pdf format that is easily accessible" | this file, `vignette.pdf` |
 | "all required dependencies … with exact version numbers" | Sections 3 and 10; `requirements.txt`, `requirements-lock.txt`, `docs/pip_freeze_full.txt`, `docs/ENVIRONMENT.txt` |
@@ -141,14 +140,14 @@ so the pins can be checked against the actual runs rather than asserted:
 | `rev_results_power.json` | 2.4.6 | 1.16.3 | 3.13.5 |
 | `rev_results_newtests_power.json` | 2.4.6 | — (not imported) | 3.13.5 |
 
-All four agree with `requirements-lock.txt`. The only file without a `meta` block
-is the archive `experiment_results.json` (written before the revision introduced
-it); its provenance is covered by the checksum manifest and by the full re-run
-recorded in Section 10, which reproduces every integer rate exactly under exactly
-these pinned versions. A clean virtual environment built from
-`requirements-lock.txt` alone runs the worked example successfully, which is the
-strongest available evidence that the lock file is complete rather than merely
-consistent.
+All four agree with `requirements-lock.txt`. The only file without a `meta`
+block is the archive `experiment_results.json` (produced by the archive
+pipeline); its provenance is covered by the checksum manifest and by the full
+re-run recorded in Section 10, which reproduces every integer rate exactly
+under exactly these pinned versions. A clean virtual environment built from
+`requirements-lock.txt` alone runs the worked example successfully, which is
+the strongest available evidence that the lock file is complete rather than
+merely consistent.
 
 **Installing.** Any Python 3.10+ installation with NumPy, SciPy and Matplotlib will
 run the pipeline; the exact versions are needed only for bit-level agreement.
@@ -156,17 +155,21 @@ Section 9 gives the step-by-step version for readers who do not use Python.
 
 # 4. Execution flowchart
 
-Figure 1 shows the order in which the files are used: the environment is set up
-once; `experiments.py` holds the ten archived statistic generators and is imported
-unchanged by `core.py`, the shared kernel of the revision (whose `_selftest` runs
-inside every script); the kernel is then used by the four revision study scripts
-and by the independent power check for the new tests, each of which writes one or
-two result files; the result files are the only inputs to the tables and figures of
-the manuscript; and a verification layer checks the whole tree. One ordering
-constraint exists: `rev_study1_ext.py` must run before `rev_alpha_dependence.py`,
-because the second merges its blocks into the file the first created.
+Figure 1 shows the order in which the files are used: the environment is set
+up once; `experiments.py` holds the ten archived statistic generators and is
+imported unchanged by `core.py`, the shared kernel of the extended panel
+(whose `_selftest` runs inside every script); the kernel is then used by the
+four sensitivity and power study scripts and by the independent power check,
+each of which writes one or two result files; the result files are the only
+inputs to the tables and figures of the manuscript; and a verification layer
+checks the whole tree. One ordering constraint exists: `rev_study1_ext.py`
+must run before `rev_alpha_dependence.py`, because the second merges its
+blocks into the file the first created.
 
-![Execution flowchart of the mc-tk simulation package. The archive script and the shared kernel are at the top, the five revision study and verification scripts in the middle with their measured runtimes, their result files below them, and the verification layer at the bottom.](docs/fig_execution_flow.png)
+![Execution flowchart of the mc-tk simulation package. The archive script and
+the shared kernel are at the top, the five sensitivity and verification
+scripts in the middle with their measured runtimes, their result files below
+them, and the verification layer at the bottom.](docs/fig_execution_flow.png)
 
 The same chart is available as Mermaid source (`docs/flowchart.mmd`), which GitHub
 renders automatically, and as a vector PDF (`docs/fig_execution_flow.pdf`) for
@@ -355,7 +358,7 @@ options:
   --skip-verification  skip the equivalence / calibration checks
 ```
 
-**Step 8 — independent power for the new tests.** `python3 code/verify_new_tests_power.py`.
+**Step 8 — independent power check.** `python3 code/verify_new_tests_power.py`.
 Writes `rev_results_newtests_power.json`. Measured wall clock: **37 s**. Key
 numbers: for T11 KPSS at $n=100$ the size is $\hat\alpha = 0.0402$ and the nominal
 power 0.831; for T12 Hoeffding $D$ at $n=100$ the size is 0.0591 and the power
@@ -375,16 +378,16 @@ its own wall clock in its `meta` block.
 
 # 7. Function-level documentation
 
-The referee observed that the Python files had "almost no comments" and asked for a
-short description of each function, including its arguments, the format of the
-input and the format of the output. The request is now answered in full: **every
-top-level function of every script carries a docstring — 188 of 188 across the
-eight pipeline files** (`experiments.py` 20/20, `core.py` 44/44,
-`rev_study1_ext.py` 11/11, `rev_alpha_dependence.py` 7/7, `rev_sensitivity.py`
-52/52, `rev_power.py` 38/38, `verify_new_tests_power.py` 3/3,
-`verify_manuscript.py` 3/3), and so does every tool in `docs/`. The archive script,
-which the referee quoted and which had a single documented function, was completed
-first; the three files that produced the revision numbers were completed last.
+Each Python file documents its functions, so that the purpose of every
+routine, together with the format of its input and of its output, is readable
+without following the whole script. **Every top-level function of every script
+carries a docstring — 188 of 188 across the eight pipeline files**
+(`experiments.py` 20/20, `core.py` 44/44, `rev_study1_ext.py` 11/11,
+`rev_alpha_dependence.py` 7/7, `rev_sensitivity.py` 52/52, `rev_power.py`
+38/38, `verify_new_tests_power.py` 3/3, `verify_manuscript.py` 3/3), and so
+does every tool in `docs/`. The archive script had a single documented
+function and was completed first; the three files that produce the sensitivity
+and power numbers were completed last.
 
 The full list is generated from the sources by `docs/make_function_reference.py`
 and written to `docs/FUNCTION_REFERENCE.md`; because it is generated, it cannot go
@@ -394,15 +397,13 @@ stale. Library-style browsing works out of the box:
 $ python3 -m pydoc core | head -10
 Help on module core:
 
-NAME
-    core - core.py -- shared Monte Carlo kernel for the 14-test panel (COST-D-26-00503R1 revision).
+NAME core - core.py -- shared Monte Carlo kernel for the 14-test panel
+(COST-D-26-00503R1).
 
-DESCRIPTION
-    This module is the long-lived home of the test panel used by the revision of
-    "Finite-Sample Adequacy and Robustness of Null Distributions".  It is imported by
-    ``rev_study1_ext.py`` (t1), ``rev_alpha_dependence.py`` (t1), ``rev_sensitivity.py``
-    (t2) and ``rev_power.py`` (t3).
-```
+DESCRIPTION This module is the long-lived home of the test panel used by
+"Finite-Sample Adequacy and Robustness of Null Distributions". It is imported
+by ``rev_study1_ext.py`` (t1), ``rev_alpha_dependence.py`` (t1),
+``rev_sensitivity.py`` (t2) and ``rev_power.py`` (t3). ```
 
 A representative example of the documentation style, from `core.py`:
 
@@ -456,12 +457,13 @@ The verification scripts were re-run after the pass and are unaffected:
 
 # 8. Worked example: reproducing one published number
 
-The manuscript reports that Bartlett's test rejects at rate $\hat\alpha = 0.429$
-under the skewed parent $\mathrm{Exp}(1)-1$ with three groups of $n = 50$ and
-$N = 10{,}000$ replications (abstract; Table 5; Section 5.2). The stored machine
-value is 0.4288 in `experiment_results.json`. The command below re-runs the same
-configuration through the revision pipeline and compares the printed number and its
-Wilson interval with the committed results file, character by character.
+The manuscript reports that Bartlett's test rejects at rate $\hat\alpha =
+0.429$ under the skewed parent $\mathrm{Exp}(1)-1$ with three groups of $n =
+50$ and $N = 10{,}000$ replications (abstract; Table 5; Section 5.2). The
+stored machine value is 0.4288 in `experiment_results.json`. The command below
+re-runs the same configuration through the sensitivity pipeline and compares
+the printed number and its Wilson interval with the committed results file,
+character by character.
 
 ```text
 $ python3 docs/verify_bartlett.py
@@ -491,17 +493,18 @@ core.py seed=2024  N_MC=10000  alpha=0.05
     type1       : 0.4328   -- NOT the archived 0.4288, because the archive stream is consumed by Study 1 first
   [PASS] standalone archive call is within 3 Monte Carlo sd of the archived value -- z = +0.571
 
-[3] Independent Monte Carlo realisations of the same scenario
-    archive  experiment_results.json : study2.T5_bartlett.skewed                 = 0.4288
-    revision rev_results.json        : study2_nsweep ... by_n['50']          = 0.4267
-    power    rev_results_power.json  : verification.calibration.rows       = 0.4329
-    kernel   this script (seed 7)                                    = 0.4342
-    archive vs power  : z = -0.585   (stored by rev_power.py: +0.585)
-    archive vs n-sweep: z = +0.300
-  [PASS] archive realisation agrees with the power study's calibration check within 3 sd -- z = -0.585
-  [PASS] archive realisation agrees with the revision n-sweep within 3 sd -- z = +0.300
-  [PASS] rev_power.json stores the archive value and its difference correctly -- archive_alpha_hat=0.4288, difference=0.0041
-  [PASS] the manuscript's rounded value 0.429 equals round(0.4288, 3) -- round(0.4288, 3) = 0.429
+[3] Independent Monte Carlo realisations of the same scenario archive
+experiment_results.json : study2.T5_bartlett.skewed = 0.4288 sensitivity
+rev_results.json : study2_nsweep ... by_n['50'] = 0.4267 power
+rev_results_power.json : verification.calibration.rows = 0.4329 kernel this
+script (seed 7) = 0.4342 archive vs power : z = -0.585 (stored by
+rev_power.py: +0.585) archive vs n-sweep: z = +0.300 [PASS] archive
+realisation agrees with the power study's calibration check within 3 sd -- z =
+-0.585 [PASS] archive realisation agrees with the sensitivity n-sweep within 3
+sd -- z = +0.300 [PASS] rev_power.json stores the archive value and its
+difference correctly -- archive_alpha_hat=0.4288, difference=0.0041 [PASS] the
+manuscript's rounded value 0.429 equals round(0.4288, 3) -- round(0.4288, 3) =
+0.429
 
 [4] Closed-form constants used throughout the paper
     core.wilson_ci(0.05, 10000)      = (0.0458984827, 0.0544471158)
@@ -560,7 +563,7 @@ such case, and none of them is an error.
    `np.random.seed(2024)` gives 0.4328 rather than the stored 0.4288 — an equally
    valid realisation of the same configuration, drawn from a different point of the
    stream.
-2. **The revision scripts take an explicit seed per cell.** `rev_sensitivity.py`
+2. **The sensitivity and power scripts take an explicit seed per cell.** `rev_sensitivity.py`
    derives a stable seed from the cell's identity (`cell_seed("nsweep", "skewed")`
    gives 19204), and `core.py` uses `np.random.default_rng(seed)` throughout, so any
    single configuration can be reproduced on its own without replaying anything
@@ -645,16 +648,17 @@ Three examples:
   `sample_sizes = [5, 10, 20, 30, 50, 100, 200, 500]`; replace it with, say,
   `[50, 100]` to study only two sizes. In `rev_sensitivity.py`, the sweep grid is
   `NSWEEP_N` at the top of the file.
-* *Change the nominal level.* Both `experiments.py` and the revision scripts take
+* *Change the nominal level.* Both `experiments.py` and the sensitivity scripts take
   $\alpha$ from a small set; in `core.py` it is `ALPHAS = (0.01, 0.05, 0.10)`.
   Add a value there and every study that calls `evaluate_multi_alpha` will report
   it.
 
-**Reading the output.** Every results file is JSON: plain text that opens in any
-editor, with one entry per test and scenario. For example,
-`experiment_results.json` contains `"T5_bartlett": {"baseline": 0.0479, "skewed":
-0.4288, ...}`, and every revision file additionally starts with a `meta` block
-recording the seed, the package versions and the timestamp of the run.
+**Reading the output.** Every results file is JSON: plain text that opens in
+any editor, with one entry per test and scenario. For example,
+`experiment_results.json` contains `"T5_bartlett": {"baseline": 0.0479,
+"skewed": 0.4288, ...}`, and every sensitivity result file additionally starts
+with a `meta` block recording the seed, the package versions and the timestamp
+of the run.
 
 **If something goes wrong.** Three common cases and their fixes:
 
@@ -668,7 +672,7 @@ recording the seed, the package versions and the timestamp of the run.
 * The figures come out on screen instead of being saved, or the run stalls after
   the last test — on a machine without a display, set the environment variable
   `MPLBACKEND=Agg` before running. On macOS and Linux this is
-  `MPLBACKEND=Agg python3 experiments.py`; the revision scripts already do this
+  `MPLBACKEND=Agg python3 experiments.py`; the sensitivity scripts already do this
   internally.
 
 **Getting help.** Please open an issue in the repository (Section 11) rather than
@@ -711,8 +715,9 @@ run) and the Markdown documents; the reduced-budget smoke artefact
 **(3) The worked example reproduces a published number** — Section 8; `13/13
 checks passed`, exit status 0.
 
-**(4) The results files carry their own provenance.** Every revision results file
-starts with a `meta` block written at run time. For `rev_results.json`:
+**(4) The results files carry their own provenance.** Every sensitivity
+results file starts with a `meta` block written at run time. For
+`rev_results.json`:
 
 ```json
 {"seed": 2024, "N_mc": 10000, "n_fixed": 50,
@@ -803,44 +808,46 @@ one:
 | | `T12_hoeffding_d` > `n=100` > `power_linear` | 0.9973 |
 
 **How exactly does a rerun reproduce the committed files?** We ran the archive
-script twice end to end on the machine of Section 3 (196 s and 205 s). The two runs
-produced **byte-identical** results files (SHA-256 `7fb7080f…`), which shows the
-script is deterministic within a fixed environment. Compared with the committed
-file from the original submission (SHA-256 `6d533636…`), all integer rejection
-rates, all $n^{*}$ values and all intervals agree exactly; 29 of the ~1,000 Study 1
-floating-point KS and KL distances differ in the 14th significant digit (largest
-relative difference $2.9\times10^{-12}$), which is floating-point reduction order
-in a different numerical environment. No value at the precision reported in the
-paper (three decimals) changes. This is the honest form of the reproducibility
-claim: the pipeline is deterministic, and a small part of the archive output is
-reproducible to about twelve significant digits rather than bit for bit when the
-numerical libraries are not the exact versions pinned here.
+script twice end to end on the machine of Section 3 (196 s and 205 s). The two
+runs produced **byte-identical** results files (SHA-256 `7fb7080f…`), which
+shows the script is deterministic within a fixed environment. Compared with
+the committed result file (SHA-256 `6d533636…`), all integer rejection rates,
+all $n^{*}$ values and all intervals agree exactly; 29 of the ~1,000 Study 1
+floating-point KS and KL distances differ in the 14th significant digit
+(largest relative difference $2.9\times10^{-12}$), which is floating-point
+reduction order in a different numerical environment. No value at the
+precision reported in the paper (three decimals) changes. This is the honest
+form of the reproducibility claim: the pipeline is deterministic, and a small
+part of the archive output is reproducible to about twelve significant digits
+rather than bit for bit when the numerical libraries are not the exact
+versions pinned here.
 
-The same effect shows up in `rev_results_t1.json`, which re-generates T1–T10 from
-the archived RNG stream inside the revision pipeline and compares them with
-`experiment_results.json`: `archive_reproduction_check` records
-`like_for_like_type1_max_abs_diff = 0.0` (the rejection counts match the archived
-denominator exactly) and `max_abs_diff_ks = 2.5\times10^{-14}`, the same
-floating-point reduction effect, found independently by a different script.
+The same effect shows up in `rev_results_t1.json`, which re-generates T1–T10
+from the archived RNG stream inside the sensitivity pipeline and compares them
+with `experiment_results.json`: `archive_reproduction_check` records
+`like_for_like_type1_max_abs_diff = 0.0` (the rejection counts match the
+archived denominator exactly) and `max_abs_diff_ks = 2.5\times10^{-14}`, the
+same floating-point reduction effect, found independently by a different
+script.
 
 # 11. Repository, license and data availability
 
-Referee 2 also objected that the GitHub link used in the paper covers unrelated
-work. The revised manuscript answers this with a **dedicated project folder inside
-the mc-tk repository that contains only this study's material**:
+The GitHub link in the manuscript points at a **dedicated project folder
+inside the mc-tk repository that contains only this study's material**:
 
     https://github.com/zhangys11/mc/tree/main/Finite-Sample%20Adequacy%20and%20Robustness%20of%20Null%20Distributions
 
-which holds the scripts, results, figures, this vignette and the documentation, and
-nothing else; the same folder is included as Supplementary Material so the
-materials remain available independently of the repository. The toolkit repository
-itself (`https://github.com/zhangys11/mc`) is cited only as the *software* reference
-for Section 4. `docs/REPO_LAYOUT.md` documents the layout, the licensing (MIT for
-code, CC BY 4.0 for results and figures), the alternative of a separate repository
-with a Zenodo DOI, and the exact wording proposed for the Data Availability
-statement and for the point-by-point response. The Data Availability statement
-should point at the project folder above rather than at the repository root, since
-the root is exactly what the referee found ambiguous.
+which holds the scripts, results, figures, this vignette and the
+documentation, and nothing else; the same folder is included as Supplementary
+Material so the materials remain available independently of the repository.
+The toolkit repository itself (`https://github.com/zhangys11/mc`) is cited
+only as the *software* reference for Section 4. `docs/REPO_LAYOUT.md`
+documents the layout, the licensing (MIT for code, CC BY 4.0 for results and
+figures), the alternative of a separate repository with a Zenodo DOI, and the
+exact wording proposed for the Data Availability statement and for the
+point-by-point response. The Data Availability statement should point at the
+project folder above rather than at the repository root, because the root
+holds unrelated work and does not identify the package unambiguously.
 
 # Appendix A. How this vignette was built
 

@@ -32,42 +32,43 @@ COMMON=(
 # point-by-point response are built without one.
 TOC=(--toc --toc-depth=2)
 
+# Figures are built in two steps.  Pandoc alone would leave each numbered caption outside
+# its float, so LaTeX could set the caption on one page and the image on the next; Pandoc
+# also uses the Markdown image's alternative text as the float caption, which produced a
+# second, unnumbered caption.  code/pin_figures.py rewrites the intermediate .tex so the
+# real caption sits inside a non-floating figure environment, then xelatex typesets it.
+render_pdf() {
+  local src="$1" out="$2"; shift 2
+  local tex
+  mkdir -p .build
+  tex=".build/${out%.pdf}.tex"
+  pandoc "$src" "${COMMON[@]}" "$@" -t latex -o "$tex"
+  python3 code/pin_figures.py "$tex"
+  xelatex -interaction=nonstopmode -halt-on-error -output-directory=.build "$tex" >/dev/null 2>&1
+  cp ".build/${out%.pdf}.pdf" "$out"
+}
+
 build_draft() {
   echo "==> draft.pdf"
-  pandoc draft.md "${COMMON[@]}" \
-    -V documentclass=article \
-    -V linestretch=1.15 \
-    -o draft.pdf
+  render_pdf draft.md draft.pdf -V documentclass=article -V linestretch=1.15
   echo "    $(du -h draft.pdf | cut -f1)  draft.pdf"
 }
 
 build_letter() {
   echo "==> response_letter.pdf"
-  pandoc response_letter.md "${COMMON[@]}" \
-    -V documentclass=article \
-    -V linestretch=1.15 \
-    -o response_letter.pdf
+  render_pdf response_letter.md response_letter.pdf -V documentclass=article -V linestretch=1.15
   echo "    $(du -h response_letter.pdf | cut -f1)  response_letter.pdf"
 }
 
 build_supp() {
   echo "==> supplementary_material.pdf"
-  pandoc supplementary_material.md "${COMMON[@]}" "${TOC[@]}" \
-    -V documentclass=article \
-    -V linestretch=1.15 \
-    -o supplementary_material.pdf
+  render_pdf supplementary_material.md supplementary_material.pdf -V documentclass=article -V linestretch=1.15 "${TOC[@]}"
   echo "    $(du -h supplementary_material.pdf | cut -f1)  supplementary_material.pdf"
 }
 
 build_vignette() {
   echo "==> vignette.pdf"
-  pandoc vignette.md "${COMMON[@]}" "${TOC[@]}" \
-    -V documentclass=article \
-    -V linestretch=1.15 \
-    -V geometry:margin=1.9cm \
-    -V mainfont="Helvetica Neue" -V monofont="Menlo" \
-    --highlight-style=tango \
-    -o vignette.pdf
+  render_pdf vignette.md vignette.pdf -V documentclass=article -V linestretch=1.15 -V geometry:margin=1.9cm -V mainfont="Helvetica Neue" -V monofont="Menlo" --highlight-style=tango "${TOC[@]}"
   echo "    $(du -h vignette.pdf | cut -f1)  vignette.pdf"
 }
 
