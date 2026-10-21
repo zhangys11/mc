@@ -1,5 +1,9 @@
 import importlib.metadata
-__version__ = importlib.metadata.version('mc-tk')
+
+try:
+    __version__ = importlib.metadata.version("mc-tk")
+except importlib.metadata.PackageNotFoundError:  # running from a source checkout
+    __version__ = "1.2.0"
 
 import os.path
 DATA_FOLDER = os.path.dirname(os.path.realpath(__file__)) + "/data/"

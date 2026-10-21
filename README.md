@@ -16,6 +16,9 @@ A reproducible Monte Carlo toolkit for statistical inference.
 
 ![The class diagram of the mc-tk package](class%20diagram.jpg)
 
+The class diagram is generated from the package modules with
+`python3 doc/make_class_diagram.py`.
+
 # modules and classes
 
 <table border="1" cellspacing="0">
