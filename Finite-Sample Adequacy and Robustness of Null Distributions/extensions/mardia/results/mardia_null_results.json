@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_utc": "2026-10-21T11:37:21+00:00",
+    "generated_utc": "2026-10-21T15:02:25+00:00",
     "python": "3.13.5",
     "numpy": "2.4.6",
     "scipy": "1.16.3",
@@ -9,8 +9,8 @@
     "seed": 2024,
     "quick": false,
     "ks_threshold": 0.013580000000000002,
-    "runtimes_seconds": 156.7,
-    "script": "mardia/study_mardia_null.py"
+    "runtimes_seconds": 146.0,
+    "script": "extensions/mardia/study_mardia_null.py"
   },
   "normal_calibration": [
     {
@@ -1659,8 +1659,8 @@
     }
   },
   "figures": [
-    "mardia/figures/fig_mardia_skew_null.png",
-    "mardia/figures/fig_mardia_kurt_null.png",
-    "mardia/figures/fig_mardia_nonnormal.png"
+    "extensions/mardia/figures/fig_mardia_skew_null.png",
+    "extensions/mardia/figures/fig_mardia_kurt_null.png",
+    "extensions/mardia/figures/fig_mardia_nonnormal.png"
   ]
 }

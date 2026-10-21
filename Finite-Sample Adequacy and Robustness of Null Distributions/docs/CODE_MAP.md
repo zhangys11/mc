@@ -57,8 +57,11 @@ first created (`core.update_results`). All other scripts are order-independent.
 
 Direct third-party imports: `numpy`, `scipy` and `matplotlib` for the study
 scripts; `lightgbm` additionally for T13 inside `core.py`. Nothing else is
-imported — in particular **no script imports the `mc-tk` package**, which is
-consistent with Section 4 of the manuscript: the numbers come from these
+imported. The optional studies under `extensions/` are the one exception: they
+import `mc-tk` (`mc.samplings.Box_M_Test`, `mc.samplings.Mardia_Test`) and are
+outside the manuscript pipeline described in this file. Consistent with Section
+4 of the manuscript, no script of the fourteen-test panel imports the `mc-tk`
+package: the numbers come from these
 standalone scripts, and `mc-tk` 1.1.0 is the separately versioned library.
 `pandas`, `scikit-learn`, `statsmodels` and `shap` are installed in the same
 Anaconda environment but are **not** used by this project.

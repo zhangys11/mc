@@ -50,6 +50,13 @@ Two properties make this satisfy the referee:
   scripts, the results, this vignette, the code map and the pinned environment, and
   nothing else.
 
+An `extensions/` subtree now contains two later, optional studies (Box's M and
+Mardia's multivariate normality tests).  They are **not** part of the manuscript, are
+excluded from `docs/MANIFEST.sha256` and from every verification script, and are kept
+here only so the toolkit repository has one home for its null-distribution studies.
+A reader interested strictly in the paper can ignore `extensions/`; the manuscript-facing
+material described in this file is unchanged.
+
 Recommended upgrade when time permits: create a standalone repository
 `https://github.com/zhangys11/mc-tk-null-distributions`, push the same folder, tag
 it (`paper-comstat-v1.0`) and archive the tag on Zenodo for a DOI. That makes the

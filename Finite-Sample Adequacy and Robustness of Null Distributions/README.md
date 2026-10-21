@@ -74,7 +74,34 @@ figures/                  published panels
 docs/                     CODE_MAP.md, DESIGN_CONTRACT.md, FUNCTION_REFERENCE.md,
                           ENVIRONMENT.txt, MANIFEST.sha256, the verification tooling,
                           the execution flowchart
+extensions/               optional later studies (Box's M, Mardia); not part of the
+                          fourteen-test manuscript and not covered by the manifest
+  box_m/                  Box's M null-distribution study
+  mardia/                 Mardia skewness/kurtosis null-distribution study
 ```
+
+## Optional extension studies
+
+`extensions/box_m/` and `extensions/mardia/` are two later Monte Carlo studies of the
+null distributions of Box's M test and Mardia's multivariate skewness/kurtosis tests.
+They are **not part of the fourteen-test manuscript**: they are not referenced by
+`code/verify_manuscript.py`, are excluded from `docs/MANIFEST.sha256`, and are not
+needed to reproduce any published number. They live here so that the toolkit repository
+has a single home for its null-distribution studies.
+
+Unlike the manuscript pipeline, they import the `mc-tk` classes
+(`mc.samplings.Box_M_Test` and `mc.samplings.Mardia_Test`), so run them from a clone of
+the repository with the `src/` tree present (they require the current `mc-tk` 1.2.0+,
+which is where these classes were added; the frozen fourteen-test pipeline continues to
+use the historical 1.1.0 environment recorded in `docs/ENVIRONMENT.txt`):
+
+| Study | Command (from this package root) | Runtime |
+|---|---|---|
+| Box's M | `python3 extensions/box_m/study_box_m_null.py` | ~1 min |
+| Mardia | `python3 extensions/mardia/study_mardia_null.py` | ~2.5 min |
+
+Each directory has its own `README.md`, `results/` and `figures/`.  A `--quick` smoke
+run writes `*_quick.json` and does not overwrite the committed full-run results.
 
 ## Verification
 

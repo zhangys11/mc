@@ -1,10 +1,10 @@
 # Box's M null-distribution study
 
 Monte Carlo verification of the null distribution of the Box's M statistic
-implemented in [`mc.samplings.Box_M_Test`](../src/mc/samplings/_box_m_test.py).
-The scripts put `../src` on `sys.path`, so they run from a clone without an
-installation; they use the toolkit's runtime dependencies (`numpy`, `scipy`,
-`matplotlib`, `tqdm`).
+implemented in [`mc.samplings.Box_M_Test`](../../../src/mc/samplings/_box_m_test.py).
+The scripts put the repository's `src/` on `sys.path`, so they run from a clone
+without an installation; they use the toolkit's runtime dependencies (`numpy`,
+`scipy`, `matplotlib`, `tqdm`).
 
 Box's M tests the homogeneity of covariance matrices across `k` groups of
 `p`-variate observations:
@@ -36,10 +36,20 @@ the normal assumption. Two questions are answered by simulation:
 
 ## Running
 
+Run from the repository root (the script locates `src/` itself):
+
 ```bash
-python3 box_m/study_box_m_null.py              # full run, ~1 min
-python3 box_m/study_box_m_null.py --quick      # smoke run, ~11 s
-python3 box_m/study_box_m_null.py --no-figures # results only
+python3 "Finite-Sample Adequacy and Robustness of Null Distributions/extensions/box_m/study_box_m_null.py"
+python3 "Finite-Sample Adequacy and Robustness of Null Distributions/extensions/box_m/study_box_m_null.py" --quick
+python3 "Finite-Sample Adequacy and Robustness of Null Distributions/extensions/box_m/study_box_m_null.py" --no-figures
+```
+
+or from the package root (`Finite-Sample Adequacy and Robustness of Null Distributions/`):
+
+```bash
+python3 extensions/box_m/study_box_m_null.py              # full run, ~1 min
+python3 extensions/box_m/study_box_m_null.py --quick      # smoke run, ~11 s
+python3 extensions/box_m/study_box_m_null.py --no-figures # results only
 ```
 
 The full run writes `results/box_m_null_results.json` (all rows, the analytic

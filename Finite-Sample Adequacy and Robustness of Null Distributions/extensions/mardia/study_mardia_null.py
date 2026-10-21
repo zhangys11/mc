@@ -51,8 +51,10 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from scipy import stats  # noqa: E402
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "src"))
+HERE = Path(__file__).resolve().parent
+PACKAGE_ROOT = HERE.parents[1]      # "Finite-Sample Adequacy ..." package root
+REPO_ROOT = HERE.parents[2]         # mc-tk repository root (holds src/mc)
+sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from mc.samplings import Mardia_Test  # noqa: E402
 
@@ -66,7 +68,7 @@ DEFAULT_N_MC = N_MC
 ALPHAS = (0.01, 0.05)
 KS_THRESHOLD = 1.358 / np.sqrt(N_MC)   # 95% KS critical value at N_MC
 
-OUT_DIR = Path(__file__).resolve().parent
+OUT_DIR = HERE
 RESULTS_DIR = OUT_DIR / "results"
 FIGURES_DIR = OUT_DIR / "figures"
 
@@ -327,7 +329,7 @@ def _save(fig, name):
     path = FIGURES_DIR / name
     fig.savefig(path, dpi=160, bbox_inches="tight", facecolor="white")
     plt.close(fig)
-    print("  wrote", path.relative_to(ROOT))
+    print("  wrote", path.relative_to(PACKAGE_ROOT))
     return path
 
 
@@ -530,10 +532,10 @@ def main(argv=None):
     figures = []
     if not args.no_figures:
         print("\nFigures")
-        figures.append(str(figure_skew_null(normal_rows).relative_to(ROOT)))
-        figures.append(str(figure_kurt_null(normal_rows).relative_to(ROOT)))
+        figures.append(str(figure_skew_null(normal_rows).relative_to(PACKAGE_ROOT)))
+        figures.append(str(figure_kurt_null(normal_rows).relative_to(PACKAGE_ROOT)))
         figures.append(str(figure_nonnormal(nonnormal_rows, limit_rows)
-                           .relative_to(ROOT)))
+                           .relative_to(PACKAGE_ROOT)))
 
     p2 = [r for r in normal_rows if r["p"] == 2]
     p2 = sorted(p2, key=lambda r: r["n"])
@@ -591,7 +593,7 @@ def main(argv=None):
             "quick": bool(args.quick),
             "ks_threshold": KS_THRESHOLD,
             "runtimes_seconds": round(time.time() - started, 1),
-            "script": "mardia/study_mardia_null.py",
+            "script": "extensions/mardia/study_mardia_null.py",
         },
         "normal_calibration": normal_rows,
         "nonnormal_alternatives": nonnormal_rows,
@@ -606,7 +608,7 @@ def main(argv=None):
     out = RESULTS_DIR / ("mardia_null_results_quick.json" if args.quick
                          else "mardia_null_results.json")
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    print("\nwrote", out.relative_to(ROOT))
+    print("\nwrote", out.relative_to(PACKAGE_ROOT))
     print("elapsed: {:.1f} s".format(time.time() - started))
 
     print("\nHeadline")

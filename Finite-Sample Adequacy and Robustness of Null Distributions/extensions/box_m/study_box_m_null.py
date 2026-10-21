@@ -51,8 +51,10 @@ import matplotlib.pyplot as plt  # noqa: E402
 import numpy as np  # noqa: E402
 from scipy import stats  # noqa: E402
 
-ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT / "src"))
+HERE = Path(__file__).resolve().parent
+PACKAGE_ROOT = HERE.parents[1]      # "Finite-Sample Adequacy ..." package root
+REPO_ROOT = HERE.parents[2]         # mc-tk repository root (holds src/mc)
+sys.path.insert(0, str(REPO_ROOT / "src"))
 
 from mc.samplings import Box_M_Test  # noqa: E402
 
@@ -67,7 +69,7 @@ ALPHAS = (0.01, 0.05)
 KS_THRESHOLD = 1.358 / np.sqrt(N_MC)   # 95% KS critical value at N_MC
 N_LIMIT = 200_000                      # draws used to represent the limiting law
 
-OUT_DIR = Path(__file__).resolve().parent
+OUT_DIR = HERE
 RESULTS_DIR = OUT_DIR / "results"
 FIGURES_DIR = OUT_DIR / "figures"
 
@@ -359,7 +361,7 @@ def _save(fig, name):
     path = FIGURES_DIR / name
     fig.savefig(path, dpi=160, bbox_inches="tight", facecolor="white")
     plt.close(fig)
-    print("  wrote", path.relative_to(ROOT))
+    print("  wrote", path.relative_to(PACKAGE_ROOT))
     return path
 
 
@@ -553,9 +555,9 @@ def main(argv=None):
     figures = []
     if not args.no_figures:
         print("\nFigures")
-        figures.append(str(figure_normal_adequacy(normal_rows).relative_to(ROOT)))
-        figures.append(str(figure_nonnormal(nonnormal_rows).relative_to(ROOT)))
-        figures.append(str(figure_limit_convergence(nonnormal_rows).relative_to(ROOT)))
+        figures.append(str(figure_normal_adequacy(normal_rows).relative_to(PACKAGE_ROOT)))
+        figures.append(str(figure_nonnormal(nonnormal_rows).relative_to(PACKAGE_ROOT)))
+        figures.append(str(figure_limit_convergence(nonnormal_rows).relative_to(PACKAGE_ROOT)))
 
     normal_final = [r for r in normal_rows if r["n"] >= 50]
     nonnormal_at = {(r["parent"], r["n"], r["k"], r["p"]): r
@@ -589,7 +591,7 @@ def main(argv=None):
             "quick": bool(args.quick),
             "ks_threshold": KS_THRESHOLD,
             "runtimes_seconds": round(time.time() - started, 1),
-            "script": "box_m/study_box_m_null.py",
+            "script": "extensions/box_m/study_box_m_null.py",
         },
         "normal_adequacy": normal_rows,
         "nonnormal_null": nonnormal_rows,
@@ -604,7 +606,7 @@ def main(argv=None):
     out = RESULTS_DIR / ("box_m_null_results_quick.json" if args.quick
                          else "box_m_null_results.json")
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
-    print("\nwrote", out.relative_to(ROOT))
+    print("\nwrote", out.relative_to(PACKAGE_ROOT))
     print("elapsed: {:.1f} s".format(time.time() - started))
 
     print("\nHeadline")

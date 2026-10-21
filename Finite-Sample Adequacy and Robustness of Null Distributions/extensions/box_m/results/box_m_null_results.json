@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_utc": "2026-10-21T11:34:43+00:00",
+    "generated_utc": "2026-10-21T14:59:58+00:00",
     "python": "3.13.5",
     "numpy": "2.4.6",
     "scipy": "1.16.3",
@@ -10,8 +10,8 @@
     "seed": 2024,
     "quick": false,
     "ks_threshold": 0.013580000000000002,
-    "runtimes_seconds": 57.4,
-    "script": "box_m/study_box_m_null.py"
+    "runtimes_seconds": 56.6,
+    "script": "extensions/box_m/study_box_m_null.py"
   },
   "normal_adequacy": [
     {
@@ -4387,8 +4387,8 @@
     }
   },
   "figures": [
-    "box_m/figures/fig_box_m_normal_adequacy.png",
-    "box_m/figures/fig_box_m_nonnormal.png",
-    "box_m/figures/fig_box_m_limit_convergence.png"
+    "extensions/box_m/figures/fig_box_m_normal_adequacy.png",
+    "extensions/box_m/figures/fig_box_m_nonnormal.png",
+    "extensions/box_m/figures/fig_box_m_limit_convergence.png"
   ]
 }

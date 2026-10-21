@@ -267,23 +267,22 @@ See the demo notebooks (`demo.ipynb`, `demo_CO.ipynb`) for quick-start examples.
 The directory [`Finite-Sample Adequacy and Robustness of Null Distributions`](Finite-Sample%20Adequacy%20and%20Robustness%20of%20Null%20Distributions/) contains the
 reproduction package for a comparative simulation study of fourteen hypothesis tests: the
 analysis scripts, every results file, the published figures, the verification tooling and
-a user guide (`vignette.md`, also as `vignette.pdf`). It is self-contained and independent
-of the package API; start from its own `README.md`, which states exactly which analyses
-re-run from a clone and which long runs are committed as artefacts.
+a user guide (`vignette.md`, also as `vignette.pdf`). Its fourteen-test pipeline is
+self-contained and independent of the package API; start from its own `README.md`, which
+states exactly which analyses re-run from a clone and which long runs are committed as
+artefacts. The optional extension studies described below are the exception: they import
+`mc-tk` itself.
 
-The directory [`box_m/`](box_m/) contains the Monte Carlo verification study of the null
-distribution of the `Box_M_Test` statistic: normal-theory adequacy over a `(k, p, n)`
-grid, the breakdown of the chi-square reference for non-normal populations with identical
-covariance matrices, and the weighted chi-square limit implied by the fourth moments. Run
-`python3 box_m/study_box_m_null.py` (about a minute) to regenerate its results file
-and figures; see `box_m/README.md`.
-
-The directory [`mardia/`](mardia/) contains the Monte Carlo verification study of the null
-distributions of `Mardia_Test`: calibration of the skewness chi-square and kurtosis normal
-references over a `(p, n)` grid, the exact finite-sample mean of the kurtosis statistic,
-and the behaviour of both tests on non-normal populations (including the multivariate t).
-Run `python3 mardia/study_mardia_null.py` (about two and a half minutes) to regenerate
-its results file and figures; see `mardia/README.md`.
+The same package also hosts two optional extension studies under
+[`extensions/`](Finite-Sample%20Adequacy%20and%20Robustness%20of%20Null%20Distributions/extensions/):
+`box_m/` verifies the null distribution of `Box_M_Test` (normal-theory adequacy, the
+breakdown under non-normal populations with identical covariance matrices, and the
+weighted chi-square limit implied by the fourth moments); `mardia/` verifies the null
+distributions of `Mardia_Test` (skewness/kurtosis calibration, the exact finite-sample
+mean of the kurtosis statistic, and behaviour on non-normal populations including the
+multivariate t). They are **not part of the fourteen-test manuscript** and are excluded
+from the package's manifest and verification scripts; see that package's `README.md` for
+the run commands and the `extensions/*/README.md` files for the study details.
 
 # future plan
 

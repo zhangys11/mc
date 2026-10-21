@@ -2,7 +2,7 @@
 
 Monte Carlo verification of the null distributions of Mardia's multivariate
 skewness and kurtosis tests, implemented in
-[`mc.samplings.Mardia_Test`](../src/mc/samplings/_mardia_test.py).  The scripts
+[`mc.samplings.Mardia_Test`](../../../src/mc/samplings/_mardia_test.py).  The scripts
 put `../src` on `sys.path`, so they run from a clone without an installation;
 they use the toolkit's runtime dependencies (`numpy`, `scipy`, `matplotlib`,
 `tqdm`).
@@ -31,10 +31,20 @@ Z_K = (b_{2,p} - p(p+2)) / sqrt(8 p(p+2)/n)  ->  N(0, 1).
 
 ## Running
 
+Run from the repository root (the script locates `src/` itself):
+
 ```bash
-python3 mardia/study_mardia_null.py            # full run, ~2.5 min
-python3 mardia/study_mardia_null.py --quick    # smoke run, ~30 s
-python3 mardia/study_mardia_null.py --no-figures
+python3 "Finite-Sample Adequacy and Robustness of Null Distributions/extensions/mardia/study_mardia_null.py"
+python3 "Finite-Sample Adequacy and Robustness of Null Distributions/extensions/mardia/study_mardia_null.py" --quick
+python3 "Finite-Sample Adequacy and Robustness of Null Distributions/extensions/mardia/study_mardia_null.py" --no-figures
+```
+
+or from the package root (`Finite-Sample Adequacy and Robustness of Null Distributions/`):
+
+```bash
+python3 extensions/mardia/study_mardia_null.py            # full run, ~2.5 min
+python3 extensions/mardia/study_mardia_null.py --quick    # smoke run, ~30 s
+python3 extensions/mardia/study_mardia_null.py --no-figures
 ```
 
 The full run writes `results/mardia_null_results.json`; a `--quick` smoke run
