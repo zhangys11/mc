@@ -47,6 +47,8 @@ class McBase(object):
             theory = scipy.stats.t.pdf(x=x_theory, df=k)
         elif dist == "f":
             theory = scipy.stats.f.pdf(x=x_theory, dfn=df1, dfd=df2)
+        elif dist == "norm":
+            theory = scipy.stats.norm.pdf(x_theory)
         else:
             raise ValueError("Unsupported theoretical distribution: {}".format(dist))
 

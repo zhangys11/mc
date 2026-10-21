@@ -111,7 +111,7 @@ A reproducible Monte Carlo toolkit for statistical inference.
             </td>
         </tr>
         <tr>
-            <td rowspan="17">
+            <td rowspan="20">
                 mc.samplings
             </td>
             <td rowspan="8">
@@ -190,6 +190,14 @@ A reproducible Monte Carlo toolkit for statistical inference.
         </tr>
         <tr>
             <td>
+                Box_M_Test
+            </td>
+            <td>
+                Verify&nbsp;the&nbsp;Bartlett-corrected&nbsp;Box&rsquo;s&nbsp;M&nbsp;statistic&nbsp;for&nbsp;the&nbsp;equality&nbsp;of&nbsp;k&nbsp;covariance&nbsp;matrices&nbsp;follows&nbsp;the&nbsp;&chi;2&nbsp;distribution.
+            </td>
+        </tr>
+        <tr>
+            <td>
                 Anova
             </td>
             <td>
@@ -236,6 +244,14 @@ A reproducible Monte Carlo toolkit for statistical inference.
                 Verify&nbsp;the&nbsp;T2 &nbsp;statistic&nbsp;from&nbsp;two&nbsp;multivariate&nbsp;Gaussian&nbsp;populations follows&nbsp;the&nbsp;Hotelling&rsquo;s&nbsp;T2 &nbsp;distribution.
             </td>
         </tr>
+        <tr>
+            <td>
+                Mardia_Test
+            </td>
+            <td>
+                Verify&nbsp;Mardia&rsquo;s&nbsp;multivariate&nbsp;skewness&nbsp;and&nbsp;kurtosis&nbsp;statistics&nbsp;follow&nbsp;their&nbsp;asymptotic&nbsp;&chi;2&nbsp;and&nbsp;normal&nbsp;null&nbsp;distributions.
+            </td>
+        </tr>
     </tbody>
 </table>
 
@@ -251,6 +267,20 @@ analysis scripts, every results file, the published figures, the verification to
 a user guide (`vignette.md`, also as `vignette.pdf`). It is self-contained and independent
 of the package API; start from its own `README.md`, which states exactly which analyses
 re-run from a clone and which long runs are committed as artefacts.
+
+The directory [`box_m/`](box_m/) contains the Monte Carlo verification study of the null
+distribution of the `Box_M_Test` statistic: normal-theory adequacy over a `(k, p, n)`
+grid, the breakdown of the chi-square reference for non-normal populations with identical
+covariance matrices, and the weighted chi-square limit implied by the fourth moments. Run
+`python3 box_m/study_box_m_null.py` (about a minute) to regenerate its results file
+and figures; see `box_m/README.md`.
+
+The directory [`mardia/`](mardia/) contains the Monte Carlo verification study of the null
+distributions of `Mardia_Test`: calibration of the skewness chi-square and kurtosis normal
+references over a `(p, n)` grid, the exact finite-sample mean of the kurtosis statistic,
+and the behaviour of both tests on non-normal populations (including the multivariate t).
+Run `python3 mardia/study_mardia_null.py` (about two and a half minutes) to regenerate
+its results file and figures; see `mardia/README.md`.
 
 # future plan
 
