@@ -37,6 +37,8 @@ finite-sample expectation; the accompanying study (`mardia/`) quantifies the
 resulting miscalibration by Monte Carlo.
 """
 
+import warnings
+
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy import stats
@@ -65,7 +67,11 @@ class Mardia_Test(McBase):
         'lognorm'.  For 't' the multivariate t is drawn with its true
         covariance standardized to the identity; the other non-normal choices
         use independent standardized margins with identity covariance, so the
-        population covariance is the identity in every case.
+        population covariance is the identity in every case.  A t parent with
+        ``4 < df <= 8`` has a finite mean of b2 but an infinite variance of
+        b2; such a parent is useful for simulating heavy-tailed alternatives,
+        but its normal-theory null diagnostics are not calibrated (the
+        ``summary`` method warns about it).
     parent_args : dict or None
         Extra parameters: {'df': ...} for 't' (default 10) and 'chi2'
         (default 1), {'sigma': ...} for 'lognorm' (default 0.5).
@@ -94,9 +100,10 @@ class Mardia_Test(McBase):
             raise ValueError("parent must be one of {}".format(self.PARENT_NAMES))
         self.parent = parent
         self.parent_args = dict(parent_args or {})
+        self._validate_parent_args()
 
         self.stats = None      # filled by simulate()
-        self.summary_ = None   # filled by run()/summary()
+        self.summary_ = None   # filled by run() and summary()
 
     # ------------------------------------------------------------------ #
     # reference distributions / finite-sample moments
@@ -119,6 +126,24 @@ class Mardia_Test(McBase):
     # ------------------------------------------------------------------ #
     # data generation
     # ------------------------------------------------------------------ #
+    def _validate_parent_args(self):
+        """Validate and normalize ``parent_args`` once, at construction time."""
+        if self.parent == "t":
+            df = float(self.parent_args.get("df", 10.0))
+            if df <= 4:
+                raise ValueError("t parent needs df > 4 for a finite kurtosis")
+            self.parent_args["df"] = df
+        elif self.parent == "chi2":
+            df = float(self.parent_args.get("df", 1.0))
+            if df <= 0:
+                raise ValueError("chi2 parent needs df > 0")
+            self.parent_args["df"] = df
+        elif self.parent == "lognorm":
+            sigma = float(self.parent_args.get("sigma", 0.5))
+            if sigma <= 0:
+                raise ValueError("lognorm parent needs sigma > 0")
+            self.parent_args["sigma"] = sigma
+
     def _draw(self, rng):
         """Draw one (n, p) sample from the chosen parent with identity covariance."""
         shape = (self.n, self.p)
@@ -127,19 +152,17 @@ class Mardia_Test(McBase):
         if self.parent == "normal":
             return rng.standard_normal(shape)
         if self.parent == "t":
-            df = float(args.get("df", 10.0))
-            if df <= 4:
-                raise ValueError("t parent needs df > 4 for a finite kurtosis")
+            df = args["df"]
             # Z / sqrt(W/df) has covariance df/(df-2) I; rescale to identity.
             return rng.standard_normal(shape) * np.sqrt(
                 (df - 2.0) / rng.chisquare(df, (self.n, 1)))
         if self.parent == "exp":
             return rng.exponential(1.0, shape) - 1.0
         if self.parent == "chi2":
-            df = float(args.get("df", 1.0))
+            df = args["df"]
             return (rng.chisquare(df, shape) - df) / np.sqrt(2.0 * df)
         if self.parent == "lognorm":
-            sigma = float(args.get("sigma", 0.5))
+            sigma = args["sigma"]
             mean = np.exp(sigma ** 2 / 2.0)
             sd = np.sqrt((np.exp(sigma ** 2) - 1.0) * np.exp(sigma ** 2))
             return (rng.lognormal(0.0, sigma, shape) - mean) / sd
@@ -163,6 +186,12 @@ class Mardia_Test(McBase):
         -------
         dict with keys 'b1', 'b2' (sample skewness / kurtosis), 'skew'
         (n b1 / 6) and 'kurt' (the standardized kurtosis Z_K).
+
+        Notes
+        -----
+        The implementation forms the full ``n x n`` matrix ``d_ij``, so memory
+        is O(n^2); this is the reason the validation study uses fewer
+        replications for ``n = 1000``.
         """
         X = np.asarray(X, dtype=float)
         if X.ndim == 1:
@@ -175,6 +204,8 @@ class Mardia_Test(McBase):
 
         centered = X - X.mean(axis=0, keepdims=True)
         cov = centered.T @ centered / n
+        if not np.all(np.isfinite(cov)):
+            raise ValueError("sample covariance matrix contains non-finite values")
         inv_cov = np.linalg.inv(cov)
         # D[i, j] = (X_i - Xbar)' S^{-1} (X_j - Xbar)
         d = centered @ inv_cov @ centered.T
@@ -196,7 +227,10 @@ class Mardia_Test(McBase):
 
         The p-values rely on the normal-theory references and are the ones the
         test is normally used with; they inherit the finite-sample bias
-        documented in the class docstring.
+        documented in the class docstring.  They are not calibrated when the
+        class ``parent`` is a non-normal population: there they describe the
+        normal-theory test applied to those data, not a null law of that
+        population.
         """
         X = np.asarray(X, dtype=float)
         if X.ndim == 1:
@@ -244,10 +278,19 @@ class Mardia_Test(McBase):
         -------
         dict with the sample moments of the two statistics, the KS distance to
         chi2(dof_skew) and N(0, 1), the empirical rejection rates at level
-        ``alpha`` and the exact finite-sample expectation of b2.
+        ``alpha`` and ``expected_kurtosis_finite``.  The latter is the
+        normal-theory finite-sample mean p (p + 2) (n - 1) / (n + 1); it is not
+        the expectation of b2 under the non-normal ``parent`` choices.
         """
         if self.stats is None:
             self.simulate(progress=progress)
+
+        if self.parent == "t" and self.parent_args["df"] <= 8.0:
+            warnings.warn(
+                "the t parent has df <= 8: Var(b2) is infinite, so the normal "
+                "reference and Monte Carlo standard errors are not calibrated "
+                "for this parent; treat it as an alternative-only simulation",
+                RuntimeWarning)
 
         skew = self.stats["skew"]
         kurt = self.stats["kurt"]
@@ -285,6 +328,7 @@ class Mardia_Test(McBase):
         out["type1_kurt_upper"] = float(
             np.mean(kurt > stats.norm.ppf(1.0 - alpha)))
 
+        self.summary_ = out
         return out
 
     def run(self, display=True):
@@ -318,8 +362,10 @@ class Mardia_Test(McBase):
             grid_kurt = np.linspace(-1.05 * upper_kurt, 1.05 * upper_kurt, 300)
             axes[1].hist(kurt, bins=80, density=True, label="MC null",
                          **BARPLOT_KWARGS)
-            axes[1].plot(grid_kurt, stats.norm.pdf(grid_kurt),
-                         color="black", lw=1.6, label="N(0, 1)")
+            axes[1].plot(
+                grid_kurt,
+                super().init_theory(dist="norm", x_theory=grid_kurt),
+                color="black", lw=1.6, label="N(0, 1)")
             axes[1].set(title="Mardia kurtosis statistic\n"
                               "p = {}, n = {}".format(self.p, self.n),
                         xlabel="Z_K", ylabel="density")

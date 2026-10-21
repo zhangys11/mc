@@ -104,9 +104,10 @@ class Box_M_Test(McBase):
             raise ValueError("parent must be one of {}".format(self.PARENT_NAMES))
         self.parent = parent
         self.parent_args = dict(parent_args or {})
+        self._validate_parent_args()
 
         self.stats = None      # filled by simulate()
-        self.summary_ = None   # filled by run()/summary()
+        self.summary_ = None   # filled by run() and summary()
 
     # ------------------------------------------------------------------ #
     # statistic
@@ -130,8 +131,9 @@ class Box_M_Test(McBase):
     @staticmethod
     def _logdet(matrix):
         sign, value = np.linalg.slogdet(matrix)
-        if sign <= 0:
-            raise np.linalg.LinAlgError("sample covariance matrix is singular")
+        if sign <= 0 or not np.isfinite(value):
+            raise np.linalg.LinAlgError(
+                "sample covariance matrix is singular or non-finite")
         return value
 
     def statistic(self, groups):
@@ -182,6 +184,24 @@ class Box_M_Test(McBase):
     # ------------------------------------------------------------------ #
     # simulation
     # ------------------------------------------------------------------ #
+    def _validate_parent_args(self):
+        """Validate and normalize ``parent_args`` once, at construction time."""
+        if self.parent == "t":
+            df = float(self.parent_args.get("df", 8.0))
+            if df <= 2:
+                raise ValueError("t parent needs df > 2")
+            self.parent_args["df"] = df
+        elif self.parent == "chi2":
+            df = float(self.parent_args.get("df", 1.0))
+            if df <= 0:
+                raise ValueError("chi2 parent needs df > 0")
+            self.parent_args["df"] = df
+        elif self.parent == "lognorm":
+            sigma = float(self.parent_args.get("sigma", 0.5))
+            if sigma <= 0:
+                raise ValueError("lognorm parent needs sigma > 0")
+            self.parent_args["sigma"] = sigma
+
     def _draw_group(self, rng, size):
         """Draw one group of iid standardized p-variate observations."""
         shape = (size, self.p)
@@ -190,17 +210,15 @@ class Box_M_Test(McBase):
         if self.parent == "normal":
             return rng.standard_normal(shape)
         if self.parent == "t":
-            df = float(args.get("df", 8.0))
-            if df <= 2:
-                raise ValueError("t parent needs df > 2")
+            df = args["df"]
             return rng.standard_t(df, shape) / np.sqrt(df / (df - 2.0))
         if self.parent == "exp":
             return rng.exponential(1.0, shape) - 1.0
         if self.parent == "chi2":
-            df = float(args.get("df", 1.0))
+            df = args["df"]
             return (rng.chisquare(df, shape) - df) / np.sqrt(2.0 * df)
         if self.parent == "lognorm":
-            sigma = float(args.get("sigma", 0.5))
+            sigma = args["sigma"]
             mean = np.exp(sigma ** 2 / 2.0)
             sd = np.sqrt((np.exp(sigma ** 2) - 1.0) * np.exp(sigma ** 2))
             return (rng.lognormal(0.0, sigma, shape) - mean) / sd
@@ -284,6 +302,7 @@ class Box_M_Test(McBase):
             out["ks_scaled_chi2"] = float(stats.kstest(
                 corrected, lambda x: stats.chi2.cdf(x / a, b)).statistic)
 
+        self.summary_ = out
         return out
 
     def run(self, display=True):

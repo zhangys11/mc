@@ -1,6 +1,6 @@
 {
   "meta": {
-    "generated_utc": "2026-10-21T11:19:48+00:00",
+    "generated_utc": "2026-10-21T11:34:43+00:00",
     "python": "3.13.5",
     "numpy": "2.4.6",
     "scipy": "1.16.3",
@@ -8,8 +8,9 @@
     "N_MC": 10000,
     "N_LIMIT": 200000,
     "seed": 2024,
+    "quick": false,
     "ks_threshold": 0.013580000000000002,
-    "runtimes_seconds": 56.6,
+    "runtimes_seconds": 57.4,
     "script": "box_m/study_box_m_null.py"
   },
   "normal_adequacy": [

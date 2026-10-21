@@ -58,6 +58,11 @@ from mc.samplings import Box_M_Test  # noqa: E402
 
 SEED = 2024
 N_MC = 10_000
+# Defaults captured before ``main`` mutates the module-level values, so that a
+# second ``main`` call in the same interpreter starts from the documented
+# defaults instead of inheriting a previous ``--quick``/``--seed`` setting.
+DEFAULT_SEED = SEED
+DEFAULT_N_MC = N_MC
 ALPHAS = (0.01, 0.05)
 KS_THRESHOLD = 1.358 / np.sqrt(N_MC)   # 95% KS critical value at N_MC
 N_LIMIT = 200_000                      # draws used to represent the limiting law
@@ -81,7 +86,12 @@ PARENT_LABELS = {
 # ---------------------------------------------------------------------------
 
 def excess_kurtosis(parent):
-    """Excess kurtosis of the standardized marginal used by ``Box_M_Test``."""
+    """Excess kurtosis of the standardized marginal used by ``Box_M_Test``.
+
+    All non-normal configurations in this study use the class defaults
+    (t: df=8, chi2: df=1, lognorm: sigma=0.5), so the values below match
+    ``Box_M_Test``'s defaults.
+    """
     if parent == "normal":
         return 0.0
     if parent == "t":
@@ -218,8 +228,8 @@ def nonnormal_null(N, n_limit, seed=SEED):
 
     rng = np.random.default_rng(seed)
     for index, (parent, k, p, n) in enumerate(cases):
-        model, corrected, _raw = run_config(k, p, [n] * k, parent, N,
-                                            seed + 1000 + index)
+        model, corrected, _ = run_config(k, p, [n] * k, parent, N,
+                                         seed + 1000 + index)
         nu = model.dof
         kurt = excess_kurtosis(parent)
         _omega, eigenvalues = weighted_limit(p, [kurt] * p)
@@ -271,8 +281,8 @@ def unbalanced_groups(N, seed=SEED):
     ]
     rows = []
     for index, (k, p, sizes) in enumerate(cases):
-        model, corrected, _raw = run_config(k, p, sizes, "normal", N,
-                                            seed + 2000 + index)
+        model, corrected, _ = run_config(k, p, sizes, "normal", N,
+                                         seed + 2000 + index)
         nu = model.dof
         row = {
             "k": k, "p": p, "group_sizes": sizes, "dof": nu, "N": N,
@@ -497,12 +507,14 @@ def main(argv=None):
     global N_MC, KS_THRESHOLD, SEED
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--N", type=int, default=N_MC,
-                        help="MC replications per configuration (default %d)" % N_MC)
+    parser.add_argument("--N", type=int, default=DEFAULT_N_MC,
+                        help="MC replications per configuration (default %d)"
+                             % DEFAULT_N_MC)
     parser.add_argument("--n-limit", type=int, default=N_LIMIT,
-                        help="draws representing the limiting law (default %d)" % N_LIMIT)
-    parser.add_argument("--seed", type=int, default=SEED,
-                        help="master seed (default %d)" % SEED)
+                        help="draws representing the limiting law (default %d)"
+                             % N_LIMIT)
+    parser.add_argument("--seed", type=int, default=DEFAULT_SEED,
+                        help="master seed (default %d)" % DEFAULT_SEED)
     parser.add_argument("--quick", action="store_true",
                         help="fast smoke run: N = 2000")
     parser.add_argument("--no-figures", action="store_true",
@@ -574,6 +586,7 @@ def main(argv=None):
             "N_MC": n_mc,
             "N_LIMIT": n_limit,
             "seed": SEED,
+            "quick": bool(args.quick),
             "ks_threshold": KS_THRESHOLD,
             "runtimes_seconds": round(time.time() - started, 1),
             "script": "box_m/study_box_m_null.py",
@@ -587,7 +600,9 @@ def main(argv=None):
     }
 
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
-    out = RESULTS_DIR / "box_m_null_results.json"
+    # A smoke run must not clobber the canonical full-run artifact.
+    out = RESULTS_DIR / ("box_m_null_results_quick.json" if args.quick
+                         else "box_m_null_results.json")
     out.write_text(json.dumps(payload, indent=2), encoding="utf-8")
     print("\nwrote", out.relative_to(ROOT))
     print("elapsed: {:.1f} s".format(time.time() - started))

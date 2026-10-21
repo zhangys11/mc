@@ -2,8 +2,9 @@
 
 Monte Carlo verification of the null distribution of the Box's M statistic
 implemented in [`mc.samplings.Box_M_Test`](../src/mc/samplings/_box_m_test.py).
-The study is self-contained and needs only `numpy`, `scipy` and `matplotlib`
-(the same runtime dependencies as the toolkit).
+The scripts put `../src` on `sys.path`, so they run from a clone without an
+installation; they use the toolkit's runtime dependencies (`numpy`, `scipy`,
+`matplotlib`, `tqdm`).
 
 Box's M tests the homogeneity of covariance matrices across `k` groups of
 `p`-variate observations:
@@ -41,10 +42,13 @@ python3 box_m/study_box_m_null.py --quick      # smoke run, ~11 s
 python3 box_m/study_box_m_null.py --no-figures # results only
 ```
 
-The script writes `results/box_m_null_results.json` (all rows, the analytic
-checks and the headline numbers) and three figures under `figures/`. The
-defaults are `N = 10,000` replications per configuration, `200,000` draws for
-the limiting law, and seed `2024`; the full run takes about a minute on one core (57 s in the committed run).
+The full run writes `results/box_m_null_results.json` (all rows, the analytic
+checks and the headline numbers) and three figures under `figures/`; a
+`--quick` smoke run writes `results/box_m_null_results_quick.json` instead, so
+it cannot overwrite the canonical full-run artifact. The defaults are
+`N = 10,000` replications per configuration, `200,000` draws for the limiting
+law, and seed `2024`; the full run takes about a minute on one core (57 s in the
+committed run).
 
 ## What is measured
 
@@ -82,8 +86,11 @@ collapses to `chi2(nu)`; the script checks this numerically for `p = 2, 3, 4`
 (`checks.normal_limit_is_chi2`). For example, exponential margins with
 `k = 3`, `p = 2` give eigenvalues `(8, 8, 2)`, so the limit is
 `4 chi2(2) + 4 chi2(2) + 1 chi2(2)`, not a scaled `chi2(6)`. The class's
-`p = 1` case must reduce exactly to the Bartlett statistic, which the script
-verifies to `3.6e-15` (`checks.p1_reduces_to_bartlett`).
+`p = 1` case must reduce exactly to Bartlett's numerator `M` and to its
+correction constant `c`, which the script verifies to `3.6e-15`
+(`checks.p1_reduces_to_bartlett`).  The *corrected* statistics differ at
+`O(c^2)`: the Bartlett class divides by `1 + c` while Box's M multiplies by
+`1 - c`.
 
 ## Results
 
@@ -105,8 +112,9 @@ table is in `results/box_m_null_results.json`.
 for `n >= 20` three of 36 configurations sit marginally above it and the maximum
 is 0.0152, which is what 36 simultaneous 5% tests produce. Type I errors stay
 within `[0.045, 0.054]` at the 5% level. The Bartlett correction is what makes
-this work at small `n`: without it the null law of `M` has mean `nu (1 + c)` and
-the empirical size at `n = 10` reaches 0.295 instead of 0.05.
+this work at small `n`: to first order, the uncorrected null law of `M` has mean
+`nu (1 + c)` (exact normal-theory means differ by `O(n^-2)`), and the empirical
+size at `n = 10` reaches 0.295 instead of 0.05.
 
 ### Non-normal populations with H0 true: the reference breaks down
 
@@ -142,6 +150,7 @@ The correction keeps working when the groups are unbalanced
 ```
 study_box_m_null.py            the study (CLI, no arguments required)
 results/box_m_null_results.json  every row + analytic checks + metadata
+results/box_m_null_results_quick.json  optional smoke-run output (not committed)
 figures/fig_box_m_normal_adequacy.png    D_KS and size vs n under normality
 figures/fig_box_m_nonnormal.png          size inflation; distances; density overlay
 figures/fig_box_m_limit_convergence.png  mean/variance vs the weighted-chi2 limit

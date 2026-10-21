@@ -507,7 +507,7 @@ Each class constructs the test statistic's random variable and compares it with 
         \hline
         \begin{tabular}[c]{@{}c@{}}samplings.\\Bartlett\_Test\end{tabular}                       & Bartlett's Test                                                          & \begin{tabular}[c]{@{}c@{}}$H_0$:All k population \\variances are equal\end{tabular}                & $\chi^2=\frac{(N-k)ln(S_p^2)-\sum_{i=1}^k(n_i-1)ln(S_i^2)}{1+\frac{1}{3(k-1)}(\sum_{i=1}^k(\frac{1}{n_i})-\frac{1}{N-k})}$ & $\chi^2(k-1)$                   \\
         \hline
-        \begin{tabular}[c]{@{}c@{}}samplings.\\Box\_M\_Test\end{tabular}                         & \begin{tabular}[c]{@{}c@{}}Box's M Test \\ (homogeneity of \\ covariance matrices)\end{tabular} & $H_0:\Sigma_1=...=\Sigma_k$                                                                          & $M=(N-k)ln|S_p|-\sum_{i=1}^k(n_i-1)ln|S_i|$                                                                                 & $\chi^2(\nu)$                   \\
+        \begin{tabular}[c]{@{}c@{}}samplings.\\Box\_M\_Test\end{tabular}                         & \begin{tabular}[c]{@{}c@{}}Box's M Test \\ (homogeneity of \\ covariance matrices)\end{tabular} & $H_0:\Sigma_1=...=\Sigma_k$                                                                          & $M=(N-k)ln|S_p|-\sum_i(n_i-1)ln|S_i|$; $(1-c)M$                                                                              & $\chi^2(\nu)$                   \\
         \hline
         \begin{tabular}[c]{@{}c@{}}samplings.\\Sign\_Test\end{tabular}                           & sign test                                                                & $H_0:m = m_0$                                                                                       & N- \qquad N+                                                                                                               & $b(n,p)$                        \\
         \hline
@@ -722,7 +722,7 @@ mc-tk provides the Bartlett\_Test class to verify the test statistic follows a d
 \end{figure}
 
 \subsection{Box's M Test}
-Box's M test generalises Bartlett's test from variances to covariance matrices. For $k$ groups of
+Box's M test \cite{box1949} generalises Bartlett's test from variances to covariance matrices. For $k$ groups of
 $p$-variate observations it tests
 \begin{equation}
     \label{deqn_boxm_h0}
@@ -774,7 +774,7 @@ population; the \texttt{parent} argument can be set to a non-normal family ('t',
 \end{figure}
 
 \subsection{Mardia's Tests}
-Mardia's tests assess multivariate normality through the third and fourth moments.  For a
+Mardia's tests \cite{mardia1970} assess multivariate normality through the third and fourth moments.  For a
 $p$-variate population with mean $\mu$ and covariance matrix $\Sigma$, let
 $D^2=(X-\mu)^{T}\Sigma^{-1}(X-\mu)$ be the squared Mahalanobis distance.  The population
 skewness and kurtosis are
@@ -809,7 +809,10 @@ quantifies the resulting miscalibration.
 mc-tk provides the Mardia\_Test class to verify these null distributions
 (Figure \ref{fig: mardia mc}).  The \texttt{parent} argument also allows non-normal
 populations, including the multivariate $t$ distribution, for which
-$\beta_{2,p}=p(p+2)(\nu-2)/(\nu-4)$.
+$\beta_{2,p}=p(p+2)(\nu-2)/(\nu-4)$.  A $t$ parent with $4<\nu\le 8$ has a finite
+mean of $b_{2,p}$ but an infinite variance of $b_{2,p}$, so it is useful for
+simulating heavy-tailed alternatives but its normal-theory null diagnostics are not
+calibrated.
 
 \lstset{
     basicstyle=\footnotesize,

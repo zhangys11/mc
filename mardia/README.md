@@ -2,9 +2,10 @@
 
 Monte Carlo verification of the null distributions of Mardia's multivariate
 skewness and kurtosis tests, implemented in
-[`mc.samplings.Mardia_Test`](../src/mc/samplings/_mardia_test.py).  The study is
-self-contained (`numpy`, `scipy`, `matplotlib`) and accompanies the classes'
-Monte Carlo diagnostics.
+[`mc.samplings.Mardia_Test`](../src/mc/samplings/_mardia_test.py).  The scripts
+put `../src` on `sys.path`, so they run from a clone without an installation;
+they use the toolkit's runtime dependencies (`numpy`, `scipy`, `matplotlib`,
+`tqdm`).
 
 Mardia (1970) generalises skewness and kurtosis to `p`-variate data.  With
 `D^2 = (X - mu)' Sigma^{-1} (X - mu)` the squared Mahalanobis distance,
@@ -36,15 +37,20 @@ python3 mardia/study_mardia_null.py --quick    # smoke run, ~30 s
 python3 mardia/study_mardia_null.py --no-figures
 ```
 
-The full run uses `N = 10,000` replications per configuration (2,000 for the
-`n = 1000` multivariate-t points, which are expensive because every replication
-forms an `n x n` matrix of Mahalanobis products) and seed `2024`; see
-`results/mardia_null_results.json` for every row and the metadata.
+The full run writes `results/mardia_null_results.json`; a `--quick` smoke run
+writes `results/mardia_null_results_quick.json` instead, so it cannot overwrite
+the canonical full-run artifact.  The full run uses `N = 10,000` replications
+per configuration (2,000 for the `n = 1000` multivariate-t points, which are
+expensive because every replication forms an `n x n` matrix of Mahalanobis
+products) and seed `2024`; see the results file for every row and the metadata.
+The analytic consistency checks use fixed internal seeds and are therefore not
+affected by `--seed`.
 
 ## What the study measures
 
 * **Null calibration under multivariate normality** on a grid of
-  `p in {1,2,3,5,10}` and `n in {10,20,50,100,200}` (with `n > p + 1`):
+  `p in {1,2,3,5,10}` and `n in {10,20,50,100,200}` (the grid keeps
+  `n > p + 1`, so for example `p = 10` starts at `n = 20`):
   the mean and variance of `n b1/6` against `chi2(dof)`, the mean and standard
   deviation of `Z_K` against `N(0,1)`, KS distances, and empirical type I
   errors at 1% and 5%.
@@ -90,8 +96,9 @@ the finite-sample null distributions are far from them:
 * The kurtosis statistic `Z_K` has a strongly negative finite-sample mean and
   `sd(Z_K) < 1`; the exact finite-sample mean formula
   `E[b2] = p(p+2)(n-1)/(n+1)` matches the simulation to within 2.4 Monte Carlo
-  standard errors, and `E[Z_K] = (E[b2] - p(p+2))/sqrt(8p(p+2)/n)` matches to
-  the same accuracy (both checks pass).
+  standard errors.  The corresponding `E[Z_K]` check is algebraically the same
+  statement (the two JSON values agree to roundoff), so it is one piece of
+  evidence, not two.
 * The two-sided kurtosis test can therefore **over-reject badly**: at
   `p = 10, n = 20` its size is 0.199, almost entirely from the lower tail
   (the upper-tail size is 0.000), because `E[Z_K] = -1.65`.  Centring `Z_K` by
@@ -113,9 +120,12 @@ the finite-sample null distributions are far from them:
 | t(30) | 2 | 200 | 0.15 (0) | 8.47 (8.62)  | 0.115 | 0.173 |
 | exp   | 2 | 200 | 7.59 (8.00) | 17.70 (20.00) | 1.000 | 1.000 |
 
-* The multivariate-t kurtosis formula is verified in the large-`n` run:
+* The multivariate-t kurtosis formula is supported by the large-`n` run:
   at `n = 1000`, `E[b2]/beta2` is 0.818 for `t(5)`, 0.992 for `t(10)` and
-  0.995 for `t(30)`.  The `t(5)` sample kurtosis converges very slowly: the fourth moment is
+  0.995 for `t(30)`.  For `t(10)` and `t(30)` this is a verification within
+  Monte Carlo error; for `t(5)` it is only a slow-convergence observation,
+  because `b2` has infinite variance when `nu <= 8` (so no finite Monte Carlo
+  standard error exists).  The `t(5)` sample kurtosis converges very slowly: the fourth moment is
   finite, but the higher moments that control its sampling variability are not
   (the variance of `b2` needs eighth moments, which require `nu > 8`), so the
   finite-sample bias decays very slowly; at `n = 200` the ratio is still 0.659.  This is exactly the kind of
@@ -158,12 +168,15 @@ figures/fig_mardia_nonnormal.png   power, moment estimates, t-limit convergence
 * The references are asymptotic: `n b1/6 -> chi2` and `Z_K -> N(0,1)`.  The
   study deliberately keeps the class's canonical (uncorrected) statistics;
   the comparison with the exact finite-sample mean is a diagnostic, not a
-  modified test.
-* The `p` values in the grid are at most 10 and the smallest `n` is `p + 2`;
-  the over-rejection at `p = 10, n = 20` is therefore an extreme corner of the
-  `p/n` regime, but it is a legitimate corner and is reported as such.
+  modified test.  The class's `expected_kurtosis_finite` is the normal-theory
+  expectation and is not the expectation of `b2` under the non-normal parents.
+* The `p` values in the grid are at most 10 and the grid keeps `n >= p + 2`
+  (the smallest grid value is `n = 10`); the over-rejection at `p = 10, n = 20`
+  is therefore an extreme corner of the `p/n` regime, but it is a legitimate
+  corner and is reported as such.
 * Monte Carlo standard errors: with `N = 10,000` the type I standard error is
-  `2.2e-3` at the 5% level and the KS standard error is about `1.4e-3`;
-  Wilson intervals for the rejection rates are included in the results file.
+  `2.2e-3` at the 5% level and the KS standard error is about `1.4e-3`.
+  Wilson intervals are included in the results file for the null type-I rates
+  only; the power rows of the non-normal study do not carry intervals.
 * The multivariate t is standardized to its true covariance matrix, so the
   identity covariance assumption of the class holds for every parent.

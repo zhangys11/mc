@@ -1,14 +1,15 @@
 {
   "meta": {
-    "generated_utc": "2026-10-21T11:22:17+00:00",
+    "generated_utc": "2026-10-21T11:37:21+00:00",
     "python": "3.13.5",
     "numpy": "2.4.6",
     "scipy": "1.16.3",
     "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
     "N_MC": 10000,
     "seed": 2024,
+    "quick": false,
     "ks_threshold": 0.013580000000000002,
-    "runtimes_seconds": 148.4,
+    "runtimes_seconds": 156.7,
     "script": "mardia/study_mardia_null.py"
   },
   "normal_calibration": [
