@@ -1,0 +1,3 @@
+# The repository-wide .gitignore drops *.log. The simulation run log and the
+# manifest of the committed results are part of the record, so re-include logs here.
+!*.log

@@ -1,0 +1,58 @@
+{
+  "schema_version": "2.0",
+  "generated_at": "2026-10-22T22:15:50+08:00",
+  "git_commit": "43e196d365cb511595519192d4be79268963ca69",
+  "seed": 2024,
+  "environment": {
+    "python": "3.13.5",
+    "numpy": "2.4.6",
+    "platform": "macOS-26.6.2-arm64-arm-64bit-Mach-O",
+    "scipy": "1.16.3",
+    "matplotlib": "3.11.0",
+    "scikit-learn": "1.9.0"
+  },
+  "script": "experiment.py",
+  "results_file": "experiment_results.json",
+  "study1_tests": [
+    "T10_hotelling",
+    "T1_t_test",
+    "T2_anova",
+    "T3_kruskal_wallis",
+    "T4_chisq_gof",
+    "T5_bartlett",
+    "T6_fligner_killeen",
+    "T7_sign_test",
+    "T8_cochran_q",
+    "T9_median_test"
+  ],
+  "study_mv_configs": [
+    "T11_box_m_lognormal_p2_k2",
+    "T11_box_m_lognormal_p2_k3",
+    "T11_box_m_lognormal_p3_k2",
+    "T11_box_m_lognormal_p3_k3",
+    "T11_box_m_normal_p2_k2",
+    "T11_box_m_normal_p2_k3",
+    "T11_box_m_normal_p3_k2",
+    "T11_box_m_normal_p3_k3",
+    "T11_box_m_t5_p2_k2",
+    "T11_box_m_t5_p2_k3",
+    "T11_box_m_t5_p3_k2",
+    "T11_box_m_t5_p3_k3"
+  ],
+  "exact_null_validation": {
+    "n_pairs_lr_vs_inv": 36,
+    "max_rel_lr_vs_inv": 0.001149134281457069,
+    "median_rel_lr_vs_inv": 0.00021440028598351278,
+    "n_pairs_vs_mc": 30,
+    "max_rel_lr_vs_mc": 0.005139632164627836,
+    "max_rel_inv_vs_mc": 0.006016197022556784,
+    "max_rel_chi2_vs_mc": 0.1453697894059514
+  },
+  "bootstrap_benchmark": {
+    "B_test": 200,
+    "B_boot": 100,
+    "note": "parametric bootstrap benchmark; not used by any table or figure"
+  },
+  "script_sha256": "ff7bbc83c13f1fbe77df068e4507682a51f5a3c556caab05e12c376bdf83cf9b",
+  "results_sha256": "69ac7c99af5b02778e2d13a5c56d0cbded9acc50fa337e68c72a7c9a5d402b6d"
+}

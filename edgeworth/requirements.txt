@@ -1,0 +1,6 @@
+# Runtime dependencies for experiment.py. Versions are those of the committed run
+# (Python 3.13.5, macOS arm64); the script also runs on any recent numpy/scipy.
+numpy==2.4.6
+scipy==1.16.3
+matplotlib==3.11.0
+scikit-learn==1.9.0
